@@ -1,16 +1,27 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ count($cmsInitialContent ?? []) ? 'cms-content-pending' : '' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Manufactt - Manufacturing Services Website')</title>
+    <title>@yield('title', 'HARIPRIYA - Manufacturing Services')</title>
     
     <!-- Meta Tags -->
-    <meta name="title" content="@yield('meta_title', 'Manufactt - Manufacturing Services Website TailwindCSS 4 Template')">
+    <meta name="title" content="@yield('meta_title', 'HARIPRIYA - Manufacturing Services')">
     <meta name="description" content="@yield('meta_description', 'Professional Manufacturing Services Website Template built with TailwindCSS 4. Ideal for factories, industrial companies, production plants, and engineering businesses. Fully responsive, modern, and easy to customize.')">
     <meta name="keywords" content="manufacturing website template, industrial website, factory website template, tailwind css manufacturing template, production company website, engineering services template, industrial tailwind template">
     <meta name="author" content="Unifato">
     <meta name="robots" content="index, follow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="cms-page" content="{{ $cmsEditorPage ?? $cmsPage ?? request()->route()?->getName() ?? 'home' }}">
+    <meta name="cms-content-url" content="{{ route('site-content.index') }}">
+    <meta name="cms-collections-url" content="{{ url('/api/collections') }}">
+    <meta name="cms-blog-detail-url" content="{{ route('blog-detail') }}">
+    <style>html.cms-content-pending body { visibility: hidden; }</style>
+    <noscript><style>html.cms-content-pending body { visibility: visible; }</style></noscript>
+    <script>window.siteContentInitial = {{ Illuminate\Support\Js::from($cmsInitialContent ?? []) }};</script>
+    @isset($cmsEditorPage)
+        <meta name="cms-save-url" content="{{ route('site-content.save') }}">
+    @endisset
     
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/favicon-D5yOChkQ.svg') }}">
@@ -22,13 +33,28 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('assets/app-DVm5M2fF.css') }}">
+    @isset($cmsEditorPage)
+        <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
+    @endisset
+    @isset($cmsEditorPage)
+        <link rel="stylesheet" href="{{ asset('css/editor.css') }}?v={{ filemtime(public_path('css/editor.css')) }}">
+    @endisset
     
     <!-- Scripts -->
     <script type="module" src="{{ asset('assets/app-MYA1z5jW.js') }}"></script>
+    <script src="{{ asset('js/site-content.js') }}?v={{ filemtime(public_path('js/site-content.js')) }}" defer></script>
+    <script src="{{ asset('js/collection-content.js') }}" defer></script>
+    @isset($cmsEditorPage)
+        <script src="{{ asset('js/editor.js') }}?v={{ filemtime(public_path('js/editor.js')) }}" defer></script>
+    @endisset
     
     @stack('styles')
 </head>
-<body class="bg-white text-default-800 antialiased">
+<body class="bg-white text-default-800 antialiased {{ isset($cmsEditorPage) ? 'has-admin-sidebar' : '' }}">
+
+    @isset($cmsEditorPage)
+        @include('admin.sidebar')
+    @endisset
 
     <!-- Header -->
     @include('partials.header')
@@ -40,6 +66,10 @@
 
     <!-- Footer -->
     @include('partials.footer')
+
+    @isset($cmsEditorPage)
+        @include('admin.editor-toolbar')
+    @endisset
 
     @stack('scripts')
 </body>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'FAQs | Manufactt - Manufacturing Services Website TailwindCSS 4 Template')
+@section('title', 'FAQs | HARIPRIYA')
 
 @section('content')
 <section class="overflow-hidden relative size-full lg:py-50 py-25">
@@ -10,7 +10,7 @@
             </div>
 
             <div class="lg:w-200 mx-auto">
-                <div class="md:space-y-7.5 space-y-5">
+                <div class="md:space-y-7.5 space-y-5" data-cms-collection="faqs">
 
                     <!-- FAQ 1 -->
                     <div class="hs-accordion bg-default-100 p-5 rounded-lg active">

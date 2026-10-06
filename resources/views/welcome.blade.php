@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Manufactt - Tailwind CSS 4 Template | Manufactt - Manufacturing Services Website TailwindCSS 4 Template')
+@section('title', 'HARIPRIYA | Manufacturing Services')
 
 @section('content')
 <!-- Hero Section -->
@@ -73,8 +73,8 @@
     <section class="relative overflow-hidden">
         <div class="overflow-hidden lg:h-275 h-250 w-full relative">
             <video id="myVideo" loop="" autoplay="" muted="" class="bg-[url('../images/other/video-bg.jpg')] object-cover bg-cover bg-position-[50%] flex w-full h-full absolute -inset-full m-auto -z-10">
-                <source src="https://unifato.com/manufactt/assets/video-JGTIV9SH.mp4" type="video/mp4" class="object-bottom">
-                <source src="https://unifato.com/manufactt/assets/video-Cu_LDHlO.webm" type="video/webm" class="object-bottom">
+                <source src="{{ asset('assets/video-JGTIV9SH.mp4') }}" type="video/mp4" class="object-bottom">
+                <source src="{{ asset('assets/video-Cu_LDHlO.webm') }}" type="video/webm" class="object-bottom">
             </video>
 
             <div class="absolute end-10 bottom-10 z-100">

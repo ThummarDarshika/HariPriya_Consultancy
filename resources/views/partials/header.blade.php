@@ -8,7 +8,7 @@
                         class="w-40.75">
                 </a>
 
-                <div id="navbar" class="mx-auto hidden lg:flex items-center justify-center">
+                <div id="navbar" class="mx-auto hidden lg:flex items-center justify-center" data-cms-ignore>
                     <a href="{{ route('home') }}"
                         class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary">
                         <span
@@ -119,14 +119,14 @@
         role="dialog" tabindex="-1" aria-labelledby="mobile-menu-label">
         <div class="flex max-h-78 flex-col gap-1 divide-y divide-default-200 overflow-y-auto">
             <a href="{{ route('home') }}"
-                class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary">
+                class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary" data-cms-ignore>
                 <span
                     class="me-1.25 mb-0.5 flex size-1.75 scale-0 bg-primary transition-all duration-300 group-hover:scale-100"></span>
                 Home
             </a>
 
             <a href="{{ route('about') }}"
-                class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary">
+                class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary" data-cms-ignore>
                 <span
                     class="me-1.25 mb-0.5 flex size-1.75 scale-0 bg-primary transition-all duration-300 group-hover:scale-100"></span>
                 About
@@ -145,19 +145,19 @@
                 <div class="hs-accordion-content hidden w-full overflow-hidden ps-5 pb-4 transition-[height]">
                     <a href="{{ route('home') }}"
                         class="block rounded-sm px-3 py-2 text-sm font-semibold text-default-800 hover:bg-primary/6 hover:text-primary"
-                        tabindex="0">Home </a>
+                        tabindex="0" data-cms-ignore>Home </a>
                     <a href="{{ route('about') }}"
                         class="block rounded-sm px-3 py-2 text-sm font-semibold text-default-800 hover:bg-primary/6 hover:text-primary"
-                        tabindex="0">About</a>
+                        tabindex="0" data-cms-ignore>About</a>
                     <a href="{{ route('services') }}"
                         class="block rounded-sm px-3 py-2 text-sm font-semibold text-default-800 hover:bg-primary/6 hover:text-primary"
-                        tabindex="0">Services</a>
+                        tabindex="0" data-cms-ignore>Services</a>
                     <a href="{{ route('case-studies') }}"
                         class="block rounded-sm px-3 py-2 text-sm font-semibold text-default-800 hover:bg-primary/6 hover:text-primary"
                         tabindex="0">Case Studies</a>
                     <a href="{{ route('products') }}"
                         class="block rounded-sm px-3 py-2 text-sm font-semibold text-default-800 hover:bg-primary/6 hover:text-primary"
-                        tabindex="0">Products</a>
+                        tabindex="0" data-cms-ignore>Products</a>
                     <a href="{{ route('blog') }}"
                         class="block rounded-sm px-3 py-2 text-sm font-semibold text-default-800 hover:bg-primary/6 hover:text-primary"
                         tabindex="0">Blog</a>
@@ -169,7 +169,7 @@
                         tabindex="0">FAQs</a>
                     <a href="{{ route('contact') }}"
                         class="block rounded-sm px-3 py-2 text-sm font-semibold text-default-800 hover:bg-primary/6 hover:text-primary"
-                        tabindex="0">Contact</a>
+                        tabindex="0" data-cms-ignore>Contact</a>
                     <a href="{{ route('privacy-policy') }}"
                         class="block rounded-sm px-3 py-2 text-sm font-semibold text-default-800 hover:bg-primary/6 hover:text-primary"
                         tabindex="0">Privacy Policy</a>
@@ -180,14 +180,14 @@
             </div>
 
             <a href="{{ route('services') }}"
-                class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary">
+                class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary" data-cms-ignore>
                 <span
                     class="me-1.25 mb-0.5 flex size-1.75 scale-0 bg-primary transition-all duration-300 group-hover:scale-100"></span>
                 Services
             </a>
 
             <a href="{{ route('contact') }}"
-                class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary">
+                class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary" data-cms-ignore>
                 <span
                     class="me-1.25 mb-0.5 flex size-1.75 scale-0 bg-primary transition-all duration-300 group-hover:scale-100"></span>
                 Contact
