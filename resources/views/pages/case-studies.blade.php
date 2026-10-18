@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Blogs | Manufactt - Manufacturing Services Website TailwindCSS 4 Template')
+@section('title', 'Case Studies | HARIPRIYA')
 
 @section('content')
 <section class="overflow-hidden relative size-full lg:pt-40 py-25 bg-default-100">
@@ -18,12 +18,12 @@
             <div class="border border-dashed border-default-900 w-0.5 h-full opacity-7"></div>
         </div>
 
-        <div class="absolute inset-0 size-full bg-[url(../images/bg-noice.gif)] opacity-4 bg-auto bg-repeat bg-position-[50%] object-cover"></div>
+        <div class="absolute inset-0 size-full opacity-4 bg-auto bg-repeat bg-position-[50%] object-cover" style="background-image: url('{{ $siteAssets['case-studies.hero_background'] ?? '/assets/bg-noice-CMKwJ6uj.gif' }}')" data-cms-managed-asset></div>
     </section>
 
     <section class="lg:py-50 py-25">
         <div class="container relative z-10">
-            <div class="grid md:grid-cols-2 gap-7.5 mb-17.5">
+            <div class="grid md:grid-cols-2 gap-7.5 mb-17.5" data-cms-collection="case-studies">
                 <div class="grid md:grid-cols-2 group">
                     <div class="bg-default-100 p-4 rounded-s relative h-full flex flex-col items-start gap-2.5">
                         <a href="{{ route('case-studies') }}" class="absolute inset-0 z-10"></a>

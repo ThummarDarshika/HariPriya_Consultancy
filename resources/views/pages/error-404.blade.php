@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '404 | Manufactt - Manufacturing Services Website TailwindCSS 4 Template')
+@section('title', '404 | HARIPRIYA')
 
 @section('content')
 <section class="relative bg-default-100 lg:py-50 py-25">

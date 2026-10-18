@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'detail blog | Manufactt - Manufacturing Services Website TailwindCSS 4 Template')
+@section('title', 'Blog | HARIPRIYA')
 
 @section('content')
-<section class="pt-50">
+<section class="pt-50" data-cms-collection="blogs" data-cms-variant="detail-hero">
         <div class="container max-w-275!">
             <div class="text-center space-x-6 mb-5">
                 <span class="bg-linear-to-tr from-primary-1 to-primary-2 text-white rounded py-1 px-2 text-sm inline-flex items-center justify-center">
@@ -27,7 +27,7 @@
         </div>
     </section>
 
-    <section class="overflow-hidden relative size-full py-25">
+    <section class="overflow-hidden relative size-full py-25" data-cms-collection="blogs" data-cms-variant="detail-body">
         <div class="container max-w-245!">
             <h2 class="text-[32px] mb-2.5">Breakthroughs Powering Manufacturing Efficiency</h2>
 
@@ -74,7 +74,7 @@
                 <h1 class="lg:text-7xl md:text-[56px] text-[48px]">Recent blogs</h1>
             </div>
 
-            <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-5 mb-17.5">
+            <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-5 mb-17.5" data-cms-collection="blogs">
                 <div class="bg-default-100 p-4 rounded group relative">
                     <a href="{{ route('blog-detail') }}" class="absolute inset-0 z-10"></a>
                     <div class="overflow-hidden rounded relative mb-4">

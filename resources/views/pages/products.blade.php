@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Products | Manufactt - Manufacturing Services Website TailwindCSS 4 Template')
+@section('title', 'Products | HARIPRIYA')
 
 @section('content')
 <section class="overflow-hidden relative size-full lg:py-50 py-25 bg-default-100">
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-7.5 my-17.5" data-toggle="gallery">
+            <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-7.5 my-17.5" data-toggle="gallery" data-cms-collection="products">
 
                 <!-- Product 1 -->
                 <div class="bg-default-900 border border-default-700 rounded py-7.5 px-5">
@@ -265,7 +265,7 @@
 
             </div>
 
-            <div class="lg:w-269 mx-auto bg-default-900 md:p-12 p-6 bg-[url(../images/cta-bg.png)] bg-no-repeat bg-cover rounded">
+            <div class="lg:w-269 mx-auto bg-default-900 md:p-12 p-6 bg-no-repeat bg-cover rounded" style="background-image: url('{{ $siteAssets['cta.background'] }}')" data-cms-managed-asset>
                 <div class="flex lg:flex-row flex-col gap-10 lg:items-center justify-between">
                     <div>
                         <h2 class="lg:text-4xl text-2xl text-white">Custom Order Inquiry</h2>

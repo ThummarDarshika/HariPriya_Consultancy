@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Privacy Policy | Manufactt - Manufacturing Services Website TailwindCSS 4 Template')
+@section('title', 'Privacy Policy | HARIPRIYA')
 
 @section('content')
 <section class="overflow-hidden relative size-full lg:py-50 py-25">

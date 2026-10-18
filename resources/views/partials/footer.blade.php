@@ -42,27 +42,26 @@
                     <div class="grid lg:grid-cols-9 md:grid-cols-4 grid-cols-2 lg:gap-10 gap-6">
                         <!-- Main links -->
                         <div class="lg:col-span-2">
-                            <h5 class="lg:text-[28px] md:text-2xl text-lg text-white mb-7.5">Main Links</h5>
+                            <h5 class="lg:text-[28px] md:text-2xl text-lg text-white mb-7.5" data-cms-ignore>Main Links</h5>
     
                             <ul class="space-y-4 text-white/70">
-                                <li><a href="{{ route('home') }}" class="text-default-400 hover:text-primary">Home</a></li>
-                                <li><a href="{{ route('about') }}" class="text-default-400 hover:text-primary">About</a></li>
-                                <li><a href="{{ route('products') }}" class="text-default-400 hover:text-primary">Products</a></li>
-                                <li><a href="{{ route('services') }}" class="text-default-400 hover:text-primary">Services</a></li>
-                                <li><a href="{{ route('case-studies') }}" class="text-default-400 hover:text-primary">Case Studies</a></li>
+                                <li><a href="{{ route('home') }}" class="text-default-400 hover:text-primary" data-cms-ignore>Home</a></li>
+                                <li><a href="{{ route('about') }}" class="text-default-400 hover:text-primary" data-cms-ignore>About</a></li>
+                                <li><a href="{{ route('products') }}" class="text-default-400 hover:text-primary" data-cms-ignore>Products</a></li>
+                                <li><a href="{{ route('services') }}" class="text-default-400 hover:text-primary" data-cms-ignore>Services</a></li>
+                                <li><a href="{{ route('case-studies') }}" class="text-default-400 hover:text-primary" data-cms-ignore>Case Studies</a></li>
                             </ul>
                         </div>
     
                         <!-- Utility links -->
                         <div class="lg:col-span-2">
-                            <h5 class="lg:text-[28px] md:text-2xl text-lg text-white mb-7.5">Other Links</h5>
+                            <h5 class="lg:text-[28px] md:text-2xl text-lg text-white mb-7.5" data-cms-ignore>Other Links</h5>
     
                             <ul class="space-y-4 text-white/70">
-                                <li><a href="{{ route('blog') }}" class="text-default-400 hover:text-primary">Blog</a></li>
-                                <li><a href="{{ route('contact') }}" class="text-default-400 hover:text-primary">Contact</a></li>
-                                <li><a href="{{ route('faqs') }}" class="text-default-400 hover:text-primary">FAQs</a></li>
-                                <li><a href="{{ route('privacy-policy') }}" class="text-default-400 hover:text-primary">Privacy Policy</a></li>
-                                <li><a href="{{ route('error-404') }}" class="text-default-400 hover:text-primary">Error 404</a></li>
+                                <li><a href="{{ route('blog') }}" class="text-default-400 hover:text-primary" data-cms-ignore>Blog</a></li>
+                                <li><a href="{{ route('contact') }}" class="text-default-400 hover:text-primary" data-cms-ignore>Contact</a></li>
+                                <li><a href="{{ route('faqs') }}" class="text-default-400 hover:text-primary" data-cms-ignore>FAQs</a></li>
+                                <li><a href="{{ route('privacy-policy') }}" class="text-default-400 hover:text-primary" data-cms-ignore>Privacy Policy</a></li>
                             </ul>
                         </div>
     
@@ -101,18 +100,18 @@
             <!-- Bottom bar -->
             <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-white/60">
     
-                <p>Powered by <a href="{{ route('home') }}" target="_blank" class="underline">Unifato</a></p>
+                <p data-cms-ignore>Powered by <a href="{{ route('home') }}" target="_blank" class="underline">Unifato</a></p>
     
                 <div class="flex items-center gap-6">
-                    <a href="{{ route('home') }}" class="flex items-center gap-2 hover:text-white">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 hover:text-white" data-cms-ignore>
                         <i class="iconify tabler--brand-facebook-filled size-4"></i>
                         Facebook
                     </a>
-                    <a href="{{ route('home') }}" class="flex items-center gap-2 hover:text-white">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 hover:text-white" data-cms-ignore>
                         <i class="iconify tabler--brand-x-filled size-4"></i>
                         Twitter
                     </a>
-                    <a href="{{ route('home') }}" class="flex items-center gap-2 hover:text-white">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 hover:text-white" data-cms-ignore>
                         <i class="iconify tabler--brand-instagram-filled size-4"></i>
                         Instagram
                     </a>
@@ -122,7 +121,7 @@
     
         <!-- Huge background text -->
         <div class="lg:text-[15em] md:text-[7em] text-[4em] lg:-mt-25 translate-y-1/2 font-bold text-white/5 text-center leading-none pointer-events-none">
-            MANUFACTT<sup class="text-[0.75em]">®</sup>
+            HARIPRIYA<sup class="text-[0.75em]">®</sup>
         </div>
     
     </footer>

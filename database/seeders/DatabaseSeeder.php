@@ -15,11 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(LegacyCollectionSeeder::class);
+        $this->call([SiteAssetSeeder::class, CompanySeeder::class, CertificateSeeder::class, SharedContentSeeder::class]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        if (config('cms.admin.email') && config('cms.admin.password')) {
+            $administrator = User::query()->firstOrNew(['email' => config('cms.admin.email')]);
+            $administrator->name = config('cms.admin.name');
+            $administrator->password = config('cms.admin.password');
+            $administrator->is_admin = true;
+            $administrator->save();
+        }
     }
 }

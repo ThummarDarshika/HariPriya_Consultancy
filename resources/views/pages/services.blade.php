@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Service | Manufactt - Manufacturing Services Website TailwindCSS 4 Template')
+@section('title', 'Services | HARIPRIYA')
 
 @section('content')
 <section class="overflow-hidden relative size-full lg:py-50 py-25 bg-default-100">
@@ -9,7 +9,7 @@
                 <h1 class="lg:text-7xl md:text-[56px] text-[48px]">Our Services</h1>
             </div>
 
-            <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-5 mb-17.5">
+            <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-5 mb-17.5" data-cms-collection="services">
 
                 <!-- Service 1 -->
                 <div class="bg-white p-5 group relative">
@@ -104,7 +104,7 @@
             </div>
 
 
-            <div class="lg:w-269 mx-auto bg-default-900 md:p-12 p-6 bg-[url(../images/cta-bg.png)] bg-no-repeat bg-cover rounded">
+            <div class="lg:w-269 mx-auto bg-default-900 md:p-12 p-6 bg-no-repeat bg-cover rounded" style="background-image: url('{{ $siteAssets['cta.background'] }}')" data-cms-managed-asset>
                 <div class="flex md:flex-row flex-col gap-6 items-center justify-between">
                     <h2 class="lg:text-4xl text-2xl text-white">Ready to start your <br>Next project?</h2>
 
