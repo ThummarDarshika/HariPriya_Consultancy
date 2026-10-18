@@ -74,6 +74,10 @@ class AppServiceProvider extends ServiceProvider
                 ->whereIn('page', [$page, 'global'])
                 ->get(['page', 'key', 'type', 'value'])
                 ->toArray());
+            $view->with('siteAssets', array_replace(
+                collect(config('cms.managed_assets'))->mapWithKeys(fn (array $asset, string $key): array => [$key => $asset['default']])->all(),
+                SiteAsset::query()->pluck('value', 'key')->all(),
+            ));
         });
     }
 }
