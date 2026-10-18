@@ -24,7 +24,7 @@
     @endisset
     
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/favicon-D5yOChkQ.svg') }}">
+    <link rel="icon" href="{{ $siteAssets['site.favicon'] ?? asset('assets/favicon-D5yOChkQ.svg') }}">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

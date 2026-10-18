@@ -135,6 +135,17 @@
     display: none !important;
 }
 
+/* Keep the public site header visible while the admin editor sidebar is open. */
+.cms-editing.has-admin-sidebar header {
+    position: relative !important;
+    z-index: 1001 !important;
+}
+
+.cms-editing.has-admin-sidebar header .nav-sticky {
+    position: relative !important;
+    inset: auto !important;
+}
+
 @media (max-width: 640px) {
     .cms-editor-toolbar { max-height: 40vh; overflow-y: auto; }
 }

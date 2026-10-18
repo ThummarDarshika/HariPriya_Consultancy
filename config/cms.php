@@ -22,6 +22,8 @@ return [
     ],
     'managed_assets' => [
         'brochure' => ['page' => 'global', 'label' => 'Download Brochure PDF', 'kind' => 'document', 'default' => null],
+        'site.logo' => ['page' => 'global', 'label' => 'Site logo', 'kind' => 'image', 'default' => null],
+        'site.favicon' => ['page' => 'global', 'label' => 'Favicon', 'kind' => 'image', 'default' => '/favicon.ico'],
         'cta.background' => ['page' => 'global', 'label' => 'Shared CTA background (Home, Products & Services)', 'kind' => 'image', 'default' => '/assets/cta-bg-CKwZ5V_V.png'],
         'home.solutions_background' => ['page' => 'home', 'label' => 'Manufacturing solutions background', 'kind' => 'image', 'default' => '/assets/why-choose-DNef7VyW.png'],
         'about.team_avatar_1' => ['page' => 'about', 'label' => 'Team highlight image 1', 'kind' => 'image', 'default' => '/assets/team-avatar-01.webp'],
