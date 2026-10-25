@@ -1,0 +1,68 @@
+.contact-field-invalid {
+    border-color: #ff806b !important;
+    box-shadow: 0 0 0 2px rgba(255, 128, 107, .2);
+}
+
+.contact-form-error {
+    display: block;
+    margin-top: .5rem;
+    color: #ffe2dc;
+    font-size: .875rem;
+    line-height: 1.4;
+}
+
+.contact-form-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(23, 23, 23, .25);
+    border-top-color: #171717;
+    border-radius: 50%;
+    animation: contact-form-spin .7s linear infinite;
+}
+
+.contact-form-spinner[hidden],
+.contact-form-toast[hidden] {
+    display: none !important;
+}
+
+[data-contact-submit-button][disabled] {
+    cursor: wait;
+    opacity: .8;
+}
+
+.contact-form-toast {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 10000;
+    width: min(24rem, calc(100vw - 2rem));
+    padding: 1rem 1.25rem;
+    border: 1px solid #bbebce;
+    border-left: 5px solid #16a34a;
+    border-radius: .75rem;
+    background: #fff;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, .18);
+    color: #17211b;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.contact-form-toast.is-error {
+    border-color: #ffd2c9;
+    border-left-color: #c9441b;
+}
+
+@keyframes contact-form-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+    .contact-form-toast {
+        top: 1rem;
+        right: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .contact-form-spinner { animation-duration: 1.5s; }
+}

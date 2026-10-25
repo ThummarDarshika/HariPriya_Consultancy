@@ -1,0 +1,75 @@
+.career-admin{max-width:1250px}.career-admin__header{display:flex;align-items:end;justify-content:space-between;gap:24px;margin:20px 0 30px}.career-admin__header h1{font-size:clamp(30px,4vw,44px);font-weight:750;letter-spacing:-.04em;line-height:1.15;margin:4px 0 8px}.career-admin__header p:last-child{color:#667085}.career-admin__primary{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;background:#c9441b;color:#fff;padding:12px 19px;border-radius:8px;font-weight:700}.career-admin__primary:hover{background:#a93213;color:#fff}.career-admin__notice{padding:14px 16px;background:#e9f8ed;color:#146c33;border-radius:8px;margin-bottom:22px}.career-admin__search{display:flex;gap:10px;max-width:570px;margin-bottom:24px}.career-admin__search input{min-width:0;flex:1;border:1px solid #cfd4dd;border-radius:8px;padding:12px 14px;background:#fff}.career-admin__search button{background:#171b23;color:white;border-radius:8px;padding:12px 22px}.career-admin__table-wrap{overflow-x:auto;border:1px solid #dfe2e7;border-radius:12px;background:#fff}.career-admin__table{width:100%;border-collapse:collapse;min-width:690px}.career-admin__table th{text-align:left;padding:15px 18px;background:#f5f6f8;color:#535b67;font-size:12px;text-transform:uppercase;letter-spacing:.06em}.career-admin__table td{padding:18px;border-top:1px solid #e7e9ed;vertical-align:middle}.career-admin__table td strong,.career-admin__table td small{display:block}.career-admin__table td small{color:#667085;margin-top:4px}.career-admin__status{display:inline-block;padding:5px 10px;border-radius:99px;background:#f2f3f4;color:#69727e;font-size:12px;font-weight:700}.career-admin__status.is-open{background:#e6f7e9;color:#12733b}.career-admin__empty{text-align:center;color:#667085;padding:60px 20px!important}.career-admin__view{font-weight:700;color:#c9441b;white-space:nowrap}.career-admin__pagination{margin-top:28px}.career-admin__form{display:grid;gap:28px}.career-admin__form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px 22px}.career-admin__form label:not(.career-admin__toggle){display:block;font-weight:650;font-size:14px;color:#343b45}.career-admin__form label small{font-weight:400;color:#74808d}.career-admin__form input:not([type=checkbox]),.career-admin__form select,.career-admin__form textarea{display:block;width:100%;margin-top:8px;border:1px solid #cfd4dd;border-radius:8px;background:#fff;padding:11px 13px;font-weight:400;color:#20252c}.career-admin__form textarea{resize:vertical}.career-admin__wide-label{margin-top:18px}.career-admin__toggle{display:flex;align-items:center;gap:12px;margin-top:24px;padding:15px;border:1px solid #e1e5ea;border-radius:9px}.career-admin__toggle input{accent-color:#c9441b}.career-admin__toggle small{display:block;color:#667085;font-weight:400}.career-admin__detail{background:#fff;border:1px solid #e1e5ea;border-radius:14px;padding:30px;max-width:920px}.career-admin__detail dl{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:0}.career-admin__detail dt{color:#667085;font-size:13px;margin-bottom:5px}.career-admin__detail dd{font-weight:650;overflow-wrap:anywhere}.career-admin__letter{border-top:1px solid #e1e5ea;margin-top:32px;padding-top:25px}.career-admin__letter h2{font-size:21px;font-weight:700;margin:0 0 13px}.career-admin__letter p{white-space:pre-line;line-height:1.7;color:#424a55}@media(max-width:700px){.career-admin__header{align-items:start;flex-direction:column}.career-admin__form-grid,.career-admin__detail dl{grid-template-columns:1fr}.career-admin__search{max-width:100%}}
+
+.admin-panel .career-admin__header h1,
+.admin-panel .career-admin__detail h2 { color: #17191f; }
+.admin-panel a.career-admin__primary,
+.admin-panel a.career-admin__primary:hover { color: #fff; }
+.admin-panel form.career-admin__search button { background: #c9441b; color: #fff; }
+.admin-panel form.career-admin__search button:hover { background: #a93213; }
+.admin-panel .career-admin__table-wrap { box-shadow: 0 10px 30px #1018280a; }
+.admin-panel .career-admin__table td,
+.admin-panel .career-admin__table th { color: #344054; }
+.admin-panel .career-admin__table td strong { color: #17191f; }
+.admin-panel .career-admin__table td.career-admin__empty {
+    padding: 52px 20px !important;
+    text-align: center;
+    color: #667085;
+    font-size: 15px;
+}
+.admin-panel .career-admin__form-grid { align-items: start; }
+.admin-panel .career-admin__form label:not(.career-admin__toggle) { color: #344054; }
+.admin-panel .career-admin__form input:not([type=checkbox]):focus,
+.admin-panel .career-admin__form select:focus,
+.admin-panel .career-admin__form textarea:focus { border-color: #c9441b; outline: none; box-shadow: 0 0 0 3px #c9441b20; }
+
+.admin-panel .career-admin__toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    width: min(100%, 480px);
+    margin-top: 24px;
+    padding: 17px 18px;
+    border: 1px solid #d6dbe2;
+    border-radius: 11px;
+    background: #f8fafc;
+    cursor: pointer;
+}
+.admin-panel .career-admin__toggle:hover { border-color: #c9441b; }
+.admin-panel .career-admin__toggle-copy { display: block; }
+.admin-panel .career-admin__toggle-copy strong { display: block; color: #20252d; font-size: 15px; }
+.admin-panel .career-admin__toggle-copy small { display: block; margin-top: 3px; color: #667085; font-size: 12px; }
+.admin-panel .career-admin__toggle input[type=checkbox] {
+    position: absolute;
+    right: 22px;
+    width: 42px;
+    height: 24px;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.admin-panel .career-admin__toggle-track {
+    display: block;
+    width: 44px;
+    height: 26px;
+    flex: none;
+    border-radius: 99px;
+    background: #aab1bb;
+    transition: background .2s;
+    pointer-events: none;
+}
+.admin-panel .career-admin__toggle-track::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px #0003;
+    transition: transform .2s;
+}
+.admin-panel .career-admin__toggle input:checked + .career-admin__toggle-track { background: #c9441b; }
+.admin-panel .career-admin__toggle input:checked + .career-admin__toggle-track::after { transform: translateX(18px); }
+.admin-panel .career-admin__toggle:focus-within { outline: 3px solid #c9441b35; outline-offset: 2px; }
