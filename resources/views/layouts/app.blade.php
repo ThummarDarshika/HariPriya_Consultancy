@@ -69,6 +69,12 @@
     <!-- Footer -->
     @include('partials.footer')
 
+    @unless (isset($cmsEditorPage))
+        <a class="site-whatsapp-link" href="https://wa.me/919724430718" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp" title="Chat with us on WhatsApp" data-cms-ignore>
+            <img src="{{ asset('assets/whatsapp-official.svg') }}" alt="" aria-hidden="true">
+        </a>
+    @endunless
+
     @isset($cmsEditorPage)
         @include('admin.editor-toolbar')
     @endisset

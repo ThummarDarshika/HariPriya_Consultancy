@@ -1,3 +1,48 @@
+.site-whatsapp-link {
+    position: fixed;
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 110;
+    display: grid;
+    width: 60px;
+    height: 60px;
+    place-items: center;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 8px 28px rgb(0 0 0 / 20%);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.site-whatsapp-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
+}
+
+.site-whatsapp-link:focus-visible {
+    outline: 3px solid #c8370b;
+    outline-offset: 3px;
+}
+
+.site-whatsapp-link img {
+    display: block;
+    width: 48px;
+    height: 48px;
+}
+
+@media (max-width: 767px) {
+    .site-whatsapp-link {
+        right: max(16px, env(safe-area-inset-right));
+        bottom: max(16px, env(safe-area-inset-bottom));
+        width: 56px;
+        height: 56px;
+    }
+
+    .site-whatsapp-link img {
+        width: 44px;
+        height: 44px;
+    }
+}
+
 .nav-sticky [data-bswx-header-logo] {
     width: 163px;
 }
