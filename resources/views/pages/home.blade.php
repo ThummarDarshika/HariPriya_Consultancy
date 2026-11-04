@@ -3,45 +3,53 @@
 @section('title', 'HARIPRIYA | Manufacturing Services')
 
 @section('content')
+    <div id="bswx-site-loader" class="bswx-site-loader" role="status" aria-live="polite" data-cms-ignore>
+        <div class="bswx-site-loader__inner">
+            <img id="bswx-site-loader-logo" class="bswx-site-loader__logo" src="{{ $siteAssets['site.logo'] ?? '' }}" alt="HARIPRIYA logo" fetchpriority="high">
+            <div class="bswx-site-loader__track" aria-hidden="true"><span></span></div>
+            <p id="bswx-site-loader-message" class="bswx-site-loader__message"></p>
+            <button id="bswx-site-loader-retry" class="bswx-site-loader__retry" type="button" hidden>Try again</button>
+        </div>
+    </div>
 <!-- Hero Section -->
-    <section class="overflow-hidden relative size-full lg:pt-50 pt-35">
-        <div class="container-full relative z-10">
-            <div class="grid xl:grid-cols-4 items-center xl:gap-20 gap-12.5 mb-32.5">
-                <div class="xl:col-span-3">
+    <section id="bswx-hero" class="relative w-full">
+        <div class="bswx-hero__stage container-full relative z-10">
+            <div class="bswx-hero-layout grid items-center gap-12.5 mb-32.5">
+                <div>
                     <div class="inline-flex items-center gap-1.5 rounded-2xl py-1.25 px-3.5 bg-white border border-default-300">
                         <div class="size-2 bg-primary"></div>
                         <div class="text-sm text-default-900">Trusted manufacturing partner</div>
                     </div>
 
                     <h1 class="font-bold lg:text-7xl md:text-[56px] text-[48px] mt-4">From raw <span class="text-primary">material</span> <br> to market-ready</h1>
+                    <p class="bswx-hero__since text-primary">// SINCE - 2005 //</p>
+                    <a href="{{ route('services') }}" class="home-animated-cta inline-flex items-center gap-5 rounded rounded-ee-2xl bg-default-900 text-base font-medium text-white transition-all mt-4 md:mt-6">
+                        <span class="py-3.75 ps-6">
+                            <span class="home-animated-label">
+                                <span class="home-animated-label__current">Explore Our Capabilities</span>
+                                <span class="home-animated-label__next" aria-hidden="true">Explore Our Capabilities</span>
+                            </span>
+                        </span>
+
+                        <!-- ICON -->
+                        <span class="m-1.25 flex size-10 items-center justify-center rounded rounded-ee-xl bg-primary text-white">
+                            <span class="home-animated-arrow">
+                                <span class="home-animated-arrow__current"><i class="iconify tabler--arrow-narrow-right flex size-6"></i></span>
+                                <span class="home-animated-arrow__next" aria-hidden="true"><i class="iconify tabler--arrow-narrow-right flex size-6"></i></span>
+                            </span>
+                        </span>
+                    </a>
                 </div>
 
-                <div>
-                    <div>
-                        <div class="text-sm text-default-900 mb-2.5">// SINCE - 2005 //</div>
-                        <p class="mb-7.5">From concept to production, we deliver high-quality, scalable, and cost-effective solutions tailored to your business needs.</p>
-
-                        <a href="{{ route('services') }}" class="home-animated-cta inline-flex items-center gap-5 rounded rounded-ee-2xl bg-default-900 text-base font-medium text-white transition-all">
-                            <span class="py-3.75 ps-6">
-                                <span class="home-animated-label">
-                                    <span class="home-animated-label__current">Explore Our Capabilities</span>
-                                    <span class="home-animated-label__next" aria-hidden="true">Explore Our Capabilities</span>
-                                </span>
-                            </span>
-
-                            <!-- ICON -->
-                            <span class="m-1.25 flex size-10 items-center justify-center rounded rounded-ee-xl bg-primary text-white">
-                                <span class="home-animated-arrow">
-                                    <span class="home-animated-arrow__current"><i class="iconify tabler--arrow-narrow-right flex size-6"></i></span>
-                                    <span class="home-animated-arrow__next" aria-hidden="true"><i class="iconify tabler--arrow-narrow-right flex size-6"></i></span>
-                                </span>
-                            </span>
-                        </a>
+                <div class="min-w-0">
+                    <div id="bswx-hero-model" class="bswx-hero-model" aria-hidden="true"></div>
+                    <div class="bswx-hero__actions mt-3 md:mt-5">
+                        <button id="bswx-tour-open" type="button" class="bswx-tour__button">Explore in 360°</button>
                     </div>
                 </div>
             </div>
 
-            <div class="flex justify-between mb-10">
+            <div class="bswx-hero__meta flex justify-between">
                 <div class="text-sm text-default-900">Based in: Los Angeles, USA</div>
                 <div class="text-sm text-default-900">21.0278° N, 105.8342° E</div>
             </div>
@@ -56,6 +64,23 @@
         </div>
 
         <div class="absolute inset-0 size-full bg-[url(../images/bg-noice.gif)] opacity-4 bg-auto bg-repeat bg-position-[50%] object-cover" data-cms-ignore></div>
+    </section>
+
+    <section id="bswx-tour" class="relative w-full bg-default-900" aria-label="Interactive 3D manufacturing model" data-cms-ignore>
+        <div class="bswx-tour__stage">
+            <iframe
+                id="bswx-tour-frame"
+                src="{{ asset('bswx-viewer.html') }}?v={{ filemtime(public_path('bswx-viewer.html')) }}&model={{ filemtime(public_path('0505.bswx')) }}"
+                title="Interactive 3D manufacturing model"
+                class="block w-full border-0"
+                loading="eager"
+                tabindex="-1"
+            ></iframe>
+            <div id="bswx-tour-toolbar" class="bswx-tour__toolbar" hidden>
+                <div>Drag to rotate · Scroll to zoom · Arrow keys to rotate</div>
+                <button id="bswx-tour-exit" type="button" class="bswx-tour__button">Exit 360°</button>
+            </div>
+        </div>
     </section>
 
 
@@ -1361,6 +1386,11 @@
 
 @push('scripts')
     <script src="{{ asset('js/home-service-stack.js') }}?v={{ filemtime(public_path('js/home-service-stack.js')) }}" defer></script>
+    <script src="{{ asset('js/bswx-tour.js') }}?v={{ filemtime(public_path('js/bswx-tour.js')) }}" defer></script>
+@endpush
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/bswx-tour.css') }}?v={{ filemtime(public_path('css/bswx-tour.css')) }}">
 @endpush
 
 

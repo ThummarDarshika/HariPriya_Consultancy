@@ -1,3 +1,13 @@
+.nav-sticky [data-bswx-header-logo] {
+    width: 163px;
+}
+
+@media (max-width: 767px) {
+    .nav-sticky [data-bswx-header-logo] {
+        width: 144px;
+    }
+}
+
 .home-service-stack.is-stacked {
     display: block;
     position: relative;
@@ -450,15 +460,27 @@ button.group:focus-visible > span[class*="py-3.75"] > span.relative.block.overfl
     }
 
     #mobile-menu {
-        top: 110px;
+        top: 0;
+        padding-top: 74px;
         height: auto;
-        max-height: calc(100vh - 110px);
-        max-height: calc(100dvh - 110px);
+        max-height: 100vh;
+        max-height: 100dvh;
     }
 
     #mobile-menu > div {
-        max-height: calc(100vh - 110px);
-        max-height: calc(100dvh - 110px);
+        max-height: calc(100vh - 74px);
+        max-height: calc(100dvh - 74px);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    #mobile-menu {
+        padding-top: 83px;
+    }
+
+    #mobile-menu > div {
+        max-height: calc(100vh - 83px);
+        max-height: calc(100dvh - 83px);
     }
 }
 
