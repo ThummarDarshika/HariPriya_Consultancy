@@ -1,8 +1,3 @@
-body:has(.projects-hero) .navbar {
-    background: #fff !important;
-    border-color: #e5e5e5 !important;
-}
-
 .projects-hero {
     padding: 12rem 0 8rem;
     background: #191919;
