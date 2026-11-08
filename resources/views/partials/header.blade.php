@@ -1,9 +1,9 @@
 <header @if (($cmsEditorPage ?? null) === 'privacy-policy') data-cms-editor-ignore @endif>
     <div
-        class="nav-sticky navbar fixed inset-x-0 top-0 z-120 w-full border-b lg:border-transparent lg:bg-transparent border-default-200 bg-body-bg transition-all duration-300 lg:[.nav-sticky-on]:border-default-200 [.nav-sticky-on]:bg-body-bg">
+        class="nav-sticky navbar fixed inset-x-0 top-0 z-120 w-full border-b border-default-200 bg-white transition-all duration-300">
         <div class="container-full py-1">
             <div class="flex items-center justify-between">
-                <a href="{{ route('home') }}" class="flex items-center">
+                <a href="{{ route('home') }}" class="flex items-center" data-site-home-link>
                     @if (!empty($siteAssets['site.logo']))
                         <img src="{{ $siteAssets['site.logo'] }}" alt="HARIPRIYA logo" class="w-40.75" data-bswx-header-logo data-cms-managed-asset>
                     @endif
@@ -13,7 +13,7 @@
                 </a>
 
                 <div id="navbar" class="mx-auto hidden lg:flex items-center justify-center" data-cms-ignore>
-                    <a href="{{ route('home') }}"
+                    <a href="{{ route('home') }}" data-site-home-link
                         class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary">
                         <span
                             class="me-1.25 mb-0.5 flex size-1.75 scale-0 bg-primary transition-all duration-300 group-hover:scale-100"></span>
@@ -123,7 +123,7 @@
         class="hs-overlay hs-overlay-open:translate-y-0 [--body-scroll:true] fixed inset-x-0 z-110 -translate-y-full transform overflow-hidden bg-body-bg shadow-xl transition-all duration-300 lg:hidden"
         role="dialog" tabindex="-1" aria-labelledby="mobile-menu-label">
         <div class="flex flex-col gap-1 divide-y divide-default-200 overflow-y-auto">
-            <a href="{{ route('home') }}"
+            <a href="{{ route('home') }}" data-site-home-link
                 class="group flex items-center px-2.5 py-4.5 text-base font-medium text-default-800 transition-all hover:text-primary" data-cms-ignore>
                 <span
                     class="me-1.25 mb-0.5 flex size-1.75 scale-0 bg-primary transition-all duration-300 group-hover:scale-100"></span>

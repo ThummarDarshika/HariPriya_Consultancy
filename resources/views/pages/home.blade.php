@@ -3,7 +3,7 @@
 @section('title', 'HARIPRIYA | Manufacturing Services')
 
 @section('content')
-    <div id="bswx-site-loader" class="bswx-site-loader" role="status" aria-live="polite" data-cms-ignore>
+    <div id="bswx-site-loader" class="bswx-site-loader" role="status" aria-live="polite" data-model-version="{{ filemtime(public_path('0505.bswx')) }}" data-cms-ignore>
         <div class="bswx-site-loader__inner">
             <img id="bswx-site-loader-logo" class="bswx-site-loader__logo" src="{{ $siteAssets['site.logo'] ?? '' }}" alt="HARIPRIYA logo" fetchpriority="high">
             <div class="bswx-site-loader__track" aria-hidden="true"><span></span></div>
@@ -21,7 +21,7 @@
                         <div class="text-sm text-default-900">Trusted manufacturing partner</div>
                     </div>
 
-                    <h1 class="font-bold lg:text-7xl md:text-[56px] text-[48px] mt-4">From raw <span class="text-primary">material</span> <br> to market-ready</h1>
+                    <h1 class="font-bold lg:text-7xl md:text-[56px] text-[48px] mt-4">From raw <span class="bswx-hero__material text-primary">material</span> <br> to market-ready</h1>
                     <p class="bswx-hero__since text-primary">// SINCE - 2005 //</p>
                     <a href="{{ $siteAssets['brochure'] ?: asset('assets/haripriya-brochure.pdf') }}" download="Haripriya-Brochure.pdf" class="home-animated-cta inline-flex items-center gap-5 rounded rounded-ee-2xl bg-default-900 text-base font-medium text-white transition-all mt-4 md:mt-6">
                         <span class="py-3.75 ps-6">
@@ -50,8 +50,7 @@
             </div>
 
             <div class="bswx-hero__meta flex justify-between">
-                <div class="text-sm text-default-900">Based in: Los Angeles, USA</div>
-                <div class="text-sm text-default-900">21.0278° N, 105.8342° E</div>
+                <div class="text-sm text-default-900">Based in: India</div>
             </div>
         </div>
 
@@ -712,7 +711,6 @@
                             <div class="lg:col-span-3">
                                 <div class="relative overflow-hidden rounded-md group">
                                     <img src="{{ asset('assets/product-3-fEweepR8.png') }}" class="rounded-md w-full h-100 object-cover overflow-hidden transition-all duration-500 group-hover:scale-110">
-                                    <img src="{{ asset('assets/2-light-DDoFchlp.svg') }}" class="absolute top-10 start-10">
                                 </div>
                             </div>
                         </div>
@@ -768,7 +766,6 @@
                             <div class="lg:col-span-3">
                                 <div class="relative overflow-hidden rounded-md group">
                                     <img src="{{ asset('assets/product-4--sM7am50.png') }}" class="rounded-md w-full h-100 object-cover overflow-hidden transition-all duration-500 group-hover:scale-110">
-                                    <img src="{{ asset('assets/4-light-BP5GXLXE.svg') }}" class="absolute top-10 start-10">
                                 </div>
                             </div>
                         </div>
@@ -824,7 +821,6 @@
                             <div class="lg:col-span-3">
                                 <div class="relative overflow-hidden rounded-md group">
                                     <img src="{{ asset('assets/product-2-Cg8Cv16T.png') }}" class="rounded-md w-full h-100 object-cover overflow-hidden transition-all duration-500 group-hover:scale-110">
-                                    <img src="{{ asset('assets/5-light-B6pQZFV6.svg') }}" class="absolute top-10 start-10">
                                 </div>
                             </div>
                         </div>
@@ -880,7 +876,6 @@
                             <div class="lg:col-span-3">
                                 <div class="relative overflow-hidden rounded-md group">
                                     <img src="{{ asset('assets/1-BtwCsebB.webp') }}" class="rounded-md w-full h-100 object-cover overflow-hidden transition-all duration-500 group-hover:scale-110">
-                                    <img src="data:image/svg+xml,%3csvg%20width='109'%20height='34'%20viewBox='0%200%20109%2034'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_748_164)'%3e%3cpath%20d='M58.4278%2026.7565L51.0343%2017.5077L57.9575%209.33008H53.3856L47.2195%2017.1158V9.33008H43.5098V26.7565H47.2195V21.4005L48.5784%2019.7807L53.856%2026.7565H58.4278Z'%20fill='white'/%3e%3cpath%20d='M67.1508%2027.0703C72.4284%2027.0703%2076.2689%2023.308%2076.2689%2018.0566C76.2689%2012.8052%2072.4284%209.04297%2067.1508%209.04297C61.8993%209.04297%2058.0588%2012.8052%2058.0588%2018.0566C58.0588%2023.308%2061.8993%2027.0703%2067.1508%2027.0703ZM67.1508%2023.7783C63.9374%2023.7783%2061.8733%2021.2963%2061.8733%2018.0566C61.8733%2014.7908%2063.9374%2012.3349%2067.1508%2012.3349C70.3646%2012.3349%2072.4544%2014.7908%2072.4544%2018.0566C72.4544%2021.2963%2070.3646%2023.7783%2067.1508%2023.7783Z'%20fill='white'/%3e%3cpath%20d='M88.33%2026.7565C91.648%2026.7565%2093.3986%2024.6663%2093.3986%2022.0537C93.3986%2019.8591%2091.9094%2018.0563%2090.0545%2017.769C91.7005%2017.4293%2093.059%2015.9662%2093.059%2013.7716C93.059%2011.4463%2091.3609%209.33008%2088.0425%209.33008H78.8723V26.7565H88.33ZM87.2329%2016.3059H82.5821V12.5175H87.2329C88.4868%2012.5175%2089.2706%2013.3275%2089.2706%2014.4248C89.2706%2015.5221%2088.4868%2016.3059%2087.2329%2016.3059ZM87.3632%2023.5429H82.5821V19.4933H87.3632C88.8264%2019.4933%2089.6103%2020.4338%2089.6103%2021.5312C89.6103%2022.7852%2088.7742%2023.5429%2087.3632%2023.5429Z'%20fill='white'/%3e%3cpath%20d='M108.528%2026.7565V23.4907H99.9061V19.5456H108.345V16.2798H99.9061V12.5959H108.528V9.33008H96.1963V26.7565H108.528Z'%20fill='white'/%3e%3cpath%20d='M33.0224%208.90736V4.70715H18.6475V0H14.049V4.70715H0V8.90736H14.0852V12.7093H3.40362V29.6188H7.74868V16.9095H14.0852V34H18.5751V16.9095H25.4909V24.8754C25.4909%2025.2737%2025.3099%2025.4547%2024.7306%2025.4547C24.1512%2025.4547%2022.0149%2025.4547%2020.2045%2025.3823C20.82%2026.541%2021.4718%2028.3877%2021.6528%2029.6188C24.4771%2029.6188%2026.541%2029.5463%2028.0618%2028.8946C29.5463%2028.2428%2029.9808%2027.0117%2029.9808%2024.9478V12.7093H18.5751V8.90736H33.0224Z'%20fill='white'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_748_164'%3e%3crect%20width='108.8'%20height='34'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e" class="absolute top-10 start-10">
                                 </div>
                             </div>
                         </div>
@@ -936,7 +931,6 @@
                             <div class="lg:col-span-3">
                                 <div class="relative overflow-hidden rounded-md group">
                                     <img src="{{ asset('assets/product-5-P23PaWCJ.png') }}" class="rounded-md w-full h-100 object-cover overflow-hidden transition-all duration-500 group-hover:scale-110">
-                                    <img src="{{ asset('assets/5-light-B6pQZFV6.svg') }}" class="absolute top-10 start-10">
                                 </div>
                             </div>
                         </div>
@@ -1260,8 +1254,8 @@
                             <div class="bg-default-900/60 absolute inset-0 z-1"></div>
 
                             <div class="relative text-center z-10">
-                                <div class="text-sm text-white mb-2">// 2005-2K25 //</div>
-                                <img src="data:image/svg+xml,%3csvg%20width='1803'%20height='206'%20viewBox='0%200%201803%20206'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M160.371%204.14573H237.827V201.759H186.834V46.9158L143.166%20201.759H92.0351L48.6432%2046.9158V201.759H0V4.14573H80.4271L120.295%20146.621L160.371%204.14573ZM298.735%20201.759H245.461L310.826%204.14573H380.889L445.286%20201.759H390.908L379.853%20161.338H309.997L298.735%20201.759ZM321.191%20120.986H368.867L345.236%2034.5477L321.191%20120.986ZM636.624%204.14573V201.759H567.252L501.543%2053.4108V201.759H452.899V4.14573H526.417L587.981%20142.06V4.14573H636.624ZM652.089%20122.99V4.14573H703.081V118.43C703.081%20149.799%20715.795%20163.203%20739.287%20163.203C762.849%20163.203%20775.493%20149.799%20775.493%20118.43V4.14573H826.486V122.99C826.486%20176.262%20790.418%20205.904%20739.287%20205.904C688.226%20205.904%20652.089%20176.262%20652.089%20122.99ZM980.151%204.14573V46.4321H893.094V86.162H972.274V126.79H893.094V201.759H842.101V4.14573H980.151ZM1021.27%20201.759H967.99L1033.35%204.14573H1103.42L1167.81%20201.759H1113.44L1102.39%20161.338H1032.53L1021.27%20201.759ZM1043.72%20120.986H1091.39L1067.76%2034.5477L1043.72%20120.986ZM1211.54%20102.952C1211.54%20142.475%201227.84%20163.203%201257.56%20163.203C1281.05%20163.203%201295.08%20149.246%201299.57%20120.917H1350.14C1343.1%20173.706%201308.13%20205.904%201257.49%20205.904C1200.76%20205.904%201160.13%20165.415%201160.13%20102.952C1160.13%2040.4899%201200.76%200%201257.49%200C1308.13%200%201343.1%2032.1985%201350.14%2084.9874H1299.57C1295.08%2056.6583%201281.05%2042.701%201257.56%2042.701C1227.84%2042.701%201211.54%2063.3605%201211.54%20102.952ZM1521.19%204.14573V46.4321H1462.73V201.759H1411.74V46.4321H1353.29V4.14573H1521.19ZM1693.39%204.14573V46.4321H1634.94V201.759H1583.94V46.4321H1525.49V4.14573H1693.39Z'%20fill='white'/%3e%3cpath%20d='M1761.83%207.72616C1782.49%207.72617%201799.23%2024.4721%201799.23%2045.1295C1799.23%2065.7869%201782.49%2082.5328%201761.83%2082.5328C1741.17%2082.5328%201724.43%2065.7869%201724.43%2045.1295C1724.43%2024.4721%201741.17%207.72616%201761.83%207.72616Z'%20stroke='white'%20stroke-width='7.01316'/%3e%3cpath%20d='M1755.23%2066.26H1745.54V22.3684H1767.25C1777.09%2022.3684%201783.09%2027.5383%201783.09%2035.6385C1783.09%2042.7262%201778.32%2047.3747%201770.93%2047.6048C1774.39%2047.8502%201777.08%2050.2128%201778.99%2054.5083L1784.27%2066.26H1773.52L1768.19%2054.539C1766.63%2051.0719%201765.22%2050.1207%201761.6%2050.1207H1755.23V66.26ZM1755.23%2042.2967H1766.12C1770.71%2042.2967%201773.4%2040.0722%201773.4%2036.2369C1773.4%2032.4629%201770.79%2030.3765%201766.11%2030.3765H1755.23V42.2967Z'%20fill='white'/%3e%3c/svg%3e" alt="" class="h-5">
+                                <div class="text-sm text-white mb-2">// SINCE 2005 //</div>
+                                <div class="text-4xl font-bold tracking-widest text-white md:text-6xl">HARIPRIYA</div>
                             </div>
                         </div>
 
@@ -1390,6 +1384,13 @@
 @endpush
 
 @push('styles')
+    <script>
+        try {
+            if (sessionStorage.getItem('bswx-ready-version') === '{{ filemtime(public_path('0505.bswx')) }}') {
+                document.documentElement.classList.add('bswx-return-visit');
+            }
+        } catch (error) {}
+    </script>
     <link rel="stylesheet" href="{{ asset('css/bswx-tour.css') }}?v={{ filemtime(public_path('css/bswx-tour.css')) }}">
 @endpush
 

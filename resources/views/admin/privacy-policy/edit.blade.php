@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('admin.favicon')
     <title>Privacy Policy · Admin</title>
     <link rel="stylesheet" href="{{ asset('assets/app-DVm5M2fF.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
@@ -11,17 +12,8 @@
 <body class="admin-panel has-admin-sidebar min-h-screen bg-default-100 text-default-900">
     @include('admin.sidebar')
 
-    <main class="admin-form-main privacy-policy-admin">
-        <a class="admin-back-link" href="{{ route('admin.dashboard') }}"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M19 12H5m7-7-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Dashboard</span></a>
-
-        <div class="admin-form-heading">
-            <div>
-                <p class="admin-form-eyebrow">Content</p>
-                <h1>Privacy Policy</h1>
-                <p>Edit and format the policy body. Change the page title in the Live Visual Editor. The last updated date changes automatically when you save policy content here.</p>
-            </div>
-            <span class="admin-form-badge">{{ $hasSavedBody ? 'Published content' : 'Current page content' }}</span>
-        </div>
+    <main class="admin-form-main admin-wide-main privacy-policy-admin">
+        <div class="admin-page-bar">@include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Privacy Policy'])</div>
 
         @if (session('status'))
             <p class="privacy-policy-admin__notice" role="status">{{ session('status') }}</p>
@@ -32,14 +24,9 @@
             </div>
         @endif
 
-        <form method="post" action="{{ route('admin.privacy-policy.update') }}" class="admin-form-card privacy-policy-editor" data-privacy-policy-form data-admin-confirm-update data-admin-confirm-label="Privacy Policy">
+        <form method="post" action="{{ route('admin.privacy-policy.update') }}" class="privacy-policy-editor" data-privacy-policy-form data-admin-confirm-update data-admin-confirm-label="Privacy Policy">
             @csrf
             @method('PUT')
-
-            <div class="privacy-policy-editor__intro">
-                <div><strong>Policy content</strong><p>Select text to format it, or place the cursor in a paragraph to create a list or heading.</p></div>
-                <a href="{{ route('privacy-policy') }}" target="_blank" rel="noopener">View public page ↗</a>
-            </div>
 
             <div class="privacy-policy-editor__toolbar" role="toolbar" aria-label="Text formatting">
                 <div class="privacy-policy-editor__tool-group">

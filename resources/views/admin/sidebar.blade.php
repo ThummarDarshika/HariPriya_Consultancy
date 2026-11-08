@@ -1,9 +1,8 @@
 <aside class="admin-sidebar" data-cms-ignore aria-label="Admin navigation">
     <div class="admin-sidebar__brand-row">
         <a class="admin-sidebar__brand" href="{{ route('admin.dashboard') }}" aria-label="HARIPRIYA Admin dashboard">
-            <span class="admin-sidebar__brand-full">HARIPRIYA</span>
-            <span class="admin-sidebar__brand-admin">ADMIN</span>
-            <span class="admin-sidebar__brand-mark" aria-hidden="true">HP</span>
+            <img class="admin-sidebar__brand-logo" src="{{ asset('assets/haripriya-sidebar-white.png') }}" alt="HARIPRIYA logo">
+            <img class="admin-sidebar__brand-mark" src="{{ $adminBrandAssets['site.favicon'] ?: asset('assets/favicon-D5yOChkQ.svg') }}" alt="" aria-hidden="true">
         </a>
         <button type="button" class="admin-sidebar__toggle" data-admin-sidebar-toggle aria-label="{{ request()->routeIs('admin.editor') ? 'Expand sidebar' : 'Collapse sidebar' }}" aria-controls="admin-sidebar-navigation" aria-expanded="{{ request()->routeIs('admin.editor') ? 'false' : 'true' }}" title="{{ request()->routeIs('admin.editor') ? 'Expand sidebar' : 'Collapse sidebar' }}">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14.5 5-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
@@ -23,6 +22,7 @@
             <span class="admin-sidebar__heading">Site settings</span>
             <a class="{{ request()->routeIs('admin.site-assets.*') ? 'is-active' : '' }}" href="{{ route('admin.site-assets.index') }}" title="Site media"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="9" r="1.5" stroke="currentColor" stroke-width="1.5"/><path d="m4 17 5-5 3 3 3-4 5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="admin-sidebar__label">Site media</span></a>
             <a class="{{ request()->routeIs('admin.brochure') ? 'is-active' : '' }}" href="{{ route('admin.brochure') }}" title="Download brochure"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="admin-sidebar__label">Download brochure</span></a>
+            <a class="{{ request()->routeIs('admin.notification-settings.*') ? 'is-active' : '' }}" href="{{ route('admin.notification-settings.edit') }}" title="Notification settings"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="admin-sidebar__label">Notification settings</span></a>
             <a class="{{ request()->routeIs('admin.companies.*') ? 'is-active' : '' }}" href="{{ route('admin.companies.index') }}" title="Companies"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20V5a1 1 0 0 1 1-1h9v16M14 9h5a1 1 0 0 1 1 1v10M2.5 20h19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 8h3M7 12h3M7 16h3M17 13h1M17 16h1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="admin-sidebar__label">Companies</span></a>
             <a class="{{ request()->routeIs('admin.certificates.*') ? 'is-active' : '' }}" href="{{ route('admin.certificates.index') }}" title="Certificates"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 14.8 5l3.5.1.8 3.4 2 2.8-2 2.8-.8 3.4-3.5.1L12 20l-2.8-2.4-3.5-.1-.8-3.4-2-2.8 2-2.8.8-3.4 3.5-.1L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="admin-sidebar__label">Certificates</span></a>
         </div>
@@ -63,6 +63,10 @@
             <span class="admin-sidebar__heading">Messages</span>
             <a class="{{ request()->routeIs('admin.contact-submissions.*') ? 'is-active' : '' }}" href="{{ route('admin.contact-submissions.index') }}" title="Contact submissions"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="admin-sidebar__label">Contact submissions</span></a>
             <a class="{{ request()->routeIs('admin.job-applications.*') ? 'is-active' : '' }}" href="{{ route('admin.job-applications.index') }}" title="Job applications"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 3h10l4 4v14H5V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15 3v5h4M8 12h8M8 16h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="admin-sidebar__label">Job applications</span></a>
+        </div>
+        <div class="admin-sidebar__group">
+            <span class="admin-sidebar__heading">Account</span>
+            <a class="{{ request()->routeIs('admin.password.*') ? 'is-active' : '' }}" href="{{ route('admin.password.edit') }}" title="Change password"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="admin-sidebar__label">Change password</span></a>
         </div>
     </nav>
     <form method="post" action="{{ route('admin.logout') }}" class="admin-sidebar__logout">@csrf<button type="submit" title="Sign out"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5m5-4 4-4-4-4m4 4H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="admin-sidebar__label">Sign out</span></button></form>
@@ -112,5 +116,15 @@
         this.setAttribute('aria-expanded', String(!isCollapsed));
         this.setAttribute('aria-label', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
         this.setAttribute('title', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+        if (!isCollapsed) document.querySelector('.admin-sidebar').scrollTop = Number(sessionStorage.getItem('admin-sidebar-scroll') || 0);
     });
+
+    const adminSidebar = document.querySelector('.admin-sidebar');
+    if (adminSidebar) {
+        const savedScroll = Number(sessionStorage.getItem('admin-sidebar-scroll') || 0);
+        if (!document.body.classList.contains('admin-sidebar-collapsed')) adminSidebar.scrollTop = savedScroll;
+        adminSidebar.addEventListener('scroll', () => {
+            if (!document.body.classList.contains('admin-sidebar-collapsed')) sessionStorage.setItem('admin-sidebar-scroll', String(adminSidebar.scrollTop));
+        }, { passive: true });
+    }
 </script>

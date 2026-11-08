@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Mail\NewContactInquiry;
 use App\Models\ContactSubmission;
+use App\Models\MailSenderSetting;
+use App\Models\SiteSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use RuntimeException;
@@ -17,6 +19,7 @@ class ContactInquiryNotificationTest extends TestCase
     {
         config()->set('mail.contact_inquiry.to', 'owner@example.com');
         config()->set('mail.from.address', 'website@example.com');
+        SiteSetting::query()->create(['key' => SiteSetting::NOTIFICATION_EMAIL, 'value' => 'inquiries@example.com']);
         Mail::fake();
 
         $this->postJson('/contact', [
@@ -32,7 +35,7 @@ class ContactInquiryNotificationTest extends TestCase
         $this->assertSame('Asha Shah', $submission->name);
 
         Mail::assertSent(NewContactInquiry::class, function (NewContactInquiry $mail) use ($submission): bool {
-            $this->assertTrue($mail->hasTo('owner@example.com'));
+            $this->assertTrue($mail->hasTo('inquiries@example.com'));
             $this->assertSame('asha@example.com', $mail->envelope()->replyTo[0]->address);
             $mail->assertHasSubject('New website inquiry')
                 ->assertSeeInHtml('Asha Shah')
@@ -44,6 +47,26 @@ class ContactInquiryNotificationTest extends TestCase
             return $mail->submission->is($submission);
         });
         Mail::assertSentCount(1);
+    }
+
+    public function test_contact_notification_uses_the_verified_sender_configuration(): void
+    {
+        SiteSetting::query()->create(['key' => SiteSetting::NOTIFICATION_EMAIL, 'value' => 'owner@example.com']);
+        MailSenderSetting::query()->create([
+            'email' => 'sender@example.com', 'name' => 'HARIPRIYA',
+            'smtp_host' => 'smtp.example.com', 'smtp_port' => 587, 'smtp_scheme' => 'smtp',
+            'smtp_username' => 'sender@example.com', 'smtp_password' => 'app-password',
+        ]);
+        Mail::fake();
+
+        $this->postJson('/contact', [
+            'first_name' => 'Asha', 'last_name' => 'Shah', 'email' => 'asha@example.com',
+            'phone' => '9876543210', 'message' => 'Please call me.',
+        ])->assertOk();
+
+        $this->assertSame('configured_sender', config('mail.default'));
+        $this->assertSame('sender@example.com', config('mail.from.address'));
+        Mail::assertSent(NewContactInquiry::class);
     }
 
     public function test_contact_form_keeps_the_inquiry_when_recipient_address_is_not_configured(): void

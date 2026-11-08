@@ -29,6 +29,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer(['admin.sidebar', 'admin.favicon'], function (BladeView $view): void {
+            $view->with('adminBrandAssets', SiteAsset::query()
+                ->whereIn('key', ['site.logo', 'site.favicon'])
+                ->pluck('value', 'key'));
+        });
+
         if (PHP_OS_FAMILY === 'Windows' && $this->app->runningInConsole()) {
             ServeCommand::$passthroughVariables = array_values(array_unique([
                 ...ServeCommand::$passthroughVariables,

@@ -34,7 +34,7 @@ class SiteAssetController extends Controller
             $asset->update(['value' => $validated['value']]);
         } else {
             $rules = $asset->kind === 'document'
-                ? ['required_without:remove', 'file', 'mimes:pdf', 'max:5120']
+                ? ['required_without:remove', 'file', 'mimes:pdf', 'max:51200']
                 : ($asset->key === 'site.logo' || $asset->key === 'site.favicon'
                     ? ['required', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120']
                     : ['required', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120']);

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('admin.favicon')
     <title>{{ $item->exists ? 'Edit' : 'Add' }} {{ config('cms.collections.'.$collection) }}</title>
     <link rel="stylesheet" href="{{ asset('assets/app-DVm5M2fF.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
@@ -10,11 +11,7 @@
 <body class="admin-panel has-admin-sidebar min-h-screen bg-default-100 text-default-900">
     @include('admin.sidebar')
     <main class="admin-form-main mx-auto max-w-4xl p-5 md:p-10">
-        <a class="admin-back-link" href="{{ route('admin.collections.index', $collection) }}"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M19 12H5m7-7-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>{{ config('cms.collections.'.$collection) }}</span></a>
-        <div class="admin-form-heading">
-            <div><p class="admin-form-eyebrow">{{ config('cms.collections.'.$collection) }}</p><h1>{{ $item->exists ? 'Edit item' : 'Add item' }}</h1><p>Update the content below and save your changes.</p></div>
-            <span class="admin-form-badge">{{ $item->exists ? 'Editing' : 'New item' }}</span>
-        </div>
+        <div class="admin-page-bar">@include('admin.back-link', ['href' => route('admin.collections.index', $collection), 'title' => $item->exists ? 'Edit item' : 'Add item'])</div>
         <form id="collection-item-form" data-jquery-validation @if ($item->exists) data-admin-confirm-update data-admin-confirm-remove @endif data-admin-confirm-label="{{ $item->title ?: $item->client_name }}" method="post" enctype="multipart/form-data" action="{{ $item->exists ? route('admin.collections.update', [$collection, $item]) : route('admin.collections.store', $collection) }}" class="admin-form-card space-y-5" novalidate>
             @csrf
             @if ($item->exists) @method('PUT') @endif

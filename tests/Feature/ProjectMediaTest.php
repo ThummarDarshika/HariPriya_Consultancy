@@ -107,7 +107,7 @@ class ProjectMediaTest extends TestCase
         $this->actingAs($this->administrator());
 
         $this->get('/admin/project-media')->assertOk()
-            ->assertSee('<table class="project-media-table">', false)
+            ->assertSee('<table class="admin-list__table">', false)
             ->assertSee('Assembly image')
             ->assertSee('Assembly video')
             ->assertSee('Preview')

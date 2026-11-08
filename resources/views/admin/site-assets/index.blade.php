@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('admin.favicon')
     <title>Site media · Admin</title>
     <link rel="stylesheet" href="{{ asset('assets/app-DVm5M2fF.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
@@ -10,8 +11,7 @@
 <body class="admin-panel has-admin-sidebar min-h-screen bg-default-100 text-default-900">
     @include('admin.sidebar')
     <main class="admin-content-main mx-auto max-w-6xl p-5 md:p-10">
-        <a class="admin-back-link" href="{{ route('admin.dashboard') }}"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M19 12H5m7-7-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Dashboard</span></a>
-        <div class="admin-form-heading"><div><p class="admin-form-eyebrow">Site settings</p><h1>Site media</h1><p>Manage images and fixed content used across your website.</p></div></div>
+        <div class="admin-page-bar">@include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Site media'])</div>
         @if (session('status')) <p role="status" class="my-4 rounded bg-green-100 p-3">{{ session('status') }}</p> @endif
         @if ($errors->any())
             <div role="alert" class="my-4 rounded bg-red-100 p-4 text-red-900">
@@ -19,8 +19,9 @@
             </div>
         @endif
         @foreach ($assetGroups as $page => $assets)
-            <h2 class="mt-10 mb-4 text-xl font-semibold">{{ ucfirst(str_replace('-', ' ', $page)) }}</h2>
-            <div class="grid gap-4 md:grid-cols-2">
+            <section class="admin-asset-group" aria-label="{{ ucfirst(str_replace('-', ' ', $page)) }} media">
+                <div class="admin-asset-group__heading"><h2>{{ ucfirst(str_replace('-', ' ', $page)) }}</h2><span>{{ $assets->count() }} {{ $assets->count() === 1 ? 'item' : 'items' }}</span></div>
+                <div class="grid gap-4 md:grid-cols-2">
                 @foreach ($assets as $asset)
                     <form method="post" enctype="multipart/form-data" action="{{ route('admin.site-assets.update', $asset) }}" data-admin-confirm-update data-admin-confirm-label="{{ $asset->label }}" class="admin-asset-card">
                         @csrf @method('PUT')
@@ -49,11 +50,12 @@
                                 <input name="upload" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/x-icon" required class="mt-2 block w-full">
                             </label>
                         @endif
-                        @if ($asset->kind !== 'text') <p class="mt-2 text-sm">Maximum file size: 5 MB.</p> @endif
+                        @if ($asset->kind !== 'text') <p class="mt-2 text-sm">Maximum file size: {{ $asset->kind === 'document' ? '50' : '5' }} MB.</p> @endif
                         <button class="mt-4 rounded bg-primary px-5 py-3 text-white">Save</button>
                     </form>
                 @endforeach
-            </div>
+                </div>
+            </section>
         @endforeach
     </main>
 </body>

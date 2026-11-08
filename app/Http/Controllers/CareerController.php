@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Mail\NewJobApplication;
+use App\Mail\SenderMailConfiguration;
 use App\Models\JobApplication;
 use App\Models\JobOpening;
+use App\Models\SiteSetting;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,7 +34,7 @@ class CareerController extends Controller
         return view('pages.career.show', ['cmsPage' => 'career-detail', 'jobOpening' => $jobOpening]);
     }
 
-    public function apply(Request $request, JobOpening $jobOpening): RedirectResponse|JsonResponse
+    public function apply(Request $request, JobOpening $jobOpening, SenderMailConfiguration $mailConfiguration): RedirectResponse|JsonResponse
     {
         abort_unless($jobOpening->is_active, 404);
 
@@ -63,7 +65,8 @@ class CareerController extends Controller
             throw $exception;
         }
 
-        $recipientAddress = config('mail.contact_inquiry.to');
+        $mailConfiguration->applySaved();
+        $recipientAddress = SiteSetting::notificationEmail();
         $senderAddress = config('mail.from.address');
 
         if ($recipientAddress && $senderAddress) {

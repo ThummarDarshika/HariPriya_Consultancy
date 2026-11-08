@@ -4,12 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactSubmission;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ContactSubmissionController extends Controller
 {
+    public function destroy(ContactSubmission $contactSubmission): RedirectResponse
+    {
+        $contactSubmission->delete();
+
+        return redirect()->route('admin.contact-submissions.index')->with('status', 'Contact submission deleted.');
+    }
+
     public function index(Request $request): View
     {
         $search = $request->string('search')->trim()->toString();

@@ -2,8 +2,12 @@ body.bswx-tour-locked {
     overflow: hidden;
 }
 
-body:has(#bswx-site-loader:not([hidden])) {
+html:not(.bswx-return-visit) body:has(#bswx-site-loader:not([hidden])) {
     overflow: hidden;
+}
+
+html.bswx-return-visit .bswx-site-loader {
+    display: none;
 }
 
 .bswx-site-loader {

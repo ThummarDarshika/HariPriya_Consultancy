@@ -44,6 +44,7 @@
     <!-- Scripts -->
     <script type="module" src="{{ asset('assets/app-MYA1z5jW.js') }}"></script>
     <script src="{{ asset('js/site-content.js') }}?v={{ filemtime(public_path('js/site-content.js')) }}" defer></script>
+    <script src="{{ asset('js/home-navigation.js') }}?v={{ filemtime(public_path('js/home-navigation.js')) }}" defer></script>
     <script src="{{ asset('js/collection-content.js') }}" defer></script>
     <script src="{{ asset('js/product-gallery.js') }}?v={{ filemtime(public_path('js/product-gallery.js')) }}" defer></script>
     @isset($cmsEditorPage)
@@ -71,7 +72,7 @@
 
     @unless (isset($cmsEditorPage))
         <a class="site-whatsapp-link" href="https://wa.me/919724430718" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp" title="Chat with us on WhatsApp" data-cms-ignore>
-            <img src="{{ asset('assets/whatsapp-official.svg') }}" alt="" aria-hidden="true">
+            <img src="{{ asset('assets/whatsapp-client.png') }}" alt="" aria-hidden="true">
         </a>
     @endunless
 

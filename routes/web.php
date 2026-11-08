@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ContactSubmissionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobApplicationController;
 use App\Http\Controllers\Admin\JobOpeningController;
+use App\Http\Controllers\Admin\NotificationSettingsController;
 use App\Http\Controllers\Admin\PrivacyPolicyController;
 use App\Http\Controllers\Admin\ProjectMediaController;
 use App\Http\Controllers\Admin\SiteAssetController;
@@ -87,12 +88,17 @@ Route::post('/admin/login', [AdminAuthController::class, 'store'])->middleware('
 
 Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(function (): void {
     Route::post('/logout', [AdminAuthController::class, 'destroy'])->name('logout');
+    Route::get('/password', [AdminAuthController::class, 'editPassword'])->name('password.edit');
+    Route::put('/password', [AdminAuthController::class, 'updatePassword'])->name('password.update');
     Route::get('/', DashboardController::class)->name('dashboard');
     Route::get('/editor', VisualEditorController::class)->name('editor');
     Route::get('/privacy-policy', [PrivacyPolicyController::class, 'edit'])->name('privacy-policy.edit');
     Route::put('/privacy-policy', [PrivacyPolicyController::class, 'update'])->name('privacy-policy.update');
     Route::get('/site-assets', [SiteAssetController::class, 'index'])->name('site-assets.index');
     Route::get('/brochure', [SiteAssetController::class, 'brochure'])->name('brochure');
+    Route::get('/notification-settings', [NotificationSettingsController::class, 'edit'])->name('notification-settings.edit');
+    Route::put('/notification-settings', [NotificationSettingsController::class, 'update'])->name('notification-settings.update');
+    Route::put('/notification-settings/sender', [NotificationSettingsController::class, 'updateSender'])->name('notification-settings.sender.update');
     Route::put('/site-assets/{asset}', [SiteAssetController::class, 'update'])->name('site-assets.update');
     Route::resource('companies', CompanyController::class)->except('show');
     Route::resource('certificates', CertificateController::class)->except('show');
@@ -101,6 +107,7 @@ Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(fu
     Route::get('/job-applications', [JobApplicationController::class, 'index'])->name('job-applications.index');
     Route::get('/job-applications/{jobApplication}', [JobApplicationController::class, 'show'])->name('job-applications.show');
     Route::get('/job-applications/{jobApplication}/resume', [JobApplicationController::class, 'resume'])->name('job-applications.resume');
+    Route::delete('/job-applications/{jobApplication}', [JobApplicationController::class, 'destroy'])->name('job-applications.destroy');
     Route::get('/collections/{collection}', [CollectionItemController::class, 'index'])->name('collections.index');
     Route::get('/collections/{collection}/create', [CollectionItemController::class, 'create'])->name('collections.create');
     Route::post('/collections/{collection}', [CollectionItemController::class, 'store'])->name('collections.store');
@@ -109,6 +116,7 @@ Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(fu
     Route::delete('/collections/{collection}/{item}', [CollectionItemController::class, 'destroy'])->name('collections.destroy');
     Route::get('/contact-submissions', [ContactSubmissionController::class, 'index'])->name('contact-submissions.index');
     Route::get('/contact-submissions/export', [ContactSubmissionController::class, 'export'])->name('contact-submissions.export');
+    Route::delete('/contact-submissions/{contactSubmission}', [ContactSubmissionController::class, 'destroy'])->name('contact-submissions.destroy');
 });
 
 Route::fallback(function () {

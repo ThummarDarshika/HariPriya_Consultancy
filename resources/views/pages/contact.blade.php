@@ -47,18 +47,16 @@
                             <div class="text-primary mb-5">// Contact us on //</div>
 
                             <div class="flex flex-col gap-2">
-                                <a href="tel:+(558)845889" class="underline decoration-transparent transition-all duration-300 hover:decoration-default-600">+(558) 845 889</a>
-                                <a href="tel:+(41)845889568" class="underline decoration-transparent transition-all duration-300 hover:decoration-default-600">+(41) 845 889 568</a>
-                                <a href="mailto:example@gmail.com" class="underline decoration-transparent transition-all duration-300 hover:decoration-default-600">example@gmail.com</a>
+                                <a href="tel:+919724430718" class="underline decoration-transparent transition-all duration-300 hover:decoration-default-600">+91 97244 30718</a>
+                                <a href="https://wa.me/919724430718" target="_blank" rel="noopener noreferrer" class="underline decoration-transparent transition-all duration-300 hover:decoration-default-600">WhatsApp us</a>
                             </div>
                         </div>
 
                         <div>
-                            <div class="text-primary mb-5">// Find us //</div>
+                            <div class="text-primary mb-5">// Send an inquiry //</div>
 
                             <div class="flex flex-col gap-2">
-                                <p>USA - 123 creative street, suite 456, new york, NY 10001</p>
-                                <p>USA - 93 back street, suite 786, new york, ny 10005</p>
+                                <p>Tell us about your project using the form on this page.</p>
                             </div>
                         </div>
                     </div>

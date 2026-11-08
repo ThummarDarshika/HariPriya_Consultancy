@@ -181,7 +181,8 @@ class CareerFlowTest extends TestCase
         ]);
 
         $this->get('/admin/job-applications')->assertOk()->assertSee('19 Oct 2026, 02:00 PM IST');
-        $this->get('/admin/job-applications/'.$application->id)->assertOk()->assertSee('Submitted 19 Oct 2026, 02:00 PM IST');
+        $this->get('/admin/job-applications/'.$application->id)->assertOk()
+            ->assertSee('<dt>Submitted</dt><dd>19 Oct 2026, 02:00 PM IST</dd>', false);
         $this->assertSame('2026-10-19 08:30:00', $application->fresh()->created_at->format('Y-m-d H:i:s'));
     }
 

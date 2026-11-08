@@ -29,7 +29,6 @@
                     </div>
                     <p class="text-sm w-32.5">Team of passionate professionals</p>
                 </div>
-                <p class="text-sm text-default-900">21.0278° N, 105.8342° E</p>
             </div>
         </div>
 
@@ -304,102 +303,36 @@
                     <img src="{{ asset('assets/1-BvH2oRHB.webp') }}" alt="" class="rounded-lg">
                     <h3 class="lg:text-[28px] text-xl">James anderson</h3>
                     <div class="team-job-title">Head of operations</div>
-                    <div class="flex text-default-900 gap-4">
-                        <a href="https://www.instagram.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-instagram size-5"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-linkedin-filled size-5"></i>
-                        </a>
-                        <a href="https://x.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-x size-5"></i>
-                        </a>
-                    </div>
                 </div>
 
                 <div class="flex flex-col gap-4">
                     <img src="{{ asset('assets/2-CnyzFw4R.webp') }}" alt="" class="rounded-lg">
                     <h3 class="lg:text-[28px] text-xl">James anderson</h3>
                     <div class="team-job-title">Head of operations</div>
-                    <div class="flex text-default-900 gap-4">
-                        <a href="https://www.instagram.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-instagram size-5"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-linkedin-filled size-5"></i>
-                        </a>
-                        <a href="https://x.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-x size-5"></i>
-                        </a>
-                    </div>
                 </div>
 
                 <div class="flex flex-col gap-4">
                     <img src="{{ asset('assets/3-CovcYcz-2wc7bx.webp') }}" alt="" class="rounded-lg">
                     <h3 class="lg:text-[28px] text-xl">James anderson</h3>
                     <div class="team-job-title">Head of operations</div>
-                    <div class="flex text-default-900 gap-4">
-                        <a href="https://www.instagram.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-instagram size-5"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-linkedin-filled size-5"></i>
-                        </a>
-                        <a href="https://x.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-x size-5"></i>
-                        </a>
-                    </div>
                 </div>
 
                 <div class="flex flex-col gap-4">
                     <img src="{{ asset('assets/4-DClr7GQJ.webp') }}" alt="" class="rounded-lg">
                     <h3 class="lg:text-[28px] text-xl">James anderson</h3>
                     <div class="team-job-title">Head of operations</div>
-                    <div class="flex text-default-900 gap-4">
-                        <a href="https://www.instagram.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-instagram size-5"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-linkedin-filled size-5"></i>
-                        </a>
-                        <a href="https://x.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-x size-5"></i>
-                        </a>
-                    </div>
                 </div>
 
                 <div class="flex flex-col gap-4">
                     <img src="{{ asset('assets/5-BGS94RRO.webp') }}" alt="" class="rounded-lg">
                     <h3 class="lg:text-[28px] text-xl">James anderson</h3>
                     <div class="team-job-title">Head of operations</div>
-                    <div class="flex text-default-900 gap-4">
-                        <a href="https://www.instagram.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-instagram size-5"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-linkedin-filled size-5"></i>
-                        </a>
-                        <a href="https://x.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-x size-5"></i>
-                        </a>
-                    </div>
                 </div>
 
                 <div class="flex flex-col gap-4">
                     <img src="{{ asset('assets/6-v477bqBM.webp') }}" alt="" class="rounded-lg">
                     <h3 class="lg:text-[28px] text-xl">James anderson</h3>
                     <div class="team-job-title">Head of operations</div>
-                    <div class="flex text-default-900 gap-4">
-                        <a href="https://www.instagram.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-instagram size-5"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-linkedin-filled size-5"></i>
-                        </a>
-                        <a href="https://x.com/" target="_blank" class="social-link w-inline-block">
-                            <i class="iconify tabler--brand-x size-5"></i>
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>

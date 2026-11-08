@@ -124,7 +124,7 @@ class ManagedContentTest extends TestCase
         $this->seed(SiteAssetSeeder::class);
         $this->actingAs($this->administrator());
         $this->get('/admin/site-assets')->assertOk();
-        $this->get('/admin/brochure')->assertOk()->assertSee('Upload PDF');
+        $this->get('/admin/brochure')->assertOk()->assertSee('Upload brochure');
 
         $background = SiteAsset::query()->where('key', 'cta.background')->firstOrFail();
         $this->put(route('admin.site-assets.update', $background), [
@@ -160,6 +160,30 @@ class ManagedContentTest extends TestCase
             'value' => 'Since - 2010',
         ])->assertRedirect(route('admin.site-assets.index'));
         $this->get('/about')->assertSee('Since - 2010');
+    }
+
+    public function test_brochure_accepts_a_50_mb_pdf_and_rejects_a_larger_file(): void
+    {
+        Storage::fake('public');
+        $this->seed(SiteAssetSeeder::class);
+        $this->actingAs($this->administrator());
+        $brochure = SiteAsset::query()->where('key', 'brochure')->firstOrFail();
+
+        $this->put(route('admin.site-assets.update', $brochure), [
+            'upload' => UploadedFile::fake()->create('brochure.pdf', 51200, 'application/pdf'),
+        ])->assertRedirect(route('admin.brochure'));
+
+        $brochure->refresh();
+        Storage::disk('public')->assertExists(substr($brochure->value, strlen('/storage/')));
+        $savedValue = $brochure->value;
+        $this->get('/')->assertSee($savedValue);
+
+        $this->put(route('admin.site-assets.update', $brochure), [
+            'upload' => UploadedFile::fake()->create('too-large.pdf', 51201, 'application/pdf'),
+        ])->assertSessionHasErrors('upload');
+
+        $this->assertSame($savedValue, $brochure->fresh()->value);
+        Storage::disk('public')->assertExists(substr($savedValue, strlen('/storage/')));
     }
 
     public function test_shared_cta_background_is_saved_in_site_assets_and_rendered_on_its_pages(): void

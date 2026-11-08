@@ -13,6 +13,7 @@
     const exitButton = document.getElementById('bswx-tour-exit');
     const toolbar = document.getElementById('bswx-tour-toolbar');
     const siteLoader = document.getElementById('bswx-site-loader');
+    if (document.documentElement.classList.contains('bswx-return-visit') && siteLoader) siteLoader.hidden = true;
     const loaderLogo = document.getElementById('bswx-site-loader-logo');
     const headerLogo = Array.from(document.querySelectorAll('[data-bswx-header-logo]'))
         .find((logo) => !logo.classList.contains('hidden'));
@@ -23,10 +24,6 @@
     }
     let mode = 'preview';
     let placeholder = null;
-    let scrollFrame = null;
-    let scrollTime = 0;
-    let scrollTarget = window.scrollY;
-    let lastProgrammaticScrollY = null;
 
     const revealSite = () => {
         if (!siteLoader || siteLoader.hidden || siteLoader.classList.contains('is-leaving')) return;
@@ -63,8 +60,11 @@
     };
 
     const showLoadError = () => {
-        if (!siteLoader || siteLoader.hidden) return;
+        if (!siteLoader) return;
 
+        document.documentElement.classList.remove('bswx-return-visit');
+        siteLoader.hidden = false;
+        try { sessionStorage.removeItem('bswx-ready-version'); } catch (error) {}
         loaderMessage.textContent = 'The 3D model could not load. Please try again.';
         retryButton.hidden = false;
     };
@@ -97,42 +97,7 @@
         syncFramePlacement();
     };
 
-    const animateScroll = (time) => {
-        const elapsed = scrollTime ? Math.min(time - scrollTime, 64) : 16;
-        scrollTime = time;
-        const next = window.scrollY + (scrollTarget - window.scrollY) * (1 - Math.exp(-elapsed / 95));
-        lastProgrammaticScrollY = Math.abs(scrollTarget - next) < 0.5 ? scrollTarget : next;
-        window.scrollTo(0, lastProgrammaticScrollY);
-
-        if (Math.abs(scrollTarget - window.scrollY) > 0.5) {
-            scrollFrame = requestAnimationFrame(animateScroll);
-        } else {
-            scrollFrame = null;
-            scrollTime = 0;
-        }
-    };
-
-    const stopSmoothScroll = () => {
-        if (scrollFrame !== null) cancelAnimationFrame(scrollFrame);
-        scrollFrame = null;
-        scrollTime = 0;
-        scrollTarget = window.scrollY;
-        lastProgrammaticScrollY = null;
-    };
-
-    const hasScrollableParent = (element) => {
-        if (!(element instanceof Element)) return false;
-
-        for (let current = element; current && current !== document.body; current = current.parentElement) {
-            const overflow = getComputedStyle(current).overflowY;
-            if ((overflow === 'auto' || overflow === 'scroll') && current.scrollHeight > current.clientHeight + 1) return true;
-        }
-
-        return false;
-    };
-
     const showExpanded = () => {
-        stopSmoothScroll();
         releaseFrame();
         placeholder = document.createElement('div');
         placeholder.style.height = `${section.offsetHeight}px`;
@@ -170,6 +135,7 @@
         if (event.source !== frame.contentWindow || event.origin !== window.location.origin) return;
 
         if (event.data?.type === 'bswx-ready') {
+            try { sessionStorage.setItem('bswx-ready-version', siteLoader?.dataset.modelVersion || ''); } catch (error) {}
             revealSite();
         } else if (event.data?.type === 'bswx-error') {
             showLoadError();
@@ -178,25 +144,7 @@
         }
     });
 
-    window.addEventListener('wheel', (event) => {
-        if (mode !== 'preview' || event.ctrlKey || hasScrollableParent(event.target)) return;
-
-        event.preventDefault();
-        const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
-        const delta = Math.max(-window.innerHeight, Math.min(window.innerHeight, event.deltaY * scale * 1.1));
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        scrollTarget = Math.max(0, Math.min(maxScroll, scrollTarget + delta));
-
-        if (scrollFrame === null) scrollFrame = requestAnimationFrame(animateScroll);
-    }, { passive: false, capture: true });
-
     window.addEventListener('scroll', () => {
-        if (scrollFrame !== null && lastProgrammaticScrollY !== null && Math.abs(window.scrollY - lastProgrammaticScrollY) > 2) {
-            stopSmoothScroll();
-        } else if (scrollFrame === null) {
-            scrollTarget = window.scrollY;
-        }
-
         syncFramePlacement();
     }, { passive: true });
 

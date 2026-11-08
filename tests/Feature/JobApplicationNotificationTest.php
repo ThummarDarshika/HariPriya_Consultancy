@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Mail\NewJobApplication;
 use App\Models\JobApplication;
 use App\Models\JobOpening;
+use App\Models\SiteSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
@@ -20,6 +21,7 @@ class JobApplicationNotificationTest extends TestCase
     {
         config()->set('mail.contact_inquiry.to', 'owner@example.com');
         config()->set('mail.from.address', 'website@example.com');
+        SiteSetting::query()->create(['key' => SiteSetting::NOTIFICATION_EMAIL, 'value' => 'hiring@example.com']);
         Storage::fake('local');
         Mail::fake();
         $opening = JobOpening::factory()->create(['title' => 'Production Engineer']);
@@ -32,7 +34,7 @@ class JobApplicationNotificationTest extends TestCase
         Storage::disk('local')->assertExists($application->resume_path);
 
         Mail::assertSent(NewJobApplication::class, function (NewJobApplication $mail): bool {
-            $this->assertTrue($mail->hasTo('owner@example.com'));
+            $this->assertTrue($mail->hasTo('hiring@example.com'));
             $mail->assertHasSubject('New job application received')
                 ->assertSeeInHtml('A new application has been submitted for a job opening.')
                 ->assertSeeInText('Sign in to the admin panel to review it.')

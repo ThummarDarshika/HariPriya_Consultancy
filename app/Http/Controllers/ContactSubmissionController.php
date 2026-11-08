@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Mail\NewContactInquiry;
+use App\Mail\SenderMailConfiguration;
 use App\Models\ContactSubmission;
+use App\Models\SiteSetting;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,7 +14,7 @@ use Throwable;
 
 class ContactSubmissionController extends Controller
 {
-    public function store(Request $request): RedirectResponse|JsonResponse
+    public function store(Request $request, SenderMailConfiguration $mailConfiguration): RedirectResponse|JsonResponse
     {
         $data = $request->validate([
             'first_name' => ['required', 'string', 'max:128'],
@@ -33,7 +35,8 @@ class ContactSubmissionController extends Controller
             'message' => $data['message'],
         ]);
 
-        $recipientAddress = config('mail.contact_inquiry.to');
+        $mailConfiguration->applySaved();
+        $recipientAddress = SiteSetting::notificationEmail();
         $senderAddress = config('mail.from.address');
 
         if ($recipientAddress && $senderAddress) {

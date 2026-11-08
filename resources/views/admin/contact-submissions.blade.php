@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('admin.favicon')
     <title>Contact submissions · Admin</title>
     <link rel="stylesheet" href="{{ asset('assets/app-DVm5M2fF.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
@@ -10,19 +11,13 @@
 <body class="admin-panel has-admin-sidebar min-h-screen bg-default-100 text-default-900">
     @include('admin.sidebar')
     <main class="mx-auto max-w-6xl p-5 md:p-10">
-        <a class="admin-back-link" href="{{ route('admin.dashboard') }}"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M19 12H5m7-7-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Dashboard</span></a>
-        <div class="my-6 flex flex-wrap items-center justify-between gap-4">
-            <h1 class="text-3xl font-semibold">Contact submissions</h1>
+        <div class="admin-page-bar">
+            @include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Contact submissions'])
             <a href="{{ route('admin.contact-submissions.export') }}" class="rounded bg-primary px-5 py-3 text-white">Export CSV</a>
         </div>
-        <form method="get" class="mb-5 flex gap-2">
-            <input name="search" value="{{ $search }}" placeholder="Search name or email" class="w-full max-w-md rounded border border-default-200 p-3">
-            <button class="rounded bg-default-900 px-5 text-white">Search</button>
-        </form>
-        <div class="overflow-x-auto rounded-lg bg-white shadow-sm">
-            <table class="w-full text-left">
-                <thead class="border-b border-default-200"><tr><th class="p-4">Date</th><th class="p-4">Name</th><th class="p-4">Email</th><th class="p-4">Phone</th><th class="p-4">Subject</th><th class="p-4">Actions</th></tr></thead>
-                <tbody>
+        @if (session('status')) <p role="status" class="mb-5 rounded bg-green-100 p-3">{{ session('status') }}</p> @endif
+        @include('admin.search', ['label' => 'contact submissions'])
+        @component('admin.list-table', ['headers' => ['Date', 'Name', 'Email', 'Phone', 'Subject', 'Actions']])
                     @forelse ($submissions as $submission)
                         <tr class="border-b border-default-100 align-top">
                             <td class="p-4 whitespace-nowrap">{{ $submission->created_at->format('d M Y H:i') }}</td>
@@ -30,14 +25,12 @@
                             <td class="p-4">{{ $submission->email }}</td>
                             <td class="p-4">{{ $submission->phone }}</td>
                             <td class="p-4">{{ $submission->subject }}</td>
-                            <td class="p-4"><button type="button" class="rounded bg-primary px-4 py-2 text-white" data-submission-view data-submission="{{ json_encode(['date' => $submission->created_at->format('d M Y H:i'), 'name' => $submission->name, 'email' => $submission->email, 'phone' => $submission->phone, 'subject' => $submission->subject, 'message' => $submission->message], JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_TAG) }}">View</button></td>
+                            <td class="p-4"><div class="admin-action-buttons"><button type="button" class="admin-icon-button" aria-label="View {{ $submission->name }}" title="View" data-submission-view data-submission="{{ json_encode(['date' => $submission->created_at->format('d M Y H:i'), 'name' => $submission->name, 'email' => $submission->email, 'phone' => $submission->phone, 'subject' => $submission->subject, 'message' => $submission->message], JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_TAG) }}"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/></svg></button><form method="post" action="{{ route('admin.contact-submissions.destroy', $submission) }}" data-admin-confirm-delete data-admin-confirm-label="{{ $submission->name }}">@csrf @method('DELETE')<button type="submit" class="admin-icon-button admin-icon-button--danger" aria-label="Delete {{ $submission->name }}" title="Delete"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 7h16m-10 4v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form></div></td>
                         </tr>
                     @empty
                         <tr><td colspan="6" class="p-6 text-center">No submissions yet.</td></tr>
                     @endforelse
-                </tbody>
-            </table>
-        </div>
+        @endcomponent
         <div class="mt-5">{{ $submissions->links() }}</div>
     </main>
     <dialog id="submission-dialog" class="submission-dialog" aria-labelledby="submission-dialog-title">

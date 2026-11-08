@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\JobApplication;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -11,6 +12,15 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class JobApplicationController extends Controller
 {
+    public function destroy(JobApplication $jobApplication): RedirectResponse
+    {
+        $resumePath = $jobApplication->resume_path;
+        $jobApplication->delete();
+        Storage::disk('local')->delete($resumePath);
+
+        return redirect()->route('admin.job-applications.index')->with('status', 'Job application deleted.');
+    }
+
     public function index(Request $request): View
     {
         $search = $request->string('search')->trim()->toString();

@@ -1,3 +1,20 @@
+html {
+    scroll-behavior: auto;
+    scrollbar-color: #a94235 transparent;
+    scrollbar-width: thin;
+}
+
+html::-webkit-scrollbar { width: 12px; }
+html::-webkit-scrollbar-track { background: transparent; }
+html::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #7d1f2f, #d4471e) padding-box;
+}
+html::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #a52d3b, #e65a2d) padding-box;
+}
+
 .site-whatsapp-link {
     position: fixed;
     right: max(20px, env(safe-area-inset-right));
@@ -8,6 +25,7 @@
     height: 60px;
     place-items: center;
     border-radius: 50%;
+    overflow: hidden;
     background: #fff;
     box-shadow: 0 8px 28px rgb(0 0 0 / 20%);
     transition: transform 180ms ease, box-shadow 180ms ease;
@@ -25,8 +43,8 @@
 
 .site-whatsapp-link img {
     display: block;
-    width: 48px;
-    height: 48px;
+    width: 60px;
+    height: 60px;
 }
 
 @media (max-width: 767px) {
@@ -38,23 +56,27 @@
     }
 
     .site-whatsapp-link img {
-        width: 44px;
-        height: 44px;
+        width: 56px;
+        height: 56px;
     }
 }
 
 .nav-sticky [data-bswx-header-logo] {
-    width: 185px;
+    width: 202px;
 }
 
-body:not(:has(#bswx-hero)) .nav-sticky {
+.nav-sticky {
     background: #fff;
     border-color: #e5e5e5;
 }
 
+.bswx-hero__material {
+    margin-inline-start: 0.16em;
+}
+
 @media (max-width: 767px) {
     .nav-sticky [data-bswx-header-logo] {
-        width: 156px;
+        width: 170px;
     }
 }
 

@@ -3,18 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('admin.favicon')
     <title>Admin dashboard</title>
     <link rel="stylesheet" href="{{ asset('assets/app-DVm5M2fF.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
 </head>
 <body class="admin-panel has-admin-sidebar min-h-screen bg-default-100 text-default-900">
     @include('admin.sidebar')
-    <header class="bg-white border-b border-default-200 p-5">
-        <div class="mx-auto max-w-6xl flex items-center justify-between gap-4">
-            <h1 class="text-2xl font-semibold">Admin dashboard</h1>
-        </div>
-    </header>
     <main class="mx-auto max-w-6xl p-5 md:p-10">
+        <div class="admin-page-bar"><div class="admin-page-heading"><h1>Admin dashboard</h1></div></div>
         <a href="{{ route('admin.editor', ['page' => 'home']) }}" class="inline-flex rounded bg-primary px-6 py-4 font-semibold text-white">🎨 Launch Live Visual Editor</a>
         <h2 class="mt-10 mb-4 text-xl font-semibold">Dynamic collections</h2>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
