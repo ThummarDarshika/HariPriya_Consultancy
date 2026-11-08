@@ -44,12 +44,17 @@
 }
 
 .nav-sticky [data-bswx-header-logo] {
-    width: 163px;
+    width: 185px;
+}
+
+body:not(:has(#bswx-hero)) .nav-sticky {
+    background: #fff;
+    border-color: #e5e5e5;
 }
 
 @media (max-width: 767px) {
     .nav-sticky [data-bswx-header-logo] {
-        width: 144px;
+        width: 156px;
     }
 }
 

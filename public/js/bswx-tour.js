@@ -100,7 +100,7 @@
     const animateScroll = (time) => {
         const elapsed = scrollTime ? Math.min(time - scrollTime, 64) : 16;
         scrollTime = time;
-        const next = window.scrollY + (scrollTarget - window.scrollY) * (1 - Math.exp(-elapsed / 240));
+        const next = window.scrollY + (scrollTarget - window.scrollY) * (1 - Math.exp(-elapsed / 95));
         lastProgrammaticScrollY = Math.abs(scrollTarget - next) < 0.5 ? scrollTarget : next;
         window.scrollTo(0, lastProgrammaticScrollY);
 
@@ -183,7 +183,7 @@
 
         event.preventDefault();
         const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
-        const delta = Math.max(-window.innerHeight, Math.min(window.innerHeight, event.deltaY * scale * 0.85));
+        const delta = Math.max(-window.innerHeight, Math.min(window.innerHeight, event.deltaY * scale * 1.1));
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
         scrollTarget = Math.max(0, Math.min(maxScroll, scrollTarget + delta));
 

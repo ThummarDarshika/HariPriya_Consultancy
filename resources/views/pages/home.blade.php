@@ -12,7 +12,7 @@
         </div>
     </div>
 <!-- Hero Section -->
-    <section id="bswx-hero" class="relative w-full">
+    <section id="bswx-hero" class="relative w-full bg-default-100">
         <div class="bswx-hero__stage container-full relative z-10">
             <div class="bswx-hero-layout grid items-center gap-12.5 mb-32.5">
                 <div>
@@ -23,19 +23,19 @@
 
                     <h1 class="font-bold lg:text-7xl md:text-[56px] text-[48px] mt-4">From raw <span class="text-primary">material</span> <br> to market-ready</h1>
                     <p class="bswx-hero__since text-primary">// SINCE - 2005 //</p>
-                    <a href="{{ route('services') }}" class="home-animated-cta inline-flex items-center gap-5 rounded rounded-ee-2xl bg-default-900 text-base font-medium text-white transition-all mt-4 md:mt-6">
+                    <a href="{{ $siteAssets['brochure'] ?: asset('assets/haripriya-brochure.pdf') }}" download="Haripriya-Brochure.pdf" class="home-animated-cta inline-flex items-center gap-5 rounded rounded-ee-2xl bg-default-900 text-base font-medium text-white transition-all mt-4 md:mt-6">
                         <span class="py-3.75 ps-6">
                             <span class="home-animated-label">
-                                <span class="home-animated-label__current">Explore Our Capabilities</span>
-                                <span class="home-animated-label__next" aria-hidden="true">Explore Our Capabilities</span>
+                                <span class="home-animated-label__current">Download Brochure</span>
+                                <span class="home-animated-label__next" aria-hidden="true">Download Brochure</span>
                             </span>
                         </span>
 
                         <!-- ICON -->
                         <span class="m-1.25 flex size-10 items-center justify-center rounded rounded-ee-xl bg-primary text-white">
                             <span class="home-animated-arrow">
-                                <span class="home-animated-arrow__current"><i class="iconify tabler--arrow-narrow-right flex size-6"></i></span>
-                                <span class="home-animated-arrow__next" aria-hidden="true"><i class="iconify tabler--arrow-narrow-right flex size-6"></i></span>
+                                <span class="home-animated-arrow__current"><i class="iconify tabler--download flex size-6"></i></span>
+                                <span class="home-animated-arrow__next" aria-hidden="true"><i class="iconify tabler--download flex size-6"></i></span>
                             </span>
                         </span>
                     </a>
