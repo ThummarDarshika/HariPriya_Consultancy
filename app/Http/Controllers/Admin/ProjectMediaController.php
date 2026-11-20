@@ -7,6 +7,7 @@ use App\Models\ProjectMedia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -50,18 +51,40 @@ class ProjectMediaController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $mediaType = $request->input('media_type');
+        $multipleImages = $mediaType === 'image' && is_array($request->file('media_upload'));
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'media_type' => ['required', Rule::in(['image', 'video'])],
-            'media_upload' => $this->uploadRules($mediaType, true),
+            'media_upload' => $multipleImages ? ['required', 'array', 'min:1', 'max:20'] : $this->uploadRules($mediaType, true),
+            'media_upload.*' => $multipleImages ? $this->uploadRules('image', true) : [],
             'sort_order' => ['required', 'integer', 'min:0'],
             'is_active' => ['sometimes', 'boolean'],
-        ], $this->uploadMessages($request, $mediaType));
+        ], array_merge($this->uploadMessages($request, $mediaType), $multipleImages ? [
+            'media_upload.max' => 'Choose up to 20 images at a time.',
+            'media_upload.*.max' => 'Each image must be no larger than 20 MB.',
+        ] : []));
 
-        $data['file_path'] = $this->storeUploadedFile($request->file('media_upload'));
+        $files = $multipleImages ? array_values($request->file('media_upload')) : [$request->file('media_upload')];
         $data['is_active'] = $request->boolean('is_active');
         unset($data['media_upload']);
-        ProjectMedia::query()->create($data);
+        $storedPaths = [];
+        try {
+            DB::transaction(function () use ($files, $data, &$storedPaths): void {
+                foreach ($files as $index => $file) {
+                    $filePath = $this->storeUploadedFile($file);
+                    $storedPaths[] = $filePath;
+                    ProjectMedia::query()->create(array_merge($data, [
+                        'file_path' => $filePath,
+                        'sort_order' => $data['sort_order'] + $index,
+                    ]));
+                }
+            });
+        } catch (\Throwable $exception) {
+            foreach ($storedPaths as $filePath) {
+                $this->deleteStoredFile($filePath);
+            }
+            throw $exception;
+        }
 
         return redirect()->route('admin.project-media.index')->with('status', 'Project media added.');
     }

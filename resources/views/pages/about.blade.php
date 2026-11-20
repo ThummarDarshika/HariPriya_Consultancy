@@ -82,7 +82,7 @@
                                 </span>
                             </a>
 
-                            <a href="{{ $siteAssets['brochure'] ?: '#' }}" download @if (! $siteAssets['brochure']) aria-disabled="true" onclick="return false" @endif class="text-default-900 underline transition-all hover:decoration-transparent flex items-center">
+                            <a href="{{ $siteAssets['brochure'] ?: '#' }}" download="Haripriya Profile.pdf" @if (! $siteAssets['brochure']) aria-disabled="true" onclick="return false" @endif class="text-default-900 underline transition-all hover:decoration-transparent flex items-center">
                                 Download Brochure
                                 <i class="iconify tabler--download size-6 ms-4"></i>
                             </a>

@@ -68,6 +68,32 @@ class ProjectMediaTest extends TestCase
             ->assertSee('data-cms-collection="project-media"', false);
     }
 
+    public function test_admin_can_upload_multiple_images_and_invalid_batches_save_nothing(): void
+    {
+        Storage::fake('public');
+        $this->actingAs($this->administrator());
+
+        $details = ['title' => 'PEB Shed', 'media_type' => 'image', 'sort_order' => 3, 'is_active' => '1'];
+        $this->post('/admin/project-media', array_merge($details, [
+            'media_upload' => [UploadedFile::fake()->image('front.jpg'), UploadedFile::fake()->image('side.png')],
+        ]))->assertRedirect('/admin/project-media');
+
+        $items = ProjectMedia::query()->orderBy('sort_order')->get();
+        $this->assertCount(2, $items);
+        $this->assertSame([3, 4], $items->pluck('sort_order')->all());
+        foreach ($items as $item) {
+            $this->assertSame('PEB Shed', $item->title);
+            Storage::disk('public')->assertExists(substr($item->file_path, strlen('/storage/')));
+            $this->get('/projects')->assertSee($item->file_path);
+        }
+
+        $this->post('/admin/project-media', array_merge($details, [
+            'media_upload' => [UploadedFile::fake()->image('valid.jpg'), UploadedFile::fake()->create('invalid.pdf', 10, 'application/pdf')],
+        ]))->assertSessionHasErrors('media_upload.1');
+        $this->assertDatabaseCount('project_media', 2);
+        $this->assertCount(2, Storage::disk('public')->allFiles('project-media'));
+    }
+
     public function test_project_gallery_paginates_twenty_items_on_public_page_and_in_editor(): void
     {
         foreach (range(1, 21) as $position) {

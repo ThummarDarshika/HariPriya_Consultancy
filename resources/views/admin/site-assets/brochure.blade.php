@@ -29,7 +29,7 @@
                 </div>
                 <div class="brochure-current__actions">
                     <a href="{{ $asset->value }}" target="_blank" rel="noopener">Preview PDF <span aria-hidden="true">↗</span></a>
-                    <a href="{{ $asset->value }}" download="Haripriya-Brochure.pdf" class="brochure-current__download">Download PDF <span aria-hidden="true">↓</span></a>
+                    <a href="{{ $asset->value }}" download="Haripriya Profile.pdf" class="brochure-current__download">Download PDF <span aria-hidden="true">↓</span></a>
                 </div>
             </section>
         @endif

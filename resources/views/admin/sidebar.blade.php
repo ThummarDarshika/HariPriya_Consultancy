@@ -1,3 +1,7 @@
+<link rel="stylesheet" href="{{ asset('css/cropper-1.7.0.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/image-crop-editor.css') }}?v={{ filemtime(public_path('css/image-crop-editor.css')) }}">
+<script src="{{ asset('js/cropper-1.7.0.min.js') }}" defer></script>
+<script src="{{ asset('js/image-crop-editor.js') }}?v={{ filemtime(public_path('js/image-crop-editor.js')) }}" defer></script>
 <aside class="admin-sidebar" data-cms-ignore aria-label="Admin navigation">
     <div class="admin-sidebar__brand-row">
         <a class="admin-sidebar__brand" href="{{ route('admin.dashboard') }}" aria-label="HARIPRIYA Admin dashboard">

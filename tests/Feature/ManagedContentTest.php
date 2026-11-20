@@ -18,6 +18,23 @@ class ManagedContentTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_admin_can_reorder_companies_and_incomplete_orders_are_rejected(): void
+    {
+        $first = Company::factory()->create(['sort_order' => 0]);
+        $second = Company::factory()->create(['sort_order' => 1]);
+        $this->postJson('/admin/companies/reorder', ['ids' => [$second->id, $first->id]])->assertUnauthorized();
+        $this->actingAs(User::factory()->create());
+        $this->postJson('/admin/companies/reorder', ['ids' => [$second->id, $first->id]])->assertForbidden();
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        $this->postJson('/admin/companies/reorder', ['ids' => [$second->id, $first->id]])->assertOk();
+        $this->assertSame(0, $second->fresh()->sort_order);
+        $this->assertSame(1, $first->fresh()->sort_order);
+        $this->get('/admin/companies')->assertOk()->assertSeeInOrder([$second->name, $first->name]);
+        $this->postJson('/admin/companies/reorder', ['ids' => [$first->id]])->assertUnprocessable();
+        $this->postJson('/admin/companies/reorder', ['ids' => [$first->id, $first->id]])->assertUnprocessable();
+        $this->assertSame(0, $second->fresh()->sort_order);
+    }
+
     public function test_only_administrators_can_manage_company_certificate_and_site_media(): void
     {
         $this->get('/admin/companies')->assertRedirect('/admin/login');

@@ -23,7 +23,7 @@
 
                     <h1 class="font-bold lg:text-7xl md:text-[56px] text-[48px] mt-4">From raw <span class="bswx-hero__material text-primary">material</span> <br> to market-ready</h1>
                     <p class="bswx-hero__since text-primary">// SINCE - 2005 //</p>
-                    <a href="{{ $siteAssets['brochure'] ?: asset('assets/haripriya-brochure.pdf') }}" download="Haripriya-Brochure.pdf" class="home-animated-cta inline-flex items-center gap-5 rounded rounded-ee-2xl bg-default-900 text-base font-medium text-white transition-all mt-4 md:mt-6">
+                    <a href="{{ $siteAssets['brochure'] ?: asset('assets/haripriya-brochure.pdf') }}" download="Haripriya Profile.pdf" class="home-animated-cta inline-flex items-center gap-5 rounded rounded-ee-2xl bg-default-900 text-base font-medium text-white transition-all mt-4 md:mt-6">
                         <span class="py-3.75 ps-6">
                             <span class="home-animated-label">
                                 <span class="home-animated-label__current">Download Brochure</span>
@@ -76,7 +76,7 @@
                 tabindex="-1"
             ></iframe>
             <div id="bswx-tour-toolbar" class="bswx-tour__toolbar" hidden>
-                <div>Drag to rotate · Scroll to zoom · Arrow keys to rotate</div>
+                <div>Scroll to zoom · Arrow keys to rotate</div>
                 <button id="bswx-tour-exit" type="button" class="bswx-tour__button">Exit 360°</button>
             </div>
         </div>
@@ -178,7 +178,7 @@
                                 </span>
                             </a>
 
-                            <a href="{{ $siteAssets['brochure'] ?: '#' }}" download @if (! $siteAssets['brochure']) aria-disabled="true" onclick="return false" @endif class="text-primary underline transition-all hover:decoration-transparent flex items-center">
+                            <a href="{{ $siteAssets['brochure'] ?: '#' }}" download="Haripriya Profile.pdf" @if (! $siteAssets['brochure']) aria-disabled="true" onclick="return false" @endif class="text-primary underline transition-all hover:decoration-transparent flex items-center">
                                 Download Brochure
                                 <i class="iconify tabler--download size-6 ms-4"></i>
                             </a>
@@ -247,6 +247,7 @@
                 <!-- Service 1 -->
                 <div class="home-service-stack__card home-service-card">
                     <div class="home-service-card__visual">
+                        <a href="{{ route('services') }}" class="home-service-card__image-link" aria-label="View service details"></a>
                         <img src="{{ asset('assets/service-1-BZvdAoiD.png') }}" class="home-service-card__photo rounded" alt="">
                         <div class="home-service-card__icon">
                             <img src="data:image/svg+xml,%3csvg%20width='41'%20height='41'%20viewBox='0%200%2041%2041'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M28.8139%2028.8916L20.9568%2031.7487V40.3202L27.9159%2037.8222C28.4583%2037.6053%2028.8139%2037.08%2028.8139%2036.4958V28.8916Z'%20fill='%23191919'/%3e%3cpath%20d='M11.6709%2028.8916L19.528%2031.7487V40.3202L12.5689%2037.8222C12.0265%2037.6053%2011.6709%2037.08%2011.6709%2036.4958V28.8916Z'%20fill='%23191919'/%3e%3cpath%20d='M12.3853%2027.4631L20.2424%2030.3202L28.0995%2027.4631L20.773%2024.7101C20.4324%2024.5712%2020.0524%2024.5712%2019.7118%2024.7101L12.3853%2027.4631Z'%20fill='%23191919'/%3e%3cpath%20d='M10.2424%204.60603H1.671C0.882025%204.60603%200.242432%203.96643%200.242432%203.17746V0.320312H11.671V3.17746C11.671%203.96643%2011.0314%204.60603%2010.2424%204.60603Z'%20fill='%23191919'/%3e%3cpath%20d='M25.806%2018.2523L24.3774%2015.3952C24.1347%2014.9111%2023.6408%2014.6056%2023.0995%2014.6056H21.6709V11.4852C21.2219%2011.6453%2020.7457%2011.7484%2020.2424%2011.7484C19.739%2011.7484%2019.2628%2011.6452%2018.8138%2011.4851V14.6056H17.3852C16.8439%2014.6056%2016.3501%2014.9111%2016.1073%2015.3952L14.6787%2018.2523C14.4779%2018.6548%2014.4779%2019.1278%2014.6787%2019.5302L16.1073%2022.3874C16.4603%2023.094%2017.3183%2023.3793%2018.0242%2023.0263C18.7301%2022.6734%2019.0161%2021.8154%2018.6631%2021.1095L17.554%2018.8913L18.2683%2017.4627H22.2164L22.9307%2018.8913L21.8216%2021.1095C21.4686%2021.8154%2021.7546%2022.6734%2022.4606%2023.0263C22.6656%2023.1289%2022.8833%2023.177%2023.0981%2023.177C23.6227%2023.177%2024.1263%2022.8882%2024.3774%2022.3874L25.806%2019.5302C26.0069%2019.1278%2026.0069%2018.6548%2025.806%2018.2523Z'%20fill='%23191919'/%3e%3cpath%20d='M20.2424%203.17746C21.344%203.17746%2022.3396%203.60679%2023.0995%204.29213V0.320312H17.3853V4.29213C18.1452%203.60679%2019.1408%203.17746%2020.2424%203.17746Z'%20fill='%23191919'/%3e%3cpath%20d='M20.2424%2010.3202C21.8204%2010.3202%2023.0995%209.04106%2023.0995%207.4631C23.0995%205.88514%2021.8204%204.60596%2020.2424%204.60596C18.6644%204.60596%2017.3853%205.88514%2017.3853%207.4631C17.3853%209.04106%2018.6644%2010.3202%2020.2424%2010.3202Z'%20fill='url(%23paint0_linear_70_379)'/%3e%3cpath%20d='M12.6811%2023.5956L9.81306%2020.7275C9.39%2021.6119%208.67728%2022.3246%207.79297%2022.7476L10.661%2025.6157C10.94%2025.8947%2011.3055%2026.0342%2011.6711%2026.0342C12.0366%2026.0342%2012.4021%2025.8947%2012.6811%2025.6157C13.2391%2025.0576%2013.2391%2024.1536%2012.6811%2023.5956Z'%20fill='%23191919'/%3e%3cpath%20d='M5.95661%2014.6059C7.22013%2014.6059%208.3457%2015.1657%209.13079%2016.0383L10.2423%206.03442H1.6709L2.78244%2016.0383C3.56752%2015.1657%204.6931%2014.6059%205.95661%2014.6059Z'%20fill='%23191919'/%3e%3cpath%20d='M5.95675%2021.7487C7.53471%2021.7487%208.8139%2020.4695%208.8139%2018.8916C8.8139%2017.3136%207.53471%2016.0344%205.95675%2016.0344C4.3788%2016.0344%203.09961%2017.3136%203.09961%2018.8916C3.09961%2020.4695%204.3788%2021.7487%205.95675%2021.7487Z'%20fill='url(%23paint1_linear_70_379)'/%3e%3cpath%20d='M30.2425%204.60603H38.814C39.6029%204.60603%2040.2425%203.96643%2040.2425%203.17746V0.320312H28.814V3.17746C28.814%203.96643%2029.4536%204.60603%2030.2425%204.60603Z'%20fill='%23191919'/%3e%3cpath%20d='M30.6718%2020.7275L27.8038%2023.5956C27.2457%2024.1536%2027.2457%2025.0576%2027.8038%2025.6157C28.0828%2025.8947%2028.4483%2026.0342%2028.8138%2026.0342C29.1793%2026.0342%2029.5449%2025.8947%2029.8239%2025.6157L32.6919%2022.7476C31.8076%2022.3246%2031.0949%2021.6119%2030.6718%2020.7275Z'%20fill='%23191919'/%3e%3cpath%20d='M34.5281%2014.6059C35.7917%2014.6059%2036.9172%2015.1657%2037.7023%2016.0383L38.8139%206.03442H30.2424L31.354%2016.0383C32.1391%2015.1657%2033.2646%2014.6059%2034.5281%2014.6059Z'%20fill='%23191919'/%3e%3cpath%20d='M34.528%2021.7487C36.106%2021.7487%2037.3852%2020.4695%2037.3852%2018.8916C37.3852%2017.3136%2036.106%2016.0344%2034.528%2016.0344C32.9501%2016.0344%2031.6709%2017.3136%2031.6709%2018.8916C31.6709%2020.4695%2032.9501%2021.7487%2034.528%2021.7487Z'%20fill='url(%23paint2_linear_70_379)'/%3e%3cdefs%3e%3clinearGradient%20id='paint0_linear_70_379'%20x1='17.6352'%20y1='4.67752'%20x2='22.8552'%20y2='10.0878'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23F66234'/%3e%3cstop%20offset='1'%20stop-color='%23C8370B'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint1_linear_70_379'%20x1='3.34956'%20y1='16.106'%20x2='8.5696'%20y2='21.5162'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23F66234'/%3e%3cstop%20offset='1'%20stop-color='%23C8370B'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint2_linear_70_379'%20x1='31.9208'%20y1='16.106'%20x2='37.1409'%20y2='21.5162'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23F66234'/%3e%3cstop%20offset='1'%20stop-color='%23C8370B'/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e" class="home-service-card__icon-image size-10" alt="">
@@ -255,9 +256,9 @@
                     <div class="home-service-card__content">
                         <div class="home-service-card__heading">
                             <h2>Product assembly</h2>
-                            <button type="button" class="home-service-card__arrow">
+                            <a href="{{ route('services') }}" class="home-service-card__arrow" aria-label="View service details">
                                 <i class="iconify tabler--arrow-narrow-right size-6" aria-hidden="true"></i>
-                            </button>
+                            </a>
                         </div>
                         <div class="home-service-card__feature-label">Features</div>
                         <div class="home-service-card__features space-y-2.5">
@@ -284,6 +285,7 @@
                 <!-- Service 2 -->
                 <div class="home-service-stack__card home-service-card">
                     <div class="home-service-card__visual">
+                        <a href="{{ route('services') }}" class="home-service-card__image-link" aria-label="View service details"></a>
                         <img src="{{ asset('assets/service-2-G0HC8ZqU.png') }}" class="home-service-card__photo rounded" alt="">
                         <div class="home-service-card__icon">
                             <img src="{{ asset('assets/icon-2-DxbsOQF2.svg') }}" class="home-service-card__icon-image size-10" alt="">
@@ -292,9 +294,9 @@
                     <div class="home-service-card__content">
                         <div class="home-service-card__heading">
                             <h2>Sheet metal fabrication</h2>
-                            <button type="button" class="home-service-card__arrow">
+                            <a href="{{ route('services') }}" class="home-service-card__arrow" aria-label="View service details">
                                 <i class="iconify tabler--arrow-narrow-right size-6" aria-hidden="true"></i>
-                            </button>
+                            </a>
                         </div>
                         <div class="home-service-card__feature-label">Features</div>
                         <div class="home-service-card__features space-y-2.5">
@@ -321,6 +323,7 @@
                 <!-- Service 3 -->
                 <div class="home-service-stack__card home-service-card">
                     <div class="home-service-card__visual">
+                        <a href="{{ route('services') }}" class="home-service-card__image-link" aria-label="View service details"></a>
                         <img src="{{ asset('assets/service-3-z7zj_aHT.png') }}" class="home-service-card__photo rounded" alt="">
                         <div class="home-service-card__icon">
                             <img src="{{ asset('assets/icon-3-BlpuRWaX.svg') }}" class="home-service-card__icon-image size-10" alt="">
@@ -329,9 +332,9 @@
                     <div class="home-service-card__content">
                         <div class="home-service-card__heading">
                             <h2>CNC machining services</h2>
-                            <button type="button" class="home-service-card__arrow">
+                            <a href="{{ route('services') }}" class="home-service-card__arrow" aria-label="View service details">
                                 <i class="iconify tabler--arrow-narrow-right size-6" aria-hidden="true"></i>
-                            </button>
+                            </a>
                         </div>
                         <div class="home-service-card__feature-label">Features</div>
                         <div class="home-service-card__features space-y-2.5">
@@ -358,6 +361,7 @@
                 <!-- Service 4 -->
                 <div class="home-service-stack__card home-service-card">
                     <div class="home-service-card__visual">
+                        <a href="{{ route('services') }}" class="home-service-card__image-link" aria-label="View service details"></a>
                         <img src="{{ asset('assets/service-4-Dy9kmUjG.png') }}" class="home-service-card__photo rounded" alt="">
                         <div class="home-service-card__icon">
                             <img src="data:image/svg+xml,%3csvg%20width='39'%20height='41'%20viewBox='0%200%2039%2041'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M36.4299%2010.8672H2.05493C0.97626%2010.8672%200.101807%2011.7416%200.101807%2012.8203C0.101807%2013.899%200.97626%2014.7734%202.05493%2014.7734H36.4299C37.5086%2014.7734%2038.3831%2013.899%2038.3831%2012.8203C38.3831%2011.7416%2037.5086%2010.8672%2036.4299%2010.8672Z'%20fill='url(%23paint0_linear_70_320)'/%3e%3cpath%20d='M4.78931%2026.8828C4.90454%2029.9892%209.36267%2029.9869%209.47681%2026.8828V22.1953H4.78931V26.8828Z'%20fill='%23191919'/%3e%3cpath%20d='M29.0081%2026.8828C29.1233%2029.9892%2033.5814%2029.9869%2033.6956%2026.8828V22.1953H29.0081V26.8828Z'%20fill='%23191919'/%3e%3cpath%20d='M16.8987%2039.1484C16.8987%2039.7956%2017.4234%2040.3203%2018.0706%2040.3203H20.4143C21.0615%2040.3203%2021.5862%2039.7956%2021.5862%2039.1484V32.3516H16.8987V39.1484Z'%20fill='%23191919'/%3e%3cpath%20d='M14.1643%2028.8359C14.1643%2029.4831%2014.689%2030.0078%2015.3362%2030.0078H23.1487C23.7959%2030.0078%2024.3206%2029.4831%2024.3206%2028.8359V26.8828H14.1643V28.8359Z'%20fill='url(%23paint1_linear_70_320)'/%3e%3cpath%20d='M2.44556%2018.6797C2.44556%2019.3269%202.97024%2019.8516%203.61743%2019.8516H11.8206V23.3672C11.8206%2024.0144%2012.3452%2024.5391%2012.9924%2024.5391H25.4924C26.1396%2024.5391%2026.6643%2024.0144%2026.6643%2023.3672V19.8516H34.8674C35.5146%2019.8516%2036.0393%2019.3269%2036.0393%2018.6797V17.1172H2.44556V18.6797Z'%20fill='%23191919'/%3e%3cpath%20d='M33.6956%201.49219C33.6956%200.845%2033.1709%200.320312%2032.5237%200.320312H5.96118C5.31399%200.320312%204.78931%200.845%204.78931%201.49219V8.52344H33.6956V1.49219ZM10.6487%205.59375C10.0015%205.59375%209.47681%205.06906%209.47681%204.42188C9.53423%202.86906%2011.7634%202.86953%2011.8206%204.42188C11.8206%205.06906%2011.2959%205.59375%2010.6487%205.59375ZM22.3661%205.59375H16.1161C14.5629%205.53609%2014.5641%203.30711%2016.1161%203.25H22.3661C23.9193%203.30766%2023.9181%205.53664%2022.3661%205.59375ZM27.8363%205.59375C27.5069%205.59383%2027.2096%205.45742%2026.9967%205.23859C26.2781%204.51766%2026.8057%203.24172%2027.8356%203.25H27.8364C29.3895%203.30758%2029.3884%205.53672%2027.8363%205.59375Z'%20fill='%23191919'/%3e%3cdefs%3e%3clinearGradient%20id='paint0_linear_70_320'%20x1='1.77627'%20y1='10.9161'%20x2='2.47261'%20y2='17.9889'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23F66234'/%3e%3cstop%20offset='1'%20stop-color='%23C8370B'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint1_linear_70_320'%20x1='14.6086'%20y1='26.9219'%20x2='16.1672'%20y2='32.1723'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23F66234'/%3e%3cstop%20offset='1'%20stop-color='%23C8370B'/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e" class="home-service-card__icon-image size-10" alt="">
@@ -366,9 +370,9 @@
                     <div class="home-service-card__content">
                         <div class="home-service-card__heading">
                             <h2>Injection molding</h2>
-                            <button type="button" class="home-service-card__arrow">
+                            <a href="{{ route('services') }}" class="home-service-card__arrow" aria-label="View service details">
                                 <i class="iconify tabler--arrow-narrow-right size-6" aria-hidden="true"></i>
-                            </button>
+                            </a>
                         </div>
                         <div class="home-service-card__feature-label">Features</div>
                         <div class="home-service-card__features space-y-2.5">
@@ -584,7 +588,7 @@
                     <h3 class="lg:text-[42px] md:text-[34px] text-[28px] text-white">Explore our complete product range across industries.</h3>
 
                     <div class="grow flex flex-wrap gap-4 whitespace-nowrap">
-                            <a href="{{ $siteAssets['brochure'] ?: '#' }}" download @if (! $siteAssets['brochure']) aria-disabled="true" onclick="return false" @endif class="text-white underline transition-all hover:decoration-transparent flex items-center">
+                            <a href="{{ $siteAssets['brochure'] ?: '#' }}" download="Haripriya Profile.pdf" @if (! $siteAssets['brochure']) aria-disabled="true" onclick="return false" @endif class="text-white underline transition-all hover:decoration-transparent flex items-center">
                             Download Brochure
                             <i class="iconify tabler--download size-6 ms-4"></i>
                         </a>
@@ -988,7 +992,7 @@
         <div class="relative z-10 flex gap-5 flex-nowrap w-full overflow-hidden" data-cms-ignore>
             @if ($companies->isNotEmpty())
                 @foreach (range(1, 2) as $repeat)
-                    <ul class="infinite-scroll-inverse flex gap-5 justify-start items-center [&amp;&gt;li]:flex [&amp;&gt;li]:items-center [&amp;&gt;li]:justify-center [&amp;&gt;li]:bg-default-100 [&amp;&gt;li]:rounded [&amp;&gt;li]:w-57 [&amp;&gt;li]:h-39 [&amp;&gt;li]:mx-auto [&amp;&gt;li&gt;img]:w-25">
+                    <ul class="company-logo-strip infinite-scroll-inverse flex gap-5 justify-start items-center [&amp;&gt;li]:flex [&amp;&gt;li]:items-center [&amp;&gt;li]:justify-center [&amp;&gt;li]:bg-default-100 [&amp;&gt;li]:rounded [&amp;&gt;li]:w-57 [&amp;&gt;li]:h-39 [&amp;&gt;li]:mx-auto [&amp;&gt;li&gt;img]:w-25">
                         @foreach ($companies as $company)
                             <li><img src="{{ $company->image_path }}" alt="{{ $company->name }}"></li>
                         @endforeach

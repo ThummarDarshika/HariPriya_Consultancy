@@ -100,6 +100,7 @@ Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(fu
     Route::put('/notification-settings', [NotificationSettingsController::class, 'update'])->name('notification-settings.update');
     Route::put('/notification-settings/sender', [NotificationSettingsController::class, 'updateSender'])->name('notification-settings.sender.update');
     Route::put('/site-assets/{asset}', [SiteAssetController::class, 'update'])->name('site-assets.update');
+    Route::post('companies/reorder', [CompanyController::class, 'reorder'])->name('companies.reorder');
     Route::resource('companies', CompanyController::class)->except('show');
     Route::resource('certificates', CertificateController::class)->except('show');
     Route::resource('project-media', ProjectMediaController::class)->except('show');

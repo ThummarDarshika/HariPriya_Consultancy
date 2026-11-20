@@ -22,6 +22,8 @@
 
     function updateCard(card, collection, item) {
         if (collection === 'services') {
+            card.id = `service-${item.id}`;
+            card.style.scrollMarginTop = '120px';
             setText(card, 'h2', item.title);
             setRichText(card, 'p', item.description_blocks_html?.[0]);
             setImage(card, 'img', item.image);
@@ -103,6 +105,10 @@
             const card = originalCards[index] || template.cloneNode(true);
             if (!originalCards[index]) group.append(card);
             setText(card, 'h2', item.title);
+            card.querySelectorAll('.home-service-card__image-link, .home-service-card__arrow').forEach(link => {
+                link.hash = `service-${item.id}`;
+                link.setAttribute('aria-label', `View ${item.title}`);
+            });
             setImage(card, 'img.rounded', item.image);
             setImage(card, 'img.size-10', item.icon);
             const featureHost = card.querySelector('.space-y-2\\.5');
@@ -230,6 +236,9 @@
                 const items = results.flat();
                 groups.filter(group => group.dataset.cmsCollection === collection)
                     .forEach(group => render(group, collection, items));
+                if (collection === 'services' && /^#service-\d+$/.test(location.hash)) {
+                    document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: 'start' });
+                }
             })
             .catch(() => {});
     }

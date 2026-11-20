@@ -2349,6 +2349,12 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.screenSpacePanning = true;
 controls.enabled = !isEmbedded;
+if (isEmbedded) {
+  controls.enableRotate = false;
+  controls.enablePan = false;
+  controls.mouseButtons = { LEFT: null, MIDDLE: null, RIGHT: null };
+  controls.touches.ONE = null;
+}
 scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8f99, 1.6));
 const sun = new THREE.DirectionalLight(0xffffff, 1.4);
 sun.position.set(0.5, -0.8, 1);
@@ -2860,10 +2866,12 @@ function showProps(i) {
 
 // ---------- file input ----------
 $('file').addEventListener('change', async (e) => { const f = e.target.files[0]; if (f) load(await f.arrayBuffer(), f.name); e.target.value = ''; });
-view.addEventListener('dragover', (e) => { e.preventDefault(); $('overlay').classList.add('drag'); });
-view.addEventListener('dragleave', () => $('overlay').classList.remove('drag'));
+view.addEventListener('dragover', (e) => { e.preventDefault(); if (!isEmbedded) $('overlay').classList.add('drag'); });
+view.addEventListener('dragleave', () => { if (!isEmbedded) $('overlay').classList.remove('drag'); });
 view.addEventListener('drop', async (e) => {
-  e.preventDefault(); $('overlay').classList.remove('drag');
+  e.preventDefault();
+  if (isEmbedded) return;
+  $('overlay').classList.remove('drag');
   const f = e.dataTransfer.files[0]; if (f) load(await f.arrayBuffer(), f.name);
 });
 

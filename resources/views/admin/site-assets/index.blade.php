@@ -47,7 +47,7 @@
                                 <img src="{{ $asset->value }}" alt="{{ $asset->label }}" class="admin-asset-preview {{ str_starts_with($asset->key, 'about.team_avatar_') ? 'admin-asset-preview--team' : '' }} mb-3 h-28 w-full rounded object-contain">
                             @endif
                             <label>Upload image
-                                <input name="upload" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/x-icon" required class="mt-2 block w-full">
+                                <input name="upload" data-crop-width="{{ str_starts_with($asset->key, 'about.team_avatar_') || $asset->key === 'site.favicon' ? 512 : ($asset->key === 'site.logo' ? 800 : 1920) }}" data-crop-height="{{ str_starts_with($asset->key, 'about.team_avatar_') || $asset->key === 'site.favicon' ? 512 : ($asset->key === 'site.logo' ? 400 : 1080) }}" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/x-icon" required class="mt-2 block w-full">
                             </label>
                         @endif
                         @if ($asset->kind !== 'text') <p class="mt-2 text-sm">Maximum file size: {{ $asset->kind === 'document' ? '50' : '5' }} MB.</p> @endif

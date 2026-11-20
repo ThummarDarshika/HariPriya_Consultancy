@@ -606,3 +606,45 @@ button.group:focus-visible > span[class*="py-3.75"] > span.relative.block.overfl
     margin: 12px 50px 0 0;
     font-size: 16px;
 }
+.company-logo-strip > li {
+    flex-shrink: 0;
+    padding: 12px;
+    background: #fff;
+}
+
+.company-logo-strip > li > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.contact-phone-link {
+    white-space: nowrap;
+}
+.home-service-card__image-link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.home-service-card__image-link:focus-visible {
+    outline: 3px solid #f66234;
+    outline-offset: -3px;
+}
+/* Keep the saved image composition visible at every viewport width. */
+main img[data-cms-image],
+main img[data-cms-managed-asset],
+.company-logo-strip img,
+.projects-card img.projects-card__file {
+    object-fit: contain !important;
+    object-position: center;
+    background-color: #fff;
+    scale: 1 !important;
+}
+
+[data-cms-background],
+[data-cms-managed-asset][style*="background-image"] {
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}

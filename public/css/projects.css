@@ -98,6 +98,11 @@
     object-fit: cover;
 }
 
+.projects-card img.projects-card__file {
+    object-fit: contain;
+    transform: none;
+}
+
 .projects-card__type {
     top: 1rem;
     left: 1rem;

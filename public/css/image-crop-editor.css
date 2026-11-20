@@ -1,0 +1,21 @@
+.image-crop-editor { width: min(960px, 96vw); max-height: 94dvh; padding: 22px; border: 0; border-radius: 16px; overflow: auto; background: #fff; color: #191919; font: 15px/1.5 system-ui, sans-serif; }
+.image-crop-editor::backdrop { background: #000b; }
+.image-crop-editor__heading, .image-crop-editor__tools, .image-crop-editor__actions, .image-crop-editor__preview { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.image-crop-editor__heading { justify-content: space-between; }
+.image-crop-editor h2 { margin: 0; font-size: 24px; }
+.image-crop-editor p { margin: 8px 0 14px; }
+.image-crop-editor button { padding: 9px 15px; border: 1px solid #ccc; border-radius: 8px; background: #fff; color: #191919; cursor: pointer; }
+.image-crop-editor button:focus-visible { outline: 3px solid #f66234; }
+.image-crop-editor button:disabled { opacity: .5; cursor: wait; }
+.image-crop-editor [data-crop-apply] { background: #d63e08; color: #fff; border-color: #d63e08; }
+.image-crop-editor__workspace { height: clamp(220px, 43dvh, 440px); background: #fff; }
+.image-crop-editor__workspace > img { display: block; max-width: 100%; }
+.image-crop-editor .cropper-container, .image-crop-editor .cropper-wrap-box, .image-crop-editor .cropper-face { background: #fff; }
+.image-crop-editor .cropper-face { opacity: 0; }
+.image-crop-editor .cropper-view-box { background: #fff; }
+.image-crop-editor__tools { margin: 16px 0; }
+.image-crop-editor__preview { padding: 12px; background: #f5f5f5; border-radius: 10px; justify-content: space-between; }
+.image-crop-editor__preview canvas { max-width: min(100%, 240px); max-height: 140px; object-fit: contain; border: 1px solid #ddd; background: white; }
+.image-crop-editor__actions { justify-content: flex-end; }
+.image-crop-editor [data-crop-error] { color: #b42318; }
+.image-crop-hint { display: block; margin-top: 8px; color: #555; }

@@ -264,7 +264,14 @@
     window.addEventListener('resize', () => requestAnimationFrame(refreshMediaActionsAtPointer));
     imageAction.addEventListener('pointerleave', () => { imageAction.style.display = 'none'; });
     videoAction.addEventListener('pointerleave', () => { videoAction.style.display = 'none'; });
-    imageAction.addEventListener('click', () => fileInput.click());
+    imageAction.addEventListener('click', () => {
+        if (!activeImage) return;
+        const bounds = activeImage.element.getBoundingClientRect();
+        const width = Math.min(1920, Math.max(256, Math.round(bounds.width * 2)));
+        fileInput.dataset.cropWidth = width;
+        fileInput.dataset.cropHeight = Math.max(1, Math.round(width * bounds.height / bounds.width));
+        fileInput.click();
+    });
     videoAction.addEventListener('click', () => videoFileInput.click());
     fileInput.addEventListener('change', () => {
         const file = fileInput.files?.[0];

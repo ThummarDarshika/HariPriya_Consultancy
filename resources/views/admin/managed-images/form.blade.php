@@ -25,14 +25,16 @@
                 @if ($item->image_path)
                     <img src="{{ $item->image_path }}" alt="Current {{ strtolower($title) }} image" class="my-3 h-28 w-40 object-contain">
                 @endif
-                <input name="image_upload" type="file" accept="image/png,image/jpeg,image/webp,image/gif" @unless ($item->exists)data-jquery-required="true"@endunless class="mt-2 block w-full">
+                <input name="image_upload" data-crop-width="{{ $kind === 'companies' ? 684 : 900 }}" data-crop-height="{{ $kind === 'companies' ? 468 : 1200 }}" type="file" accept="image/png,image/jpeg,image/webp,image/gif" @unless ($item->exists)data-jquery-required="true"@endunless class="mt-2 block w-full">
             </label>
             @error('image_upload')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
             <p>PNG, JPEG, WebP or GIF, up to 5 MB.</p>
+            @if ($kind !== 'companies')
             <label class="block">Order index *
                 <input name="sort_order" type="number" min="0" value="{{ old('sort_order', $item->sort_order ?? 0) }}" data-jquery-required="true" class="mt-2 block w-full rounded border border-default-200 p-3">
             </label>
             @error('sort_order')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
+            @endif
             <label class="flex items-center gap-2">
                 <input name="is_active" type="checkbox" value="1" @checked(old('is_active', $item->is_active))>
                 Show on website

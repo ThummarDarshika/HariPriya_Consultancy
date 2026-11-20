@@ -47,7 +47,7 @@
                             <div class="text-primary mb-5">// Contact us on //</div>
 
                             <div class="flex flex-col gap-2">
-                                <a href="tel:+919724430718" class="underline decoration-transparent transition-all duration-300 hover:decoration-default-600">+91 97244 30718</a>
+                                <a href="tel:+919724430718" class="contact-phone-link underline decoration-transparent transition-all duration-300 hover:decoration-default-600">+91 97244 30718</a>
                                 <a href="https://wa.me/919724430718" target="_blank" rel="noopener noreferrer" class="underline decoration-transparent transition-all duration-300 hover:decoration-default-600">WhatsApp us</a>
                             </div>
                         </div>

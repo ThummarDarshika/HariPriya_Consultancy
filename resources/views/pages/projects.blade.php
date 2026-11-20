@@ -39,7 +39,9 @@
                             @else
                                 <img src="{{ $item->file_path }}" alt="{{ $item->title }}" loading="lazy" class="projects-card__file size-full object-cover transition-transform duration-500 group-hover:scale-105">
                             @endif
-                            <span class="projects-card__type pointer-events-none absolute rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest text-default-900 shadow-sm">{{ $item->media_type }}</span>
+                            @if ($item->media_type === 'video')
+                                <span class="projects-card__type pointer-events-none absolute rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest text-default-900 shadow-sm">{{ $item->media_type }}</span>
+                            @endif
                         </div>
                         <div class="projects-card__caption flex items-start gap-4 p-5 md:p-6">
                             <span class="mt-1 text-sm font-semibold text-primary">{{ str_pad((string) ($projectMedia->firstItem() + $loop->index), 2, '0', STR_PAD_LEFT) }}</span>

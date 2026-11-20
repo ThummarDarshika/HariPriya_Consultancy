@@ -23,31 +23,37 @@
     }
 
     function validateFile() {
-        const file = fileInput.files?.[0];
-        if (!file) {
+        const files = Array.from(fileInput.files || []);
+        if (!files.length) {
             const message = fileInput.dataset.requiresFile ? `Please choose a ${fileLabel} file.` : '';
             showError(message);
             return !message;
         }
 
-        const extension = file.name.split('.').pop()?.toLowerCase();
-        if (!allowedExtensions.includes(extension)) {
-            showError(isVideo
-                ? 'This video format is not supported. Choose an MP4, WebM, OGG or OGV file.'
-                : 'This image format is not supported. Choose a JPG, JPEG, PNG, WebP or GIF file.');
+        if (fileInput.multiple && files.length > 20) {
+            showError('Choose up to 20 images at a time.');
             return false;
         }
+        for (const file of files) {
+            const extension = file.name.split('.').pop()?.toLowerCase();
+            if (!allowedExtensions.includes(extension)) {
+                showError(isVideo
+                    ? 'This video format is not supported. Choose an MP4, WebM, OGG or OGV file.'
+                    : 'This image format is not supported. Choose a JPG, JPEG, PNG, WebP or GIF file.');
+                return false;
+            }
 
-        if (file.type && file.type !== 'application/octet-stream' && !allowedMimeTypes.includes(file.type)) {
-            showError(`The selected file is not a valid ${fileLabel}. Choose a supported ${fileLabel} file.`);
-            return false;
+            if (file.type && file.type !== 'application/octet-stream' && !allowedMimeTypes.includes(file.type)) {
+                showError(`The selected file is not a valid ${fileLabel}. Choose a supported ${fileLabel} file.`);
+                return false;
+            }
+
+            if (file.size > maximumBytes) {
+                showError(`This ${fileLabel} is ${(file.size / (1024 * 1024)).toFixed(1)} MB. The maximum allowed size is ${maximumMegabytes} MB.`);
+                return false;
+            }
+
         }
-
-        if (file.size > maximumBytes) {
-            showError(`This ${fileLabel} is ${(file.size / (1024 * 1024)).toFixed(1)} MB. The maximum allowed size is ${maximumMegabytes} MB.`);
-            return false;
-        }
-
         showError('');
         return true;
     }
