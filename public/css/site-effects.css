@@ -109,19 +109,16 @@ html::-webkit-scrollbar-thumb:hover {
 
 .home-service-card__visual {
     position: relative;
-    min-height: clamp(230px, 15vw, 330px);
+    align-self: start;
     overflow: hidden;
     border-radius: 14px;
     background: #e9eaeb;
 }
 
 .home-service-card__photo {
-    position: absolute;
-    inset: 0;
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
 }
 
 .home-service-card__icon {
@@ -257,11 +254,6 @@ html::-webkit-scrollbar-thumb:hover {
 @media (max-width: 900px) {
     .home-service-stack .home-service-card {
         grid-template-columns: minmax(0, 1fr);
-    }
-
-    .home-service-card__visual {
-        min-height: 220px;
-        aspect-ratio: 2.1;
     }
 
     .home-service-card__content {
