@@ -82,8 +82,7 @@
             <div class="grid gap-5 md:grid-cols-2">
                 @if (in_array('image_upload', $visibleFields, true))
                 <label class="block">Primary image{{ $isJqueryRequired('image_upload') ? ' *' : '' }}
-                    @if ($item->image) <img src="{{ $item->image }}" alt="Current image" class="my-2 h-24 w-24 object-cover"> @endif
-                    <input name="image_upload" data-crop-width="{{ in_array($collection, ['team-members', 'testimonials']) ? 800 : 1200 }}" data-crop-height="{{ in_array($collection, ['team-members', 'testimonials']) ? 800 : ($collection === 'services' ? 600 : 900) }}" type="file" accept="image/png,image/jpeg,image/webp,image/gif" @if ($isJqueryRequired('image_upload')) data-jquery-required="true" @endif @if ($item->image) data-jquery-required-if-remove="true" data-has-existing-image="true" @endif class="mt-2 block w-full">
+                    <input data-current-image="{{ $item->image }}" name="image_upload" data-crop-width="{{ in_array($collection, ['team-members', 'testimonials']) ? 800 : 1200 }}" data-crop-height="{{ in_array($collection, ['team-members', 'testimonials']) ? 800 : ($collection === 'services' ? 600 : 900) }}" type="file" accept="image/png,image/jpeg,image/webp,image/gif" @if ($isJqueryRequired('image_upload')) data-jquery-required="true" @endif @if ($item->image) data-jquery-required-if-remove="true" data-has-existing-image="true" @endif class="mt-2 block w-full">
                     @if ($item->image) <span><input type="checkbox" name="remove_image" value="1"> Remove current image</span> @endif
                 </label>
                 @error('image_upload')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
@@ -101,8 +100,7 @@
                 @endif
                 @if (in_array('icon_upload', $visibleFields, true))
                 <label class="block">Feature icon
-                    @if ($item->icon) <img src="{{ $item->icon }}" alt="Current icon" class="my-2 h-12 w-12 object-contain"> @endif
-                    <input name="icon_upload" data-crop-width="256" data-crop-height="256" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="mt-2 block w-full">
+                    <input data-current-image="{{ $item->icon }}" name="icon_upload" data-crop-width="256" data-crop-height="256" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="mt-2 block w-full">
                 </label>
                 @endif
                 @if (in_array('price', $visibleFields, true))
@@ -163,7 +161,7 @@
                 @endif
             </div>
             </section>
-            <div class="admin-form-actions"><p>Changes are saved to your website content.</p><button class="rounded bg-primary px-6 py-3 text-white">Save item</button></div>
+            <div class="admin-form-actions"><button class="rounded bg-primary px-6 py-3 text-white">Save item</button></div>
         </form>
     </main>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

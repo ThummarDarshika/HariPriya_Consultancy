@@ -40,23 +40,19 @@
                 </div>
             </section>
             <section class="admin-form-section">
-                <div class="admin-form-section__heading"><span>02</span><div><h2>{{ ucfirst($item->media_type) }} file</h2><p>{{ $item->exists ? 'Upload a new file only if you want to replace the current one.' : ($item->media_type === 'image' ? 'Select up to 20 images. Each creates a separate gallery card with this title.' : 'Choose the video to show on the Projects page.') }}</p></div></div>
-                @if ($item->file_path)
+                <div class="admin-form-section__heading"><span>02</span><div><h2>{{ ucfirst($item->media_type) }} file</h2>@if ($item->media_type === 'video' || ! $item->exists)<p>{{ $item->exists ? 'Upload a new file only if you want to replace the current one.' : ($item->media_type === 'image' ? 'Select up to 20 images. Each creates a separate gallery card with this title.' : 'Choose the video to show on the Projects page.') }}</p>@endif</div></div>
+                @if ($item->file_path && $item->media_type === 'video')
                     <div class="overflow-hidden rounded-lg bg-default-900">
-                        @if ($item->media_type === 'video')
                             <video src="{{ $item->file_path }}" controls preload="metadata" class="max-h-72 w-full object-contain"></video>
-                        @else
-                            <img src="{{ $item->file_path }}" alt="Current project image" class="max-h-72 w-full object-contain">
-                        @endif
                     </div>
                 @endif
-                <label class="block">{{ $item->exists ? 'Replace file' : 'Upload file *' }}
-                    <input name="{{ ! $item->exists && $item->media_type === 'image' ? 'media_upload[]' : 'media_upload' }}" @if (! $item->exists && $item->media_type === 'image') multiple @endif type="file" accept="{{ $item->media_type === 'video' ? '.mp4,.webm,.ogg,.ogv,video/mp4,video/webm,video/ogg' : '.jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif' }}" data-crop-width="1200" data-crop-height="900" data-project-media-file data-media-kind="{{ $item->media_type }}" data-max-bytes="{{ $maximumMegabytes * 1048576 }}" @unless ($item->exists)data-requires-file="true"@endunless aria-describedby="project-media-upload-help project-media-upload-error" class="mt-2 block w-full">
+                <label class="block">{{ $item->media_type === 'video' ? ($item->exists ? 'Replace file' : 'Upload file *') : '' }}
+                    <input name="{{ ! $item->exists && $item->media_type === 'image' ? 'media_upload[]' : 'media_upload' }}" @if (! $item->exists && $item->media_type === 'image') multiple @endif type="file" accept="{{ $item->media_type === 'video' ? '.mp4,.webm,.ogg,.ogv,video/mp4,video/webm,video/ogg' : '.jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif' }}" data-current-image="{{ $item->media_type === 'image' ? $item->file_path : '' }}" data-crop-width="1200" data-crop-height="900" data-project-media-file data-media-kind="{{ $item->media_type }}" data-max-bytes="{{ $maximumMegabytes * 1048576 }}" @unless ($item->exists)data-requires-file="true"@endunless aria-describedby="project-media-upload-help project-media-upload-error" class="mt-2 block w-full">
                 </label>
                 <p id="project-media-upload-error" class="project-media-upload-error" data-project-media-error role="alert" @unless ($errors->has('media_upload') || $errors->has('media_upload.*')) hidden @endunless>{{ $errors->first('media_upload') ?: $errors->first('media_upload.*') }}</p>
-                <p id="project-media-upload-help" class="project-media-upload-help">Supported: {{ $item->media_type === 'video' ? 'MP4, WebM, OGG/OGV' : 'JPG, JPEG, PNG, WebP, GIF' }}. Maximum size: {{ $maximumMegabytes }} MB.</p>
+                @if ($item->media_type === 'video') <p id="project-media-upload-help" class="project-media-upload-help">Supported: {{ $item->media_type === 'video' ? 'MP4, WebM, OGG/OGV' : 'JPG, JPEG, PNG, WebP, GIF' }}. Maximum size: {{ $maximumMegabytes }} MB.</p> @endif
             </section>
-            <div class="admin-form-actions"><p>Changes appear on the Projects page after saving.</p><button class="rounded bg-primary px-6 py-3 text-white">Save {{ $item->media_type }}</button></div>
+            <div class="admin-form-actions"><button class="rounded bg-primary px-6 py-3 text-white">{{ $item->exists ? 'Save changes' : 'Add '. $item->media_type }}</button></div>
         </form>
     </main>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
