@@ -631,20 +631,3 @@ button.group:focus-visible > span[class*="py-3.75"] > span.relative.block.overfl
     outline: 3px solid #f66234;
     outline-offset: -3px;
 }
-/* Keep the saved image composition visible at every viewport width. */
-main img[data-cms-image],
-main img[data-cms-managed-asset],
-.company-logo-strip img,
-.projects-card img.projects-card__file {
-    object-fit: contain !important;
-    object-position: center;
-    background-color: #fff;
-    scale: 1 !important;
-}
-
-[data-cms-background],
-[data-cms-managed-asset][style*="background-image"] {
-    background-size: contain !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-}
