@@ -76,14 +76,14 @@
         })) + 14;
         const availableStep = (window.innerHeight - firstTop - maxCardHeight - 16) / (cards.length - 1);
 
-        if (availableStep < visibleHeaderHeight) {
+        if (availableStep < 0) {
             stack.classList.remove('is-stacked');
             stack.style.removeProperty('height');
             stages = [];
             return;
         }
 
-        const step = Math.min(availableStep, 160);
+        const step = Math.min(availableStep, visibleHeaderHeight, 160);
         const stackTop = stack.getBoundingClientRect().top + window.scrollY;
         const holdDistance = Math.min(180, Math.max(80, window.innerHeight / 4));
         let flowTop = 0;
