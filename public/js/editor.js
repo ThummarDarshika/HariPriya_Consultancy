@@ -45,6 +45,7 @@
     document.addEventListener('site-content:ready', () => { status.textContent = ''; });
     document.addEventListener('site-content:error', () => { status.textContent = 'Content could not load'; });
     let activeImage = null;
+    let selectedImage = null;
     let activeVideo = null;
     let activeInput = null;
     let pointerPosition = null;
@@ -266,6 +267,7 @@
     videoAction.addEventListener('pointerleave', () => { videoAction.style.display = 'none'; });
     imageAction.addEventListener('click', () => {
         if (!activeImage) return;
+        selectedImage = activeImage;
         const bounds = activeImage.element.getBoundingClientRect();
         const width = Math.min(1920, Math.max(256, Math.round(bounds.width * 2)));
         fileInput.dataset.cropWidth = width;
@@ -275,20 +277,22 @@
     videoAction.addEventListener('click', () => videoFileInput.click());
     fileInput.addEventListener('change', () => {
         const file = fileInput.files?.[0];
-        if (!file || !activeImage) return;
+        const entry = selectedImage;
+        if (!file || !entry || !entry.element.isConnected) return;
         if (file.size > maximumImageSize) {
             status.textContent = 'Image must be 5 MB or smaller.';
             fileInput.value = '';
             return;
         }
-        const previous = drafts.get(activeImage.key);
+        const previous = drafts.get(entry.key);
         if (previous?.previewUrl) URL.revokeObjectURL(previous.previewUrl);
         const previewUrl = URL.createObjectURL(file);
-        cms.apply(activeImage, previewUrl);
-        drafts.set(activeImage.key, { entry: activeImage, file, previewUrl });
+        cms.apply(entry, previewUrl);
+        drafts.set(entry.key, { entry, file, previewUrl });
         updateCount();
         fileInput.value = '';
-        positionImageAction(activeImage);
+        selectedImage = null;
+        positionImageAction(null);
     });
     videoFileInput.addEventListener('change', () => {
         const file = videoFileInput.files?.[0];
