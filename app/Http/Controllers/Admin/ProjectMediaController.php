@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProjectMedia;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -31,9 +32,10 @@ class ProjectMediaController extends Controller
                 }))
                 ->orderBy('sort_order')
                 ->orderBy('id')
-                ->paginate(24)
-                ->withQueryString(),
+                ->when($search !== '', fn ($query) => $query->paginate(24)->withQueryString(), fn ($query) => $query->get()),
             'search' => $search,
+            'imageMaximumMegabytes' => $this->maximumMegabytes('image'),
+            'videoMaximumMegabytes' => $this->maximumMegabytes('video'),
         ]);
     }
 
@@ -48,7 +50,7 @@ class ProjectMediaController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $mediaType = $request->input('media_type');
         $multipleImages = $mediaType === 'image' && is_array($request->file('media_upload'));
@@ -57,15 +59,15 @@ class ProjectMediaController extends Controller
             'media_type' => ['required', Rule::in(['image', 'video'])],
             'media_upload' => $multipleImages ? ['required', 'array', 'min:1', 'max:20'] : $this->uploadRules($mediaType, true),
             'media_upload.*' => $multipleImages ? $this->uploadRules('image', true) : [],
-            'sort_order' => ['required', 'integer', 'min:0'],
-            'is_active' => ['sometimes', 'boolean'],
+            'sort_order' => ['sometimes', 'integer', 'min:0'],
         ], array_merge($this->uploadMessages($request, $mediaType), $multipleImages ? [
             'media_upload.max' => 'Choose up to 20 images at a time.',
             'media_upload.*.max' => 'Each image must be no larger than 20 MB.',
         ] : []));
 
         $files = $multipleImages ? array_values($request->file('media_upload')) : [$request->file('media_upload')];
-        $data['is_active'] = $request->boolean('is_active');
+        $data['sort_order'] = $data['sort_order'] ?? ((int) ProjectMedia::query()->max('sort_order') + 1);
+        $data['is_active'] = true;
         unset($data['media_upload']);
         $storedPaths = [];
         try {
@@ -86,6 +88,12 @@ class ProjectMediaController extends Controller
             throw $exception;
         }
 
+        if ($request->expectsJson()) {
+            $request->session()->flash('status', 'Project media added.');
+
+            return response()->json(['message' => 'Project media added.', 'count' => count($files)], 201);
+        }
+
         return redirect()->route('admin.project-media.index')->with('status', 'Project media added.');
     }
 
@@ -97,25 +105,30 @@ class ProjectMediaController extends Controller
         ]);
     }
 
-    public function update(Request $request, ProjectMedia $projectMedium): RedirectResponse
+    public function update(Request $request, ProjectMedia $projectMedium): RedirectResponse|JsonResponse
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'media_upload' => $this->uploadRules($projectMedium->media_type, false),
-            'sort_order' => ['required', 'integer', 'min:0'],
-            'is_active' => ['sometimes', 'boolean'],
+            'sort_order' => ['sometimes', 'integer', 'min:0'],
         ], $this->uploadMessages($request, $projectMedium->media_type));
 
         $previousPath = $projectMedium->file_path;
         if ($request->hasFile('media_upload')) {
             $data['file_path'] = $this->storeUploadedFile($request->file('media_upload'));
         }
-        $data['is_active'] = $request->boolean('is_active');
+        $data['is_active'] = true;
         unset($data['media_upload']);
         $projectMedium->update($data);
 
         if ($previousPath !== $projectMedium->file_path) {
             $this->deleteStoredFile($previousPath);
+        }
+
+        if ($request->expectsJson()) {
+            $request->session()->flash('status', 'Project media saved.');
+
+            return response()->json(['message' => 'Project media saved.']);
         }
 
         return redirect()->route('admin.project-media.index')->with('status', 'Project media saved.');

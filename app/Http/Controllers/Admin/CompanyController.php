@@ -62,20 +62,25 @@ class CompanyController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'image_upload' => ['required', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'],
             'sort_order' => ['sometimes', 'integer', 'min:0'],
-            'is_active' => ['sometimes', 'boolean'],
         ]);
 
         $data['sort_order'] = (Company::query()->max('sort_order') ?? -1) + 1;
         $data['image_path'] = '/storage/'.$request->file('image_upload')->store('companies', 'public');
-        $data['is_active'] = $request->boolean('is_active');
+        $data['is_active'] = true;
         unset($data['image_upload']);
         Company::query()->create($data);
+
+        if ($request->expectsJson()) {
+            $request->session()->flash('status', 'Company added.');
+
+            return response()->json(['message' => 'Company added.'], 201);
+        }
 
         return redirect()->route('admin.companies.index')->with('status', 'Company added.');
     }
@@ -89,25 +94,30 @@ class CompanyController extends Controller
         ]);
     }
 
-    public function update(Request $request, Company $company): RedirectResponse
+    public function update(Request $request, Company $company): RedirectResponse|JsonResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'],
             'sort_order' => ['sometimes', 'integer', 'min:0'],
-            'is_active' => ['sometimes', 'boolean'],
         ]);
 
         $previous = $company->image_path;
         if ($request->hasFile('image_upload')) {
             $data['image_path'] = '/storage/'.$request->file('image_upload')->store('companies', 'public');
         }
-        $data['is_active'] = $request->boolean('is_active');
+        $data['is_active'] = true;
         unset($data['image_upload']);
         $company->update($data);
 
         if ($previous !== $company->image_path && str_starts_with($previous, '/storage/companies/')) {
             Storage::disk('public')->delete(substr($previous, strlen('/storage/')));
+        }
+
+        if ($request->expectsJson()) {
+            $request->session()->flash('status', 'Company saved.');
+
+            return response()->json(['message' => 'Company saved.']);
         }
 
         return redirect()->route('admin.companies.index')->with('status', 'Company saved.');

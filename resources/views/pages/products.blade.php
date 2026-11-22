@@ -265,7 +265,7 @@
 
             </div>
 
-            <div class="lg:w-269 mx-auto bg-default-900 md:p-12 p-6 bg-no-repeat bg-cover rounded" style="background-image: url('{{ $siteAssets['cta.background'] }}')" data-cms-managed-asset>
+            <div class="lg:w-269 mx-auto bg-default-900 md:p-12 p-6 bg-no-repeat bg-cover rounded" style="background-image: url('{{ $siteAssets['cta.background'] }}')" data-cms-managed-asset data-cms-editable-asset="cta.background" data-crop-width="1920" data-crop-height="1080">
                 <div class="flex lg:flex-row flex-col gap-10 lg:items-center justify-between">
                     <div>
                         <h2 class="lg:text-4xl text-2xl text-white">Custom Order Inquiry</h2>

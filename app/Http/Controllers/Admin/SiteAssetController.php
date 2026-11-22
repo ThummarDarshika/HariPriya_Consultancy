@@ -16,7 +16,7 @@ class SiteAssetController extends Controller
         $managedKeys = array_keys(config('cms.managed_assets'));
 
         return view('admin.site-assets.index', [
-            'assetGroups' => SiteAsset::query()->whereIn('key', $managedKeys)->where('key', '!=', 'brochure')->orderBy('page')->orderBy('id')->get()->groupBy('page'),
+            'assetGroups' => SiteAsset::query()->whereIn('key', $managedKeys)->whereNotIn('key', ['brochure', 'cta.background', 'home.solutions_background', 'about.since_label'])->orderBy('page')->orderBy('id')->get()->groupBy('page'),
         ]);
     }
 

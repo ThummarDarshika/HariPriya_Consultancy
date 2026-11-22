@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Certificate;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -20,8 +21,7 @@ class CertificateController extends Controller
                 ->when($search !== '', fn ($query) => $query->where('name', 'like', '%'.$search.'%'))
                 ->orderBy('sort_order')
                 ->orderBy('id')
-                ->paginate(30)
-                ->withQueryString(),
+                ->when($search !== '', fn ($query) => $query->paginate(30)->withQueryString(), fn ($query) => $query->get()),
             'kind' => 'certificates',
             'title' => 'Certificates',
             'search' => $search,
@@ -37,19 +37,25 @@ class CertificateController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'image_upload' => ['required', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'],
-            'sort_order' => ['required', 'integer', 'min:0'],
-            'is_active' => ['sometimes', 'boolean'],
+            'sort_order' => ['sometimes', 'integer', 'min:0'],
         ]);
 
         $data['image_path'] = '/storage/'.$request->file('image_upload')->store('certificates', 'public');
-        $data['is_active'] = $request->boolean('is_active');
+        $data['sort_order'] = $data['sort_order'] ?? ((int) Certificate::query()->max('sort_order') + 1);
+        $data['is_active'] = true;
         unset($data['image_upload']);
         Certificate::query()->create($data);
+
+        if ($request->expectsJson()) {
+            $request->session()->flash('status', 'Certificate added.');
+
+            return response()->json(['message' => 'Certificate added.'], 201);
+        }
 
         return redirect()->route('admin.certificates.index')->with('status', 'Certificate added.');
     }
@@ -63,25 +69,30 @@ class CertificateController extends Controller
         ]);
     }
 
-    public function update(Request $request, Certificate $certificate): RedirectResponse
+    public function update(Request $request, Certificate $certificate): RedirectResponse|JsonResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'],
-            'sort_order' => ['required', 'integer', 'min:0'],
-            'is_active' => ['sometimes', 'boolean'],
+            'sort_order' => ['sometimes', 'integer', 'min:0'],
         ]);
 
         $previous = $certificate->image_path;
         if ($request->hasFile('image_upload')) {
             $data['image_path'] = '/storage/'.$request->file('image_upload')->store('certificates', 'public');
         }
-        $data['is_active'] = $request->boolean('is_active');
+        $data['is_active'] = true;
         unset($data['image_upload']);
         $certificate->update($data);
 
         if ($previous !== $certificate->image_path && str_starts_with($previous, '/storage/certificates/')) {
             Storage::disk('public')->delete(substr($previous, strlen('/storage/')));
+        }
+
+        if ($request->expectsJson()) {
+            $request->session()->flash('status', 'Certificate saved.');
+
+            return response()->json(['message' => 'Certificate saved.']);
         }
 
         return redirect()->route('admin.certificates.index')->with('status', 'Certificate saved.');

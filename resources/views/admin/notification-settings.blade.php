@@ -22,7 +22,7 @@
                 @error('receiver_email') <p class="text-red-700" role="alert">{{ $message }}</p> @enderror
             </div>
             <div class="admin-form-actions">
-                <p>Contact inquiries and job application alerts will be sent to this address.</p>
+
                 <button type="submit">Save email</button>
             </div>
         </form>
@@ -31,9 +31,9 @@
             @csrf
             @method('PUT')
             <div class="admin-form-section">
-                <div class="admin-form-section__heading"><span>02</span><div><h2>Sender email setup</h2><p>Current sender: {{ $senderSettings?->email ?? $fallbackSenderEmail ?? 'Not configured' }}</p></div></div>
-                <p class="text-sm text-default-600">Use an email account you own. For Gmail, enter its App Password below; the normal Gmail password will not work.</p>
+                <p>Current sender: {{ $senderSettings?->email ?? $fallbackSenderEmail ?? 'Not configured' }}</p>
             </div>
+            <div class="admin-field-help admin-mail-help">
             <div class="admin-mail-setup-guide" aria-labelledby="gmail-setup-title">
                 <h3 id="gmail-setup-title">Set up with a personal Gmail account</h3>
                 <p>You can use your own Gmail without buying a separate mailbox. Complete these steps in the same Google account you want to send from.</p>
@@ -43,6 +43,7 @@
                     <li><span>3</span><div>Enter that Gmail address as both sender email and SMTP username below. Paste the new App Password, then select <strong>Verify and save sender</strong>.</div></li>
                 </ol>
                 <p class="admin-mail-setup-guide__note">Do not enter your regular Google password. To change accounts later, create a new App Password for the new account and verify it here.</p>
+            </div>
             </div>
             <div class="admin-form-section">
                 <label for="sender_email">Sender email address</label>
@@ -55,7 +56,6 @@
                 @error('sender_name') <p class="text-red-700" role="alert">{{ $message }}</p> @enderror
             </div>
             <div class="admin-form-section">
-                <div class="admin-form-section__heading"><span>03</span><div><h2>Mailbox connection</h2><p>Enter the SMTP details supplied by your email provider.</p></div></div>
                 <label for="smtp_host">SMTP server</label>
                 <input id="smtp_host" name="smtp_host" type="text" value="{{ old('smtp_host', $senderSettings?->smtp_host ?? 'smtp.gmail.com') }}" maxlength="255" required>
                 @error('smtp_host') <p class="text-red-700" role="alert">{{ $message }}</p> @enderror

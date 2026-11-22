@@ -168,7 +168,7 @@ class ProjectMediaTest extends TestCase
             ->assertDontSee('Assembly 01');
     }
 
-    public function test_admin_can_edit_title_visibility_and_file_then_delete_media(): void
+    public function test_admin_can_edit_title_and_file_then_delete_media(): void
     {
         Storage::fake('public');
         $this->actingAs($this->administrator());
@@ -186,10 +186,10 @@ class ProjectMediaTest extends TestCase
 
         $item->refresh();
         $this->assertSame('Updated title', $item->title);
-        $this->assertFalse($item->is_active);
+        $this->assertTrue($item->is_active);
         Storage::disk('public')->assertMissing('project-media/old.jpg');
         Storage::disk('public')->assertExists(substr($item->file_path, strlen('/storage/')));
-        $this->get('/projects')->assertDontSee('Updated title');
+        $this->get('/projects')->assertSee('Updated title');
 
         $this->put('/admin/project-media/'.$item->id, [
             'title' => 'Updated title',
@@ -322,6 +322,40 @@ class ProjectMediaTest extends TestCase
         $this->assertDatabaseHas('site_contents', ['page' => 'projects', 'value' => 'Our latest projects']);
         $this->get('/projects')->assertSee('Our latest projects');
         $this->get('/admin/editor?page=projects')->assertSee('Our latest projects');
+    }
+
+    public function test_project_dialog_saves_multiple_images_and_video_and_preserves_media_on_edit(): void
+    {
+        Storage::fake('public');
+        $this->actingAs($this->administrator());
+        $this->get('/admin/project-media')->assertOk()->assertSee('data-project-dialog', false)->assertSee('project-dialog.js');
+        $this->postJson('/admin/project-media', ['title' => 'Missing media', 'media_type' => 'image'])->assertUnprocessable()->assertJsonValidationErrors('media_upload');
+        $this->post('/admin/project-media', [
+            'title' => 'Image project', 'media_type' => 'image',
+            'media_upload' => [UploadedFile::fake()->image('front.jpg'), UploadedFile::fake()->image('side.png')],
+        ], ['Accept' => 'application/json'])->assertCreated()->assertJsonPath('count', 2);
+        $this->post('/admin/project-media', [
+            'title' => 'Video project', 'media_type' => 'video', 'media_upload' => UploadedFile::fake()->create('video.mp4', 100, 'video/mp4'),
+        ], ['Accept' => 'application/json'])->assertCreated()->assertJsonPath('count', 1);
+        $this->assertDatabaseCount('project_media', 3);
+        foreach (['image', 'video'] as $kind) {
+            $item = ProjectMedia::query()->where('media_type', $kind)->firstOrFail();
+            $previous = $item->file_path;
+            $position = $item->sort_order;
+            $this->get('/admin/project-media')->assertOk()->assertSee('data-project-file="'.$previous.'"', false)->assertSee('data-project-kind="'.$kind.'"', false);
+            $this->post('/admin/project-media/'.$item->id, ['_method' => 'PUT', 'title' => ''], ['Accept' => 'application/json'])->assertUnprocessable()->assertJsonValidationErrors('title');
+            $this->assertSame($previous, $item->fresh()->file_path);
+            $this->post('/admin/project-media/'.$item->id, ['_method' => 'PUT', 'title' => 'Changed project'], ['Accept' => 'application/json'])->assertOk()->assertJsonPath('message', 'Project media saved.');
+            $this->assertSame($previous, $item->fresh()->file_path);
+            $this->assertSame($position, $item->fresh()->sort_order);
+            $this->post('/admin/project-media/'.$item->id, [
+                '_method' => 'PUT', 'title' => 'Changed project', 'media_upload' => $kind === 'image' ? UploadedFile::fake()->image('replacement.jpg') : UploadedFile::fake()->create('replacement.mp4', 100, 'video/mp4'),
+            ], ['Accept' => 'application/json'])->assertOk();
+            $this->assertNotSame($previous, $item->fresh()->file_path);
+            Storage::disk('public')->assertMissing(substr($previous, strlen('/storage/')));
+            Storage::disk('public')->assertExists(substr($item->fresh()->file_path, strlen('/storage/')));
+            $this->get('/projects')->assertOk()->assertSee($item->fresh()->file_path);
+        }
     }
 
     private function administrator(): User

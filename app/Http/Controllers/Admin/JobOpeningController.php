@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\JobOpening;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -19,7 +20,7 @@ class JobOpeningController extends Controller
             ->when($search !== '', fn ($query) => $query->where(function ($query) use ($search): void {
                 $query->where('title', 'like', '%'.$search.'%')->orWhere('department', 'like', '%'.$search.'%')->orWhere('location', 'like', '%'.$search.'%');
             }))
-            ->withCount('applications')->orderBy('sort_order')->latest('id')->paginate(20)->withQueryString();
+            ->withCount('applications')->orderBy('sort_order')->orderBy('id')->when($search !== '', fn ($query) => $query->paginate(20)->withQueryString(), fn ($query) => $query->get());
 
         return view('admin.job-openings.index', compact('items', 'search'));
     }
@@ -29,12 +30,18 @@ class JobOpeningController extends Controller
         return view('admin.job-openings.form', ['item' => new JobOpening(['is_active' => true])]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $data = $this->validatedData($request);
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['sort_order'] = (int) JobOpening::query()->max('sort_order') + 1;
         JobOpening::query()->create($data);
+
+        if ($request->expectsJson()) {
+            $request->session()->flash('status', 'Job opening added.');
+
+            return response()->json(['message' => 'Job opening added.'], 201);
+        }
 
         return redirect()->route('admin.job-openings.index')->with('status', 'Job opening added.');
     }
@@ -44,9 +51,15 @@ class JobOpeningController extends Controller
         return view('admin.job-openings.form', ['item' => $jobOpening]);
     }
 
-    public function update(Request $request, JobOpening $jobOpening): RedirectResponse
+    public function update(Request $request, JobOpening $jobOpening): RedirectResponse|JsonResponse
     {
         $jobOpening->update($this->validatedData($request));
+
+        if ($request->expectsJson()) {
+            $request->session()->flash('status', 'Job opening updated.');
+
+            return response()->json(['message' => 'Job opening updated.']);
+        }
 
         return redirect()->route('admin.job-openings.index')->with('status', 'Job opening updated.');
     }
@@ -69,9 +82,8 @@ class JobOpeningController extends Controller
             'description' => ['required', 'string', 'max:10000'],
             'responsibilities' => ['required', 'string', 'max:10000'],
             'requirements' => ['required', 'string', 'max:10000'],
-            'is_active' => ['sometimes', 'boolean'],
         ]);
-        $data['is_active'] = $request->boolean('is_active');
+        $data['is_active'] = true;
 
         return $data;
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Admin\VisualEditorController;
+use App\Models\SiteAsset;
 use App\Models\SiteContent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,11 @@ use Illuminate\Validation\ValidationException;
 
 class SiteContentController extends Controller
 {
+    private const EDITOR_ASSETS = [
+        'global/assets/cta.background' => ['key' => 'cta.background', 'type' => 'background'],
+        'home/assets/home.solutions_background' => ['key' => 'home.solutions_background', 'type' => 'image'],
+    ];
+
     public function index(Request $request): JsonResponse
     {
         $page = $request->validate([
@@ -58,13 +64,35 @@ class SiteContentController extends Controller
         }
 
         foreach ($validated['changes'] ?? [] as $index => $change) {
+            if ($change['key'] === 'about/assets/about.since_label' && ($page !== 'about' || $change['type'] !== 'text' || blank($change['value']) || mb_strlen($change['value']) > 160)) {
+                throw ValidationException::withMessages(["changes.$index.value" => 'Enter marquee text of up to 160 characters on the About page.']);
+            }
             if ($change['type'] === 'url' && ! preg_match('~^(?:https?://[^\s]+|mailto:[^\s]+|tel:[+0-9() .-]+|/(?!/)[^\s]*|\#[^\s]*)$~i', $change['value'] ?? '')) {
                 throw ValidationException::withMessages(["changes.$index.value" => 'Enter a valid link.']);
             }
         }
 
+        foreach ($validated['images'] ?? [] as $index => $image) {
+            if (preg_match('~^[^/]+/assets/~', $image['key'])) {
+                $asset = self::EDITOR_ASSETS[$image['key']] ?? null;
+                if (! $asset || $page !== config('cms.managed_assets')[$asset['key']]['page'] || $image['type'] !== $asset['type']) {
+                    throw ValidationException::withMessages(["images.$index.key" => 'This background cannot be changed here.']);
+                }
+            }
+        }
+
         DB::transaction(function () use ($validated, $page, &$saved): void {
             foreach ($validated['changes'] ?? [] as $change) {
+                if ($change['key'] === 'about/assets/about.since_label') {
+                    $definition = config('cms.managed_assets')['about.since_label'];
+                    $asset = SiteAsset::query()->updateOrCreate(
+                        ['key' => 'about.since_label'],
+                        ['page' => 'about', 'label' => $definition['label'], 'kind' => 'text', 'value' => $change['value']],
+                    );
+                    $saved[] = ['page' => 'about', 'key' => $change['key'], 'type' => 'text', 'value' => $asset->value];
+
+                    continue;
+                }
                 $record = SiteContent::query()->updateOrCreate(
                     ['page' => $page, 'key' => $change['key']],
                     ['type' => $change['type'], 'value' => $change['value'] ?? ''],
@@ -73,6 +101,17 @@ class SiteContentController extends Controller
             }
 
             foreach ($validated['images'] ?? [] as $image) {
+                if ($managedAsset = self::EDITOR_ASSETS[$image['key']] ?? null) {
+                    $definition = config('cms.managed_assets')[$managedAsset['key']];
+                    $path = $image['file']->store('site-assets', 'public');
+                    $asset = SiteAsset::query()->updateOrCreate(
+                        ['key' => $managedAsset['key']],
+                        ['page' => $definition['page'], 'label' => $definition['label'], 'kind' => $definition['kind'], 'value' => Storage::disk('public')->url($path)],
+                    );
+                    $saved[] = ['page' => $page, 'key' => $image['key'], 'type' => $image['type'], 'value' => $asset->value];
+
+                    continue;
+                }
                 $path = $image['file']->store('site-content', 'public');
                 $record = SiteContent::query()->updateOrCreate(
                     ['page' => $page, 'key' => $image['key']],

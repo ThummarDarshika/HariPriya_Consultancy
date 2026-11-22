@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('admin.favicon')
-    <title>{{ $item->exists ? 'Edit' : 'Add' }} project {{ $item->media_type }} · Admin</title>
+    <title>{{ $item->exists ? 'Edit' : 'Add' }} project · Admin</title>
     <link rel="stylesheet" href="{{ asset('assets/app-DVm5M2fF.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/project-media-admin.css') }}?v={{ filemtime(public_path('css/project-media-admin.css')) }}">
@@ -12,38 +12,15 @@
 <body class="admin-panel has-admin-sidebar min-h-screen bg-default-100 text-default-900">
     @include('admin.sidebar')
     <main class="admin-form-main project-media-admin project-media-form">
-        <div class="admin-page-bar">@include('admin.back-link', ['href' => route('admin.project-media.index'), 'title' => ($item->exists ? 'Edit' : 'Add').' '.$item->media_type])</div>
+        <div class="admin-page-bar">@include('admin.back-link', ['href' => route('admin.project-media.index'), 'title' => ($item->exists ? 'Edit' : 'Add').' project'])</div>
         <form data-jquery-validation @if ($item->exists) data-admin-confirm-update data-admin-confirm-label="{{ $item->title }}" @endif method="post" enctype="multipart/form-data" action="{{ $item->exists ? route('admin.project-media.update', $item) : route('admin.project-media.store') }}" class="admin-form-card space-y-5" novalidate>
             @csrf
             @if ($item->exists) @method('PUT') @else <input type="hidden" name="media_type" value="{{ $item->media_type }}"> @endif
             @error('media_type')<p class="project-media-upload-error" role="alert">{{ $message }}</p>@enderror
             <section class="admin-form-section">
-                <div class="admin-form-section__heading"><span>01</span><div><h2>Gallery details</h2><p>The title is managed here and appears below the {{ $item->media_type }}.</p></div></div>
-                <label class="block">Title *
-                    <input name="title" value="{{ old('title', $item->title) }}" maxlength="255" data-jquery-required="true" class="mt-2 block w-full rounded border border-default-200 p-3">
-                </label>
-                @error('title')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-                <div class="project-media-settings">
-                    <div>
-                        <label class="block">Display order *
-                            <input name="sort_order" type="number" min="0" value="{{ old('sort_order', $item->sort_order ?? 0) }}" data-jquery-required="true" class="mt-2 block w-full rounded border border-default-200 p-3">
-                        </label>
-                        @error('sort_order')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-                    </div>
-                    <div>
-                        <input name="is_active" type="hidden" value="0">
-                        <label class="project-media-visibility">
-                            <input name="is_active" type="checkbox" value="1" @checked(old('is_active', $item->is_active))>
-                            <span class="project-media-visibility__copy"><strong>Show on website</strong><small>Visible on the public Projects page after saving.</small></span>
-                        </label>
-                    </div>
-                </div>
-            </section>
-            <section class="admin-form-section">
-                <div class="admin-form-section__heading"><span>02</span><div><h2>{{ ucfirst($item->media_type) }} file</h2>@if ($item->media_type === 'video' || ! $item->exists)<p>{{ $item->exists ? 'Upload a new file only if you want to replace the current one.' : ($item->media_type === 'image' ? 'Select up to 20 images. Each creates a separate gallery card with this title.' : 'Choose the video to show on the Projects page.') }}</p>@endif</div></div>
                 @if ($item->file_path && $item->media_type === 'video')
-                    <div class="overflow-hidden rounded-lg bg-default-900">
-                            <video src="{{ $item->file_path }}" controls preload="metadata" class="max-h-72 w-full object-contain"></video>
+                    <div class="project-media-form__video-preview">
+                            <video src="{{ $item->file_path }}" controls preload="metadata" class="project-media-form__video"></video>
                     </div>
                 @endif
                 <label class="block">{{ $item->media_type === 'video' ? ($item->exists ? 'Replace file' : 'Upload file *') : '' }}
@@ -51,6 +28,12 @@
                 </label>
                 <p id="project-media-upload-error" class="project-media-upload-error" data-project-media-error role="alert" @unless ($errors->has('media_upload') || $errors->has('media_upload.*')) hidden @endunless>{{ $errors->first('media_upload') ?: $errors->first('media_upload.*') }}</p>
                 @if ($item->media_type === 'video') <p id="project-media-upload-help" class="project-media-upload-help">Supported: {{ $item->media_type === 'video' ? 'MP4, WebM, OGG/OGV' : 'JPG, JPEG, PNG, WebP, GIF' }}. Maximum size: {{ $maximumMegabytes }} MB.</p> @endif
+            </section>
+            <section class="admin-form-section">
+                <label class="block">Title *
+                    <input name="title" value="{{ old('title', $item->title) }}" maxlength="255" data-jquery-required="true" class="mt-2 block w-full rounded border border-default-200 p-3">
+                </label>
+                @error('title')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
             </section>
             <div class="admin-form-actions"><button class="rounded bg-primary px-6 py-3 text-white">{{ $item->exists ? 'Save changes' : 'Add '. $item->media_type }}</button></div>
         </form>

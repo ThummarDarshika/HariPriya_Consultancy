@@ -96,6 +96,98 @@ class AdminCollectionsTest extends TestCase
         $this->deleteJson('/api/products/'.$id)->assertOk()->assertJsonPath('deleted', true);
     }
 
+    public function test_client_reviews_require_an_image_and_keep_the_existing_image_on_edit(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        $details = ['client_name' => 'Client', 'description' => 'Great work', 'designation' => 'Director', 'status' => 'published'];
+        $this->post('/admin/collections/testimonials', $details)->assertSessionHasErrors('image_upload');
+        foreach ([null, ''] as $image) {
+            $item = CollectionItem::factory()->create(['collection' => 'testimonials', 'image' => $image]);
+            $this->put('/admin/collections/testimonials/'.$item->id, $details)->assertSessionHasErrors('image_upload');
+            $this->put('/admin/collections/testimonials/'.$item->id, $details + ['image_upload' => UploadedFile::fake()->image('client.jpg')])->assertSessionHasNoErrors()->assertRedirect();
+            $savedImage = $item->fresh()->image;
+            $this->assertNotEmpty($savedImage);
+            $this->put('/admin/collections/testimonials/'.$item->id, $details + ['remove_image' => '1'])->assertSessionHasNoErrors()->assertRedirect();
+            $this->assertSame($savedImage, $item->fresh()->image);
+        }
+    }
+
+    public function test_all_collection_edits_keep_their_image_when_removal_is_requested(): void
+    {
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        foreach (['products', 'blogs', 'services', 'case-studies', 'team-members'] as $collection) {
+            $item = CollectionItem::factory()->create(['collection' => $collection, 'image' => '/storage/existing.jpg']);
+            $details = ['title' => 'Updated item', 'description' => 'Details', 'status' => 'published', 'remove_image' => '1'];
+            $details += match ($collection) {
+                'products' => ['material' => 'Steel', 'capability' => 'Design', 'size_range' => 'Custom'],
+                'blogs' => ['category' => 'News', 'summary' => 'Summary', 'article_subheading' => 'Details', 'video_url' => 'https://www.youtube.com/embed/example', 'display_date' => '22 Nov 2026'],
+                'case-studies' => ['category' => 'Industrial', 'metric' => '50'],
+                'team-members' => ['role' => 'Director', 'social_links' => ['instagram' => 'https://instagram.com/example', 'linkedin' => 'https://linkedin.com/in/example', 'x' => 'https://x.com/example']],
+                default => [],
+            };
+            $this->put('/admin/collections/'.$collection.'/'.$item->id, $details)->assertSessionHasNoErrors()->assertRedirect();
+            $this->assertSame('/storage/existing.jpg', $item->fresh()->image);
+            $this->get('/admin/collections/'.$collection.'/'.$item->id.'/edit')->assertOk()->assertDontSee('Remove current image');
+        }
+    }
+
+    public function test_all_content_dialogs_keep_the_existing_fields_and_save_images_and_updates(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        foreach (['products', 'services', 'blogs', 'testimonials', 'case-studies', 'team-members'] as $collection) {
+            $details = ['title' => 'New item', 'description' => 'Description', 'status' => 'published'];
+            $details += match ($collection) {
+                'products' => ['material' => 'Steel', 'capability' => 'Design', 'size_range' => 'Custom'],
+                'blogs' => ['category' => 'News', 'summary' => 'Summary', 'article_subheading' => 'Details', 'video_url' => 'https://www.youtube.com/embed/example', 'display_date' => '22 Nov 2026'],
+                'testimonials' => ['client_name' => 'Client', 'designation' => 'Director'],
+                'case-studies' => ['category' => 'Industrial', 'metric' => '50'],
+                'team-members' => ['role' => 'Director', 'social_links' => ['instagram' => 'https://instagram.com/example', 'linkedin' => 'https://linkedin.com/in/example', 'x' => 'https://x.com/example']],
+                default => [],
+            };
+            $this->get('/admin/collections/'.$collection)->assertOk()->assertSee('data-form-dialog-open', false)->assertSee('data-form-dialog', false);
+            $this->get('/admin/collections/'.$collection.'/create')->assertOk()->assertSee('name="image_upload"', false);
+            $response = $this->post('/admin/collections/'.$collection, $details + ['image_upload' => UploadedFile::fake()->image('image.jpg')], ['Accept' => 'application/json'])->assertCreated();
+            $item = CollectionItem::query()->findOrFail($response->json('id'));
+            $image = $item->image;
+            $slug = $item->slug;
+            $position = $item->sort_order;
+            $this->get('/admin/collections/'.$collection.'/'.$item->id.'/edit')->assertOk()->assertSee('data-current-image="'.$image.'"', false);
+            $changed = $details;
+            $changed[$collection === 'testimonials' ? 'client_name' : 'title'] = 'Changed item';
+            $this->post('/admin/collections/'.$collection.'/'.$item->id, $changed + ['_method' => 'PUT'], ['Accept' => 'application/json'])->assertOk()->assertJsonPath('id', $item->id);
+            $this->assertSame($image, $item->fresh()->image);
+            $this->assertSame($slug, $item->fresh()->slug);
+            $this->assertSame($position, $item->fresh()->sort_order);
+            $this->getJson('/api/'.$collection)->assertOk()->assertJsonFragment(['id' => $item->id, 'image' => $image]);
+            $changed[$collection === 'testimonials' ? 'client_name' : 'title'] = '';
+            $this->post('/admin/collections/'.$collection.'/'.$item->id, $changed + ['_method' => 'PUT'], ['Accept' => 'application/json'])->assertUnprocessable();
+            $this->assertSame($image, $item->fresh()->image);
+        }
+        $this->get('/admin/collections/faqs')->assertOk()->assertSee('data-form-dialog-open', false);
+    }
+
+    public function test_faq_dialog_validates_question_and_answer_and_saves_add_and_edit_requests(): void
+    {
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        $this->get('/admin/collections/faqs')->assertOk()->assertSee('data-dialog-title="Add FAQ"', false)->assertSee('data-form-dialog', false);
+        $this->get('/admin/collections/faqs/create')->assertOk()->assertSee('Question')->assertSee('Answer')->assertDontSee('type="file"', false);
+        $this->postJson('/admin/collections/faqs', ['status' => 'published'])->assertUnprocessable()->assertJsonValidationErrors(['title', 'description']);
+        $response = $this->postJson('/admin/collections/faqs', ['title' => 'How does it work?', 'description' => 'Contact our team.', 'status' => 'published'])->assertCreated();
+        $item = CollectionItem::query()->findOrFail($response->json('id'));
+        $slug = $item->slug;
+        $position = $item->sort_order;
+        $this->get('/admin/collections/faqs/'.$item->id.'/edit')->assertOk()->assertSee('Contact our team.');
+        $this->get('/admin/collections/faqs')->assertOk()->assertSee('data-dialog-title="Edit FAQ"', false);
+        $this->postJson('/admin/collections/faqs/'.$item->id, ['_method' => 'PUT', 'title' => '', 'description' => '', 'status' => 'published'])->assertUnprocessable()->assertJsonValidationErrors(['title', 'description']);
+        $this->assertSame('Contact our team.', $item->fresh()->description);
+        $this->postJson('/admin/collections/faqs/'.$item->id, ['_method' => 'PUT', 'title' => 'Updated question?', 'description' => 'Updated answer.', 'status' => 'published'])->assertOk()->assertJsonPath('id', $item->id);
+        $this->assertSame($slug, $item->fresh()->slug);
+        $this->assertSame($position, $item->fresh()->sort_order);
+        $this->getJson('/api/faqs')->assertOk()->assertJsonFragment(['title' => 'Updated question?', 'description' => 'Updated answer.']);
+    }
+
     public function test_contact_form_creates_read_only_submission_for_admin(): void
     {
         $this->post('/contact', [

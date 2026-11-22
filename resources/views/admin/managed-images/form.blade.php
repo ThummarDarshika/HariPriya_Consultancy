@@ -16,25 +16,14 @@
             @csrf
             @if ($item->exists) @method('PUT') @endif
             <section class="admin-form-section">
-                <div class="admin-form-section__heading"><span>01</span><div><h2>{{ $title }} details</h2><p>Name and display settings</p></div></div>
-            <label class="block">Name *
-                <input name="name" value="{{ old('name', $item->name) }}" maxlength="255" data-jquery-required="true" class="mt-2 block w-full rounded border border-default-200 p-3">
-            </label>
-            @error('name')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
             <label class="block">Image {{ $item->exists ? '' : '*' }}
                 <input data-current-image="{{ $item->image_path }}" name="image_upload" data-crop-width="{{ $kind === 'companies' ? 684 : 900 }}" data-crop-height="{{ $kind === 'companies' ? 468 : 1200 }}" type="file" accept="image/png,image/jpeg,image/webp,image/gif" @unless ($item->exists)data-jquery-required="true"@endunless class="mt-2 block w-full">
             </label>
             @error('image_upload')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-            @if ($kind !== 'companies')
-            <label class="block">Order index *
-                <input name="sort_order" type="number" min="0" value="{{ old('sort_order', $item->sort_order ?? 0) }}" data-jquery-required="true" class="mt-2 block w-full rounded border border-default-200 p-3">
+            <label class="block">Name *
+                <input name="name" value="{{ old('name', $item->name) }}" maxlength="255" data-jquery-required="true" class="mt-2 block w-full rounded border border-default-200 p-3">
             </label>
-            @error('sort_order')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-            @endif
-            <label class="flex items-center gap-2">
-                <input name="is_active" type="checkbox" value="1" @checked(old('is_active', $item->is_active))>
-                Show on website
-            </label>
+            @error('name')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
             </section>
             <div class="admin-form-actions"><button class="rounded bg-primary px-6 py-3 text-white">{{ $item->exists ? 'Save changes' : 'Add '.strtolower($title) }}</button></div>
         </form>

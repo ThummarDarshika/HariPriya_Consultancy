@@ -15,19 +15,18 @@
         <div class="admin-page-bar">
             @include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Project media'])
             <div class="admin-page-bar__actions">
-                <a href="{{ route('admin.project-media.create', ['type' => 'image']) }}" class="project-media-action project-media-action--image"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/><path d="m4 17 5-5 3 3 3-4 5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Add image</a>
-                <a href="{{ route('admin.project-media.create', ['type' => 'video']) }}" class="project-media-action project-media-action--video"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="m10 8 6 4-6 4V8Z" fill="currentColor"/></svg>Add video</a>
+                @include('admin.search', ['label' => 'project media'])
+                @include('admin.project-media.add-menu')
             </div>
         </div>
         @if (session('status')) <p role="status" class="mb-5 rounded bg-green-100 p-3">{{ session('status') }}</p> @endif
 
-        @include('admin.search', ['label' => 'project media'])
 
         @if ($items->isNotEmpty())
-            @component('admin.list-table', ['headers' => ['Preview', 'Title', 'Type', 'Status', 'Order', 'Actions']])
+            @component('admin.list-table', ['headers' => ['Preview', 'Title', 'Type', 'Status', 'Actions'], 'reorderUrl' => route('admin.order', 'project-media'), 'search' => $search])
                         @foreach ($items as $item)
-                            <tr>
-                                <td>
+                            <tr data-order-id="{{ $item->id }}">
+                                    <td>
                                     <div class="project-media-table__preview">
                                         @if ($item->media_type === 'video')
                                             <video src="{{ $item->file_path }}" aria-label="{{ $item->title }}" controls preload="metadata"></video>
@@ -39,10 +38,9 @@
                                 <td class="admin-list__title">{{ $item->title }}</td>
                                 <td><span class="project-media-table__type">{{ ucfirst($item->media_type) }}</span></td>
                                 <td><span class="admin-list__status {{ $item->is_active ? 'is-active' : '' }}">{{ $item->is_active ? 'Visible' : 'Hidden' }}</span></td>
-                                <td>{{ $item->sort_order }}</td>
                                 <td>
                                     <div class="admin-action-buttons">
-                                        <a class="admin-icon-button" href="{{ route('admin.project-media.edit', $item) }}" aria-label="Edit {{ $item->title }}" title="Edit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m14 5 5 5M4 20l4.5-1 11-11a2.12 2.12 0 0 0-3-3l-11 11L4 20Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                                        <a class="admin-icon-button" href="{{ route('admin.project-media.edit', $item) }}" data-project-open data-project-kind="{{ $item->media_type }}" data-project-title="{{ $item->title }}" data-project-file="{{ $item->file_path }}" data-project-action="{{ route('admin.project-media.update', $item) }}" aria-label="Edit {{ $item->title }}" title="Edit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m14 5 5 5M4 20l4.5-1 11-11a2.12 2.12 0 0 0-3-3l-11 11L4 20Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
                                         <form method="post" action="{{ route('admin.project-media.destroy', $item) }}" data-admin-confirm-delete data-admin-confirm-label="{{ $item->title }}">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="admin-icon-button admin-icon-button--danger" aria-label="Delete {{ $item->title }}" title="Delete"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 7h16m-10 4v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -62,14 +60,12 @@
                 @else
                     <h2>No project media yet</h2>
                     <p>Add the first image or video to show your work on the Projects page.</p>
-                    <div class="project-media-actions">
-                        <a href="{{ route('admin.project-media.create', ['type' => 'image']) }}" class="project-media-action project-media-action--image">Add image</a>
-                        <a href="{{ route('admin.project-media.create', ['type' => 'video']) }}" class="project-media-action project-media-action--video">Add video</a>
-                    </div>
                 @endif
             </div>
         @endif
-        <div class="mt-8">{{ $items->links() }}</div>
+        <div class="mt-8">@if ($search !== '') {{ $items->links() }} @endif</div>
     </main>
+    @include('admin.project-media.dialog')
+    <script src="{{ asset('js/project-dialog.js') }}?v={{ filemtime(public_path('js/project-dialog.js')) }}" defer></script>
 </body>
 </html>

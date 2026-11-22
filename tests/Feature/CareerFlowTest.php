@@ -16,6 +16,26 @@ class CareerFlowTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_job_dialog_loads_the_existing_form_and_saves_without_changing_its_url_or_order(): void
+    {
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        $details = JobOpening::factory()->make()->only(['title', 'department', 'location', 'employment_type', 'description', 'responsibilities', 'requirements']);
+        $this->get('/admin/job-openings')->assertOk()->assertSee('data-form-dialog-open', false)->assertSee('data-form-dialog', false);
+        $this->get('/admin/job-openings/create')->assertOk()->assertSee('name="responsibilities"', false);
+        $this->postJson('/admin/job-openings', $details)->assertCreated()->assertJsonPath('message', 'Job opening added.');
+        $item = JobOpening::query()->firstOrFail();
+        $slug = $item->slug;
+        $position = $item->sort_order;
+        $this->get('/admin/job-openings/'.$item->id.'/edit')->assertOk()->assertSee('value="'.$item->title.'"', false);
+        $details['title'] = 'Changed role';
+        $this->postJson('/admin/job-openings/'.$item->id, $details + ['_method' => 'PUT'])->assertOk()->assertJsonPath('message', 'Job opening updated.');
+        $this->assertSame($slug, $item->fresh()->slug);
+        $this->assertSame($position, $item->fresh()->sort_order);
+        $details['requirements'] = '';
+        $this->postJson('/admin/job-openings/'.$item->id, $details + ['_method' => 'PUT'])->assertUnprocessable()->assertJsonValidationErrors('requirements');
+        $this->assertSame('Changed role', $item->fresh()->title);
+    }
+
     public function test_only_open_jobs_are_visible_and_can_be_applied_to(): void
     {
         $open = JobOpening::factory()->create(['title' => 'Production Engineer', 'slug' => 'production-engineer']);
@@ -120,7 +140,7 @@ class CareerFlowTest extends TestCase
 
         $this->get('/admin/job-openings/create')
             ->assertOk()
-            ->assertSee('Show on website')
+            ->assertDontSee('Show on website')
             ->assertDontSee('URL slug')
             ->assertDontSee('Display order');
         $this->get('/admin/job-applications?search=Asha')->assertOk()->assertSee('Asha Shah');

@@ -13,10 +13,12 @@
     <main class="mx-auto max-w-6xl p-5 md:p-10">
         <div class="admin-page-bar">
             @include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Contact submissions'])
-            <a href="{{ route('admin.contact-submissions.export') }}" class="rounded bg-primary px-5 py-3 text-white">Export CSV</a>
+            <div class="admin-page-bar__actions">
+                @include('admin.search', ['label' => 'contact submissions'])
+                <a href="{{ route('admin.contact-submissions.export') }}" class="admin-topbar-icon" aria-label="Export CSV" title="Export CSV"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 17v4h14v-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
         </div>
         @if (session('status')) <p role="status" class="mb-5 rounded bg-green-100 p-3">{{ session('status') }}</p> @endif
-        @include('admin.search', ['label' => 'contact submissions'])
         @component('admin.list-table', ['headers' => ['Date', 'Name', 'Email', 'Phone', 'Subject', 'Actions']])
                     @forelse ($submissions as $submission)
                         <tr class="border-b border-default-100 align-top">

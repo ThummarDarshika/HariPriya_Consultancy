@@ -14,25 +14,28 @@
     <main class="admin-content-main career-admin">
         <div class="admin-page-bar">
             @include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Job openings'])
-            <a class="career-admin__primary" href="{{ route('admin.job-openings.create') }}">+ Add opening</a>
+            <div class="admin-page-bar__actions">
+                @include('admin.search', ['label' => 'job openings'])
+                <a class="admin-add-button" href="{{ route('admin.job-openings.create') }}" data-form-dialog-open data-dialog-title="Add job opening" aria-label="Add job opening" title="Add job opening">@include('admin.plus-icon')</a>
+            </div>
         </div>
         @if (session('status')) <p role="status" class="career-admin__notice">{{ session('status') }}</p> @endif
-        @include('admin.search', ['label' => 'job openings'])
-        @component('admin.list-table', ['headers' => ['Role', 'Department', 'Location', 'Status', 'Applications', 'Actions']])
+        @component('admin.list-table', ['headers' => ['Role', 'Department', 'Location', 'Status', 'Applications', 'Actions'], 'reorderUrl' => route('admin.order', 'job-openings'), 'search' => $search])
             @forelse ($items as $item)
-                <tr>
+                <tr data-order-id="{{ $item->id }}">
                     <td><strong>{{ $item->title }}</strong><small>{{ $item->employment_type }}</small></td>
                     <td>{{ $item->department }}</td>
                     <td>{{ $item->location }}</td>
                     <td><span class="admin-list__status {{ $item->is_active ? 'is-active' : '' }}">{{ $item->is_active ? 'Open' : 'Hidden' }}</span></td>
                     <td>{{ $item->applications_count }}</td>
-                    <td><div class="admin-action-buttons"><a class="admin-icon-button" href="{{ route('admin.job-openings.edit', $item) }}" aria-label="Edit {{ $item->title }}" title="Edit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m14 5 5 5M4 20l4.5-1 11-11a2.12 2.12 0 0 0-3-3l-11 11L4 20Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><form method="post" action="{{ route('admin.job-openings.destroy', $item) }}" data-admin-confirm-delete data-admin-confirm-label="{{ $item->title }}">@csrf @method('DELETE')<button class="admin-icon-button admin-icon-button--danger" type="submit" aria-label="Delete {{ $item->title }}" title="Delete"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 7h16m-10 4v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form></div></td>
+                    <td><div class="admin-action-buttons"><a class="admin-icon-button" href="{{ route('admin.job-openings.edit', $item) }}" data-form-dialog-open data-dialog-title="Edit job opening" aria-label="Edit {{ $item->title }}" title="Edit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m14 5 5 5M4 20l4.5-1 11-11a2.12 2.12 0 0 0-3-3l-11 11L4 20Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><form method="post" action="{{ route('admin.job-openings.destroy', $item) }}" data-admin-confirm-delete data-admin-confirm-label="{{ $item->title }}">@csrf @method('DELETE')<button class="admin-icon-button admin-icon-button--danger" type="submit" aria-label="Delete {{ $item->title }}" title="Delete"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 7h16m-10 4v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form></div></td>
                 </tr>
             @empty
                 <tr><td colspan="6" class="admin-list__empty">{{ $search ? 'No matching job openings.' : 'No job openings yet. Add the first role to show it on the Career page.' }}</td></tr>
             @endforelse
         @endcomponent
-        <div class="admin-list__pagination">{{ $items->links() }}</div>
+        <div class="admin-list__pagination">@if ($search !== '') {{ $items->links() }} @endif</div>
     </main>
+    @include('admin.form-dialog')
 </body>
 </html>

@@ -102,7 +102,7 @@ class ManagedContentTest extends TestCase
             'sort_order' => 3,
             'is_active' => 0,
         ])->assertRedirect(route('admin.companies.index'));
-        $this->get('/about')->assertDontSee('alt="Acme Updated"', false);
+        $this->get('/about')->assertSee('alt="Acme Updated"', false);
 
         $this->delete(route('admin.certificates.destroy', $certificate))
             ->assertRedirect(route('admin.certificates.index'));
@@ -209,7 +209,7 @@ class ManagedContentTest extends TestCase
         $this->seed(SiteAssetSeeder::class);
         $this->actingAs($this->administrator());
         $this->get('/admin/site-assets')->assertOk()
-            ->assertSee('Shared CTA background (Home, Products & Services)')
+            ->assertDontSee('Shared CTA background (Home, Products & Services)')
             ->assertDontSee('About Us heading background')
             ->assertDontSee('Custom Order Inquiry background');
 
@@ -225,6 +225,66 @@ class ManagedContentTest extends TestCase
         foreach (['/', '/products', '/services'] as $page) {
             $this->get($page)->assertOk()->assertSee($asset->value);
         }
+    }
+
+    public function test_company_dialog_uses_the_existing_upload_and_validation_flow(): void
+    {
+        Storage::fake('public');
+        $this->actingAs($this->administrator());
+        $this->get('/admin/companies')->assertOk()->assertSee('data-company-dialog', false)->assertSee('company-dialog.js');
+        $this->get('/admin/certificates')->assertOk()->assertSee('data-company-dialog', false)->assertSee('data-crop-width="900" data-crop-height="1200"', false);
+        $this->postJson('/admin/companies', ['name' => 'New company'])->assertUnprocessable()->assertJsonValidationErrors('image_upload');
+        $this->post('/admin/companies', [
+            'name' => 'New company', 'image_upload' => UploadedFile::fake()->image('logo.jpg'),
+        ], ['Accept' => 'application/json'])->assertCreated()->assertJsonPath('message', 'Company added.');
+        $company = Company::query()->firstOrFail();
+        $image = $company->image_path;
+        $position = $company->sort_order;
+        Storage::disk('public')->assertExists(substr($image, strlen('/storage/')));
+        $this->post('/admin/companies/'.$company->id, [
+            '_method' => 'PUT', 'name' => '',
+        ], ['Accept' => 'application/json'])->assertUnprocessable()->assertJsonValidationErrors('name');
+        $this->assertSame('New company', $company->fresh()->name);
+        $this->post('/admin/companies/'.$company->id, [
+            '_method' => 'PUT', 'name' => 'Changed company',
+        ], ['Accept' => 'application/json'])->assertOk()->assertJsonPath('message', 'Company saved.');
+        $this->assertSame($image, $company->fresh()->image_path);
+        $this->assertSame($position, $company->fresh()->sort_order);
+        $this->post('/admin/companies/'.$company->id, [
+            '_method' => 'PUT', 'name' => 'Changed company', 'image_upload' => UploadedFile::fake()->image('replacement.png'),
+        ], ['Accept' => 'application/json'])->assertOk();
+        $this->assertNotSame($image, $company->fresh()->image_path);
+        Storage::disk('public')->assertMissing(substr($image, strlen('/storage/')));
+        Storage::disk('public')->assertExists(substr($company->fresh()->image_path, strlen('/storage/')));
+        $this->get('/admin/companies')->assertOk()->assertSee('data-company-name="Changed company"', false)->assertSee('data-company-image="'.$company->fresh()->image_path.'"', false);
+        $this->get('/')->assertOk()->assertSee($company->fresh()->image_path);
+    }
+
+    public function test_certificate_dialog_creates_and_updates_images_without_losing_the_existing_file_or_order(): void
+    {
+        Storage::fake('public');
+        $this->actingAs($this->administrator());
+        $this->postJson('/admin/certificates', ['name' => 'Certificate'])->assertUnprocessable()->assertJsonValidationErrors('image_upload');
+        $this->post('/admin/certificates', [
+            'name' => 'ISO certificate', 'image_upload' => UploadedFile::fake()->image('certificate.jpg'),
+        ], ['Accept' => 'application/json'])->assertCreated()->assertJsonPath('message', 'Certificate added.');
+        $item = Certificate::query()->firstOrFail();
+        $image = $item->image_path;
+        $position = $item->sort_order;
+        $this->get('/admin/certificates')->assertOk()->assertSee('data-item-label="certificate"', false)->assertSee('data-company-name="ISO certificate"', false)->assertSee('data-company-image="'.$image.'"', false);
+        $this->post('/admin/certificates/'.$item->id, ['_method' => 'PUT', 'name' => ''], ['Accept' => 'application/json'])->assertUnprocessable()->assertJsonValidationErrors('name');
+        $this->assertSame('ISO certificate', $item->fresh()->name);
+        $this->post('/admin/certificates/'.$item->id, ['_method' => 'PUT', 'name' => 'Changed certificate'], ['Accept' => 'application/json'])->assertOk()->assertJsonPath('message', 'Certificate saved.');
+        $this->assertSame($image, $item->fresh()->image_path);
+        $this->assertSame($position, $item->fresh()->sort_order);
+        Storage::disk('public')->assertExists(substr($image, strlen('/storage/')));
+        $this->post('/admin/certificates/'.$item->id, [
+            '_method' => 'PUT', 'name' => 'Changed certificate', 'image_upload' => UploadedFile::fake()->image('replacement.png'),
+        ], ['Accept' => 'application/json'])->assertOk();
+        $this->assertNotSame($image, $item->fresh()->image_path);
+        Storage::disk('public')->assertMissing(substr($image, strlen('/storage/')));
+        Storage::disk('public')->assertExists(substr($item->fresh()->image_path, strlen('/storage/')));
+        $this->get('/about')->assertOk()->assertSee($item->fresh()->image_path);
     }
 
     private function administrator(): User

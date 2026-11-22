@@ -45,7 +45,7 @@
     <script type="module" src="{{ asset('assets/app-MYA1z5jW.js') }}"></script>
     <script src="{{ asset('js/site-content.js') }}?v={{ filemtime(public_path('js/site-content.js')) }}" defer></script>
     <script src="{{ asset('js/home-navigation.js') }}?v={{ filemtime(public_path('js/home-navigation.js')) }}" defer></script>
-    <script src="{{ asset('js/collection-content.js') }}" defer></script>
+    <script src="{{ asset('js/collection-content.js') }}?v={{ filemtime(public_path('js/collection-content.js')) }}" defer></script>
     <script src="{{ asset('js/product-gallery.js') }}?v={{ filemtime(public_path('js/product-gallery.js')) }}" defer></script>
     @isset($cmsEditorPage)
         <script src="{{ asset('js/editor.js') }}?v={{ filemtime(public_path('js/editor.js')) }}" defer></script>

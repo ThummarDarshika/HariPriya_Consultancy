@@ -15,10 +15,10 @@
         <div class="container-full relative z-10 lg:pt-50 pt-25">
 
             <!-- Top grid -->
-            <div class="grid xl:grid-cols-6 lg:gap-25 gap-12">
+            <div class="footer-layout">
 
-                <div class="xl:col-span-2">
-                    <div class="lg:w-105" data-cms-ignore>
+                <div class="footer-intro">
+                    <div class="footer-intro-copy" data-cms-ignore>
                         <h4 class="text-[32px] text-white mb-6.5">Let's build together</h4>
 
                         <p class="text-default-600 mb-5">
@@ -46,10 +46,10 @@
                     </div>
                 </div>
 
-                <div class="xl:col-span-4">
-                    <div class="grid lg:grid-cols-9 md:grid-cols-4 grid-cols-2 lg:gap-10 gap-6">
+                <div class="footer-links-container">
+                    <div class="footer-links">
                         <!-- Main links -->
-                        <div class="lg:col-span-2">
+                        <div>
                             <h5 class="lg:text-[28px] md:text-2xl text-lg text-white mb-7.5" data-cms-ignore>Main Links</h5>
 
                             <ul class="space-y-4 text-white/70">
@@ -63,7 +63,7 @@
                         </div>
 
                         <!-- Utility links -->
-                        <div class="lg:col-span-2">
+                        <div>
                             <h5 class="lg:text-[28px] md:text-2xl text-lg text-white mb-7.5" data-cms-ignore>Other Links</h5>
 
                             <ul class="space-y-4 text-white/70">
@@ -76,7 +76,7 @@
                         </div>
 
                         <!-- Contact info -->
-                        <div class="lg:col-span-3">
+                        <div class="footer-contact-info">
                             <h5 class="lg:text-[28px] md:text-2xl text-lg text-white mb-7.5">Contact Info</h5>
 
                             <ul class="space-y-4 text-white/70">
@@ -86,7 +86,7 @@
                         </div>
 
                         <!-- Working hours -->
-                        <div class="lg:col-span-2">
+                        <div class="footer-working-hours">
                             <h5 class="lg:text-[28px] md:text-2xl text-lg text-white mb-7.5">Working Hours</h5>
 
                             <ul class="space-y-4 text-white/70">

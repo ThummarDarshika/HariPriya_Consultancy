@@ -66,22 +66,22 @@ class LegacyCollectionSeeder extends Seeder
             }
         }
 
-        preg_match_all('/<!-- Content \d+ -->(.*?)(?=<!-- Content \d+ -->|<!-- End Tab Content -->)/s', $home, $testimonials);
-        foreach ($testimonials[1] as $index => $markup) {
-            preg_match('/<p class="text-default-900">(.*?)<\/p>/s', $markup, $quote);
-            preg_match('/<h3[^>]*>(.*?)<\/h3>/s', $markup, $name);
-            preg_match('/<div class="text-sm text-default-600">(.*?)<\/div>/s', $markup, $designation);
-            if (! isset($name[1])) {
-                continue;
-            }
-
+        $testimonials = [
+            ['name' => 'Emily Carter', 'description' => 'The team\'s dedication and innovative approach transformed our ideas into reality. Every stage of the project was handled with care and expertise.', 'designation' => 'Product Designer', 'image' => '/assets/avatar-1-BctzwD-q.png'],
+            ['name' => 'Liam Thompson', 'description' => 'The precision and efficiency they demonstrated made the entire process effortless. I highly recommend them for any technical project.', 'designation' => 'Operations Manager', 'image' => '/assets/team-avatar-01.webp'],
+            ['name' => 'John Matthews', 'description' => 'Their precision engineering and attention to detail exceeded our expectations. From prototyping to delivery, the entire process was seamless.', 'designation' => 'Procurement Manager', 'image' => '/assets/avatar-3-C3tMRDPM.png'],
+            ['name' => 'Sofia Ramirez', 'description' => 'I was impressed by their professionalism and attention to detail. Communication was clear, and the final product exceeded expectations.', 'designation' => 'Marketing Lead at BrightWave Tech', 'image' => '/assets/avatar-4-UUYBlZFU.png'],
+            ['name' => 'Ethan Brooks', 'description' => 'The level of professionalism and commitment to quality was exceptional. Every detail was meticulously handled.', 'designation' => 'Project Coordinator at Stellar Industries', 'image' => '/assets/avatar-5-DxheSeTg.png'],
+        ];
+        foreach ($testimonials as $index => $testimonial) {
             CollectionItem::query()->firstOrCreate(
-                ['collection' => 'testimonials', 'slug' => Str::slug($name[1]).'-'.($index + 1)],
+                ['collection' => 'testimonials', 'slug' => Str::slug($testimonial['name']).'-'.($index + 1)],
                 [
-                    'title' => trim(strip_tags($name[1])),
-                    'client_name' => trim(strip_tags($name[1])),
-                    'description' => isset($quote[1]) ? trim(html_entity_decode(preg_replace('/\s+/', ' ', strip_tags($quote[1])))) : null,
-                    'designation' => isset($designation[1]) ? trim(strip_tags($designation[1])) : null,
+                    'title' => $testimonial['name'],
+                    'client_name' => $testimonial['name'],
+                    'description' => $testimonial['description'],
+                    'designation' => $testimonial['designation'],
+                    'image' => $testimonial['image'],
                     'rating' => 5,
                     'status' => 'published',
                     'sort_order' => $index,

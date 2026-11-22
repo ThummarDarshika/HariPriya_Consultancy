@@ -44,6 +44,14 @@ class AppServiceProvider extends ServiceProvider
         }
 
         View::composer(['pages.home', 'pages.about'], function (BladeView $view): void {
+            $teamMembers = CollectionItem::query()
+                ->where('collection', 'team-members')
+                ->where('status', 'published')
+                ->orderBy('sort_order')
+                ->orderBy('id');
+            $view->with('additionalTeamMemberCount', max(0, (clone $teamMembers)->count() - 4));
+            $view->with('highlightTeamMembers', $teamMembers->limit(4)->get(['id', 'title', 'image']));
+
             $founderValues = SiteContent::query()
                 ->where('page', 'global')
                 ->whereIn('key', ['global/founder/image', 'global/founder/name', 'global/founder/role'])
@@ -53,6 +61,18 @@ class AppServiceProvider extends ServiceProvider
                 ->mapWithKeys(fn (string $default, string $field): array => [
                     $field => $founderValues['global/founder/'.$field] ?? $default,
                 ])->all());
+        });
+
+        View::composer('pages.home', function (BladeView $view): void {
+            $reviews = CollectionItem::query()
+                ->where('collection', 'testimonials')
+                ->where('status', 'published')
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get(['id', 'title', 'client_name', 'designation', 'description', 'image', 'rating']);
+
+            $view->with('clientReviews', $reviews);
+            $view->with('clientAverageRating', $reviews->avg(fn (CollectionItem $review): int => $review->rating ?? 5) ?? 0);
         });
 
         View::composer(['pages.home', 'pages.about', 'pages.services', 'pages.products', 'pages.case-studies', 'pages.blog'], function (BladeView $view): void {

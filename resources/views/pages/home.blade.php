@@ -127,16 +127,8 @@
                         <div class="text-sm text-default-900">Who we are</div>
                     </div>
 
-                    <div class="mt-7.5 mb-2.5 flex -space-x-4.5" data-cms-ignore>
-                        <img src="data:image/png;base64,UklGRvgEAABXRUJQVlA4IOwEAAAQFgCdASo8ADwAPm0qkkYkIiGhLB1bMIANiUAW/WmBAZNty7/TuW7koFA0uzC99hpRFNO+89NI3TE47fROzqfUvsE/rh6YHrr/dL2QP2qY61FneV6fMfWPlezGbZiB0+lzVYFtrS8AwD59flEhSW88UH63WoaxXecfchPUdKE7nq2+JtLqXa5q5tEt/7kyDszW1n+WQV/bPlERGukgZL5GmLX7K6QZzAUdtxu0FrnmOXbWK1CK+vpZwAD++uvuuFQmpRxdzgKhNSdF+ytS9fAJgWajWIchthWEUGRB7zHndumfzSnAqDCL8BL1qB1w/HUWJXp5pIQ5MADUpSJvlUYLeOvKwtwRDjuK11EocbYXsHo/ZRtt8xoKBJnmUlZ6HpIq3Op0t9NfR7rbe01VbcU4zMHp6579oxQhaUE+fu9Pdv6bQQWWXP4RUxIGscmvmoG90e1hcwNPfp+6dW8OLkCon8PtRqAQy21dGvXy8QpqOzAcd4TznjaOrZYikRwkPnk9EOMVwd1eo80fMzjC7IH3NrRRHWEm/K8jMK1SH5HrHJr0Xq/zP23Mxb0uZ1QEq/JvF2rdSDmZK9m7JCM8ZLiXh3YzL7wkUzCyPaDr66WX/VQW3ID7ZWs8hek+DdE+PYbRS93tP31XWwYq8dYlKRzVChsWv38WamqzUcTKXZ5mqvcYf3zqOxkG3y8DD3EWgO8kmEFOQ//ya2TgA/MPb45tdagQYHqmWb8sbMSuyr37Q9svMfuQa928JagojZmlo1sU0iXMBYSeqOxovgbVXdi7O/IcZlrsVESGBJWc/kv/UlsTkH0dQa13IDfMUQ1uo8/HvcXH1PXq4GVyId1fBr+xMubep8o0358l3TXmXtUrjXOlAlfnZEHUMJnRB4fxuLp4or0qgNY06ouyGIBXXwuhIK/Bl58lgqAKj/xL0sJ53yxLuh9AegwsiQ/VOP7A3CoZzN8MTEH85j/k+9/w1hb1NUk/c+tuXDA3uHDR2D/2EDx2X+YimjrXHOaK+i2z23qSGvUfwhexkDLOdyNv+qGvbNTvhG15zRY14XcI2uas2PO6NJWnaWe5iLKkdEAS5FDaqrzX2zLwNGMKaay9xyEyhkV7nBXdyTWRMgJrp89MQnywq7ifPErmvGLjQXPVh8Hp/aFLpCPXuZhwClE2nmktsxuSjm+IGQVBWqfni/89VX3neg0gzs1Y/+8seo4ppYwpnxKac5d+5P+rehWG0abSuUZ7ymljpDRQ9D/W0bh6K9M0K/l4ZbHGSgKsuzZNthBU5/Vag8WpqgKzmSKplFBqKo3pIZgBUOtolLNvlmCV2hoOwE7oF9hal09eJ4eJokYa5XX55jAjzxp8qp9CNqeH00CShrDWi238Kjkk4m9oUQQXl0zZ6Tj/CiiRZHGZz5nZodk2QgPmr0cylV+1xQyzpfU0ibIaHOZ1PF7E5KE7Ivs1/dj5V/J55/Xt8cCpK0xj1hoSXQxFSiLNV2A5IRiBj0wu5/GDF/0jOl9uxbsT4PIQDSxCpMggYh5S46qP/Z2lf4McVEWMatpmW7Xs3nn+MKFxr8mil+9SxEeX96K39dYFvGTgF5XW5lPJ+BqUtzIoG990uw0wOI/iJ2kvU86nMhn2RssA3s/i5t+zuDGSKfs1A9wh3qz/we6ntBF1e0UONetlUuEJOmgAAAA=" alt="avatar-1" class="size-14 p-0.5 bg-white rounded-md">
-                        <img src="{{ asset('assets/avatar-3-C3tMRDPM.png') }}" alt="avatar-1" class="size-14 p-0.5 bg-white rounded-md">
-                        <img src="{{ asset('assets/avatar-4-UUYBlZFU.png') }}" alt="avatar-1" class="size-14 p-0.5 bg-white rounded-md">
-                        <img src="{{ asset('assets/avatar-1-BctzwD-q.png') }}" alt="avatar-1" class="size-14 p-0.5 bg-white rounded-md">
-                        <div class="size-14 p-0.5 bg-white rounded-md">
-                            <div class="bg-default-900 text-white rounded flex items-center justify-center size-full">
-                                10+
-                            </div>
-                        </div>
+                    <div class="mt-7.5 mb-2.5 flex -space-x-4.5" data-team-highlight data-cms-ignore>
+                        @include('pages.partials.team-highlight', ['avatarSize' => 'size-14', 'linkBadge' => false])
                     </div>
 
                     <div class="text-sm">Team Of passionate<br>professionals</div>
@@ -402,7 +394,7 @@
 
     <section class="relative size-full pb-12.5">
         <div class="container">
-            <div class="bg-default-900 lg:p-12 p-6 bg-no-repeat bg-cover rounded" style="background-image: url('{{ $siteAssets['cta.background'] }}')" data-cms-managed-asset>
+            <div class="bg-default-900 lg:p-12 p-6 bg-no-repeat bg-cover rounded" style="background-image: url('{{ $siteAssets['cta.background'] }}')" data-cms-managed-asset data-cms-editable-asset="cta.background" data-crop-width="1920" data-crop-height="1080">
                 <div class="flex md:flex-row flex-col md:items-center justify-between gap-6">
                     <h2 class="lg:text-4xl md:text-3xl text-2xl text-white">Ready to start your <br>Next project?</h2>
 
@@ -992,7 +984,7 @@
         <div class="relative z-10 flex gap-5 flex-nowrap w-full overflow-hidden" data-cms-ignore>
             @if ($companies->isNotEmpty())
                 @foreach (range(1, 2) as $repeat)
-                    <ul class="company-logo-strip infinite-scroll-inverse flex gap-5 justify-start items-center [&amp;&gt;li]:flex [&amp;&gt;li]:items-center [&amp;&gt;li]:justify-center [&amp;&gt;li]:bg-default-100 [&amp;&gt;li]:rounded [&amp;&gt;li]:w-57 [&amp;&gt;li]:h-39 [&amp;&gt;li]:mx-auto [&amp;&gt;li&gt;img]:w-25">
+                    <ul class="company-logo-strip company-logo-strip--framed infinite-scroll-inverse flex gap-5 justify-start items-center [&amp;&gt;li]:flex [&amp;&gt;li]:items-center [&amp;&gt;li]:justify-center [&amp;&gt;li]:bg-default-100 [&amp;&gt;li]:rounded [&amp;&gt;li]:w-57 [&amp;&gt;li]:h-39 [&amp;&gt;li]:mx-auto [&amp;&gt;li&gt;img]:w-25">
                         @foreach ($companies as $company)
                             <li><img src="{{ $company->image_path }}" alt="{{ $company->name }}"></li>
                         @endforeach
@@ -1004,7 +996,7 @@
 
     <!-- Blog / Insights & Article -->
     <section class="relative size-full py-37.5">
-        <img src="{{ $siteAssets['home.solutions_background'] }}" data-cms-managed-asset class="absolute inset-0 size-full bg-cover bg-no-repeat bg-position-[50%]">
+        <img src="{{ $siteAssets['home.solutions_background'] }}" data-cms-managed-asset data-cms-editable-asset="home.solutions_background" data-crop-width="1920" data-crop-height="1080" class="absolute inset-0 size-full bg-cover bg-no-repeat bg-position-[50%]">
 
         <div class="container">
             <div class="bg-default-900/50 rounded-md border border-white/10 [backdrop-filter:blur(5px)] max-w-132 lg:p-12.5 md:p-7.5 p-6">
@@ -1065,28 +1057,12 @@
                     </a>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="flex -space-x-4.5">
-                        <img src="data:image/png;base64,UklGRvgEAABXRUJQVlA4IOwEAAAQFgCdASo8ADwAPm0qkkYkIiGhLB1bMIANiUAW/WmBAZNty7/TuW7koFA0uzC99hpRFNO+89NI3TE47fROzqfUvsE/rh6YHrr/dL2QP2qY61FneV6fMfWPlezGbZiB0+lzVYFtrS8AwD59flEhSW88UH63WoaxXecfchPUdKE7nq2+JtLqXa5q5tEt/7kyDszW1n+WQV/bPlERGukgZL5GmLX7K6QZzAUdtxu0FrnmOXbWK1CK+vpZwAD++uvuuFQmpRxdzgKhNSdF+ytS9fAJgWajWIchthWEUGRB7zHndumfzSnAqDCL8BL1qB1w/HUWJXp5pIQ5MADUpSJvlUYLeOvKwtwRDjuK11EocbYXsHo/ZRtt8xoKBJnmUlZ6HpIq3Op0t9NfR7rbe01VbcU4zMHp6579oxQhaUE+fu9Pdv6bQQWWXP4RUxIGscmvmoG90e1hcwNPfp+6dW8OLkCon8PtRqAQy21dGvXy8QpqOzAcd4TznjaOrZYikRwkPnk9EOMVwd1eo80fMzjC7IH3NrRRHWEm/K8jMK1SH5HrHJr0Xq/zP23Mxb0uZ1QEq/JvF2rdSDmZK9m7JCM8ZLiXh3YzL7wkUzCyPaDr66WX/VQW3ID7ZWs8hek+DdE+PYbRS93tP31XWwYq8dYlKRzVChsWv38WamqzUcTKXZ5mqvcYf3zqOxkG3y8DD3EWgO8kmEFOQ//ya2TgA/MPb45tdagQYHqmWb8sbMSuyr37Q9svMfuQa928JagojZmlo1sU0iXMBYSeqOxovgbVXdi7O/IcZlrsVESGBJWc/kv/UlsTkH0dQa13IDfMUQ1uo8/HvcXH1PXq4GVyId1fBr+xMubep8o0358l3TXmXtUrjXOlAlfnZEHUMJnRB4fxuLp4or0qgNY06ouyGIBXXwuhIK/Bl58lgqAKj/xL0sJ53yxLuh9AegwsiQ/VOP7A3CoZzN8MTEH85j/k+9/w1hb1NUk/c+tuXDA3uHDR2D/2EDx2X+YimjrXHOaK+i2z23qSGvUfwhexkDLOdyNv+qGvbNTvhG15zRY14XcI2uas2PO6NJWnaWe5iLKkdEAS5FDaqrzX2zLwNGMKaay9xyEyhkV7nBXdyTWRMgJrp89MQnywq7ifPErmvGLjQXPVh8Hp/aFLpCPXuZhwClE2nmktsxuSjm+IGQVBWqfni/89VX3neg0gzs1Y/+8seo4ppYwpnxKac5d+5P+rehWG0abSuUZ7ymljpDRQ9D/W0bh6K9M0K/l4ZbHGSgKsuzZNthBU5/Vag8WpqgKzmSKplFBqKo3pIZgBUOtolLNvlmCV2hoOwE7oF9hal09eJ4eJokYa5XX55jAjzxp8qp9CNqeH00CShrDWi238Kjkk4m9oUQQXl0zZ6Tj/CiiRZHGZz5nZodk2QgPmr0cylV+1xQyzpfU0ibIaHOZ1PF7E5KE7Ivs1/dj5V/J55/Xt8cCpK0xj1hoSXQxFSiLNV2A5IRiBj0wu5/GDF/0jOl9uxbsT4PIQDSxCpMggYh5S46qP/Z2lf4McVEWMatpmW7Xs3nn+MKFxr8mil+9SxEeX96K39dYFvGTgF5XW5lPJ+BqUtzIoG990uw0wOI/iJ2kvU86nMhn2RssA3s/i5t+zuDGSKfs1A9wh3qz/we6ntBF1e0UONetlUuEJOmgAAAA=" alt="avatar-1" class="size-12.5 p-0.5 bg-white rounded-md">
-                        <img src="{{ asset('assets/avatar-3-C3tMRDPM.png') }}" alt="avatar-1" class="size-12.5 p-0.5 bg-white rounded-md">
-                        <img src="{{ asset('assets/avatar-4-UUYBlZFU.png') }}" alt="avatar-1" class="size-12.5 p-0.5 bg-white rounded-md">
-                        <img src="{{ asset('assets/avatar-1-BctzwD-q.png') }}" alt="avatar-1" class="size-12.5 p-0.5 bg-white rounded-md">
-                    </div>
-                    <div>
-                        <div class="flex gap-1.5 mb-2">
-                            <i class="iconify tabler--star-filled flex size-4 text-white"></i>
-                            <i class="iconify tabler--star-filled flex size-4 text-white"></i>
-                            <i class="iconify tabler--star-filled flex size-4 text-white"></i>
-                            <i class="iconify tabler--star-filled flex size-4 text-white"></i>
-                            <i class="iconify tabler--star-filled flex size-4 text-white"></i>
-                        </div>
-                        <p class="text-sm text-default-200">Happy clients worldwide</p>
-                    </div>
-                </div>
+                @include('pages.partials.client-highlight')
             </div>
         </div>
     </section>
 
+    @if ($clientReviews->isNotEmpty())
     <!-- Testimonials Section -->
     <section class="relative size-full lg:py-50 md:py-25 py-20">
         <div class="container-full">
@@ -1099,158 +1075,7 @@
             </div>
 
             <div class="grid lg:grid-cols-2 gap-7.5">
-                <div class="flex flex-col md:flex-row gap-7.5" data-cms-collection="testimonials" data-cms-variant="tabs" data-cms-limit="5">
-
-                    <!-- Tab Nav -->
-                    <div class="min-w-26 p-5 flex items-center justify-center rounded-md bg-default-950">
-                        <nav class="flex md:flex-col flex-row flex-wrap justify-center gap-4" role="tablist" aria-orientation="vertical">
-
-                            <!-- Tab 1 -->
-                            <button type="button" class="hs-tab-active:border-primary hs-tab-active:opacity-100 border-3 border-transparent opacity-55 transition-all rounded-full active" id="tab-1" aria-selected="true" data-hs-tab="#tab-content-1" role="tab">
-                                <img src="{{ asset('assets/avatar-1-BctzwD-q.png') }}" class="size-15 rounded-full">
-                            </button>
-
-                            <!-- Tab 2 -->
-                            <button type="button" class="hs-tab-active:border-primary hs-tab-active:opacity-100 border-3 border-transparent opacity-55 transition-all rounded-full" id="tab-2" aria-selected="false" data-hs-tab="#tab-content-2" role="tab">
-                                <img src="data:image/png;base64,UklGRvgEAABXRUJQVlA4IOwEAAAQFgCdASo8ADwAPm0qkkYkIiGhLB1bMIANiUAW/WmBAZNty7/TuW7koFA0uzC99hpRFNO+89NI3TE47fROzqfUvsE/rh6YHrr/dL2QP2qY61FneV6fMfWPlezGbZiB0+lzVYFtrS8AwD59flEhSW88UH63WoaxXecfchPUdKE7nq2+JtLqXa5q5tEt/7kyDszW1n+WQV/bPlERGukgZL5GmLX7K6QZzAUdtxu0FrnmOXbWK1CK+vpZwAD++uvuuFQmpRxdzgKhNSdF+ytS9fAJgWajWIchthWEUGRB7zHndumfzSnAqDCL8BL1qB1w/HUWJXp5pIQ5MADUpSJvlUYLeOvKwtwRDjuK11EocbYXsHo/ZRtt8xoKBJnmUlZ6HpIq3Op0t9NfR7rbe01VbcU4zMHp6579oxQhaUE+fu9Pdv6bQQWWXP4RUxIGscmvmoG90e1hcwNPfp+6dW8OLkCon8PtRqAQy21dGvXy8QpqOzAcd4TznjaOrZYikRwkPnk9EOMVwd1eo80fMzjC7IH3NrRRHWEm/K8jMK1SH5HrHJr0Xq/zP23Mxb0uZ1QEq/JvF2rdSDmZK9m7JCM8ZLiXh3YzL7wkUzCyPaDr66WX/VQW3ID7ZWs8hek+DdE+PYbRS93tP31XWwYq8dYlKRzVChsWv38WamqzUcTKXZ5mqvcYf3zqOxkG3y8DD3EWgO8kmEFOQ//ya2TgA/MPb45tdagQYHqmWb8sbMSuyr37Q9svMfuQa928JagojZmlo1sU0iXMBYSeqOxovgbVXdi7O/IcZlrsVESGBJWc/kv/UlsTkH0dQa13IDfMUQ1uo8/HvcXH1PXq4GVyId1fBr+xMubep8o0358l3TXmXtUrjXOlAlfnZEHUMJnRB4fxuLp4or0qgNY06ouyGIBXXwuhIK/Bl58lgqAKj/xL0sJ53yxLuh9AegwsiQ/VOP7A3CoZzN8MTEH85j/k+9/w1hb1NUk/c+tuXDA3uHDR2D/2EDx2X+YimjrXHOaK+i2z23qSGvUfwhexkDLOdyNv+qGvbNTvhG15zRY14XcI2uas2PO6NJWnaWe5iLKkdEAS5FDaqrzX2zLwNGMKaay9xyEyhkV7nBXdyTWRMgJrp89MQnywq7ifPErmvGLjQXPVh8Hp/aFLpCPXuZhwClE2nmktsxuSjm+IGQVBWqfni/89VX3neg0gzs1Y/+8seo4ppYwpnxKac5d+5P+rehWG0abSuUZ7ymljpDRQ9D/W0bh6K9M0K/l4ZbHGSgKsuzZNthBU5/Vag8WpqgKzmSKplFBqKo3pIZgBUOtolLNvlmCV2hoOwE7oF9hal09eJ4eJokYa5XX55jAjzxp8qp9CNqeH00CShrDWi238Kjkk4m9oUQQXl0zZ6Tj/CiiRZHGZz5nZodk2QgPmr0cylV+1xQyzpfU0ibIaHOZ1PF7E5KE7Ivs1/dj5V/J55/Xt8cCpK0xj1hoSXQxFSiLNV2A5IRiBj0wu5/GDF/0jOl9uxbsT4PIQDSxCpMggYh5S46qP/Z2lf4McVEWMatpmW7Xs3nn+MKFxr8mil+9SxEeX96K39dYFvGTgF5XW5lPJ+BqUtzIoG990uw0wOI/iJ2kvU86nMhn2RssA3s/i5t+zuDGSKfs1A9wh3qz/we6ntBF1e0UONetlUuEJOmgAAAA=" class="size-15 rounded-full">
-                            </button>
-
-                            <!-- Tab 3 -->
-                            <button type="button" class="hs-tab-active:border-primary hs-tab-active:opacity-100 border-3 border-transparent opacity-55 transition-all rounded-full" id="tab-3" aria-selected="false" data-hs-tab="#tab-content-3" role="tab">
-                                <img src="{{ asset('assets/avatar-3-C3tMRDPM.png') }}" class="size-15 rounded-full">
-                            </button>
-
-                            <!-- Tab 4 -->
-                            <button type="button" class="hs-tab-active:border-primary hs-tab-active:opacity-100 border-3 border-transparent opacity-55 transition-all rounded-full" id="tab-4" aria-selected="false" data-hs-tab="#tab-content-4" role="tab">
-                                <img src="{{ asset('assets/avatar-4-UUYBlZFU.png') }}" class="size-15 rounded-full">
-                            </button>
-
-                            <!-- Tab 5 -->
-                            <button type="button" class="hs-tab-active:border-primary hs-tab-active:opacity-100 border-3 border-transparent opacity-55 transition-all rounded-full" id="tab-5" aria-selected="false" data-hs-tab="#tab-content-5" role="tab">
-                                <img src="{{ asset('assets/avatar-5-DxheSeTg.png') }}" class="size-15 rounded-full">
-                            </button>
-
-                        </nav>
-                    </div>
-                    <!-- End Tab Nav -->
-
-                    <!-- Tab Content -->
-                    <div class="w-full rounded-md bg-default-100 p-10">
-
-                        <!-- Content 1 -->
-                        <div id="tab-content-1" class="h-full" role="tabpanel" aria-labelledby="tab-1">
-                            <div class="flex h-full flex-col">
-                                <div class="mb-5 flex gap-1.5">
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                </div>
-
-                                <p class="text-default-900">
-                                    The team's dedication and innovative approach transformed our ideas into reality. Every stage of the project was handled with care and expertise.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <h3 class="text-2xl lg:text-[28px] mb-2.5">Emily Carter</h3>
-                                    <div class="text-sm text-default-600">Product Designer</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Content 2 -->
-                        <div id="tab-content-2" class="hidden h-full" role="tabpanel" aria-labelledby="tab-2">
-                            <div class="flex h-full flex-col">
-                                <div class="mb-5 flex gap-1.5">
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                </div>
-
-                                <p class="text-default-900">
-                                    The precision and efficiency they demonstrated made the entire process effortless. I highly recommend them for any technical project.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <h3 class="text-2xl lg:text-[28px] mb-2.5">Liam Thompson</h3>
-                                    <div class="text-sm text-default-600">Operations Manager</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Content 3 -->
-                        <div id="tab-content-3" class="hidden h-full" role="tabpanel" aria-labelledby="tab-3">
-                            <div class="flex h-full flex-col">
-                                <div class="mb-5 flex gap-1.5">
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                </div>
-
-                                <p class="text-default-900">
-                                    Their precision engineering and attention to detail exceeded our expectations. From prototyping to delivery, the entire process was seamless.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <h3 class="text-2xl lg:text-[28px] mb-2.5">John Matthews</h3>
-                                    <div class="text-sm text-default-600">Procurement Manager</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Content 4 -->
-                        <div id="tab-content-4" class="hidden h-full" role="tabpanel" aria-labelledby="tab-4">
-                            <div class="flex h-full flex-col">
-                                <div class="mb-5 flex gap-1.5">
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                </div>
-
-                                <p class="text-default-900">
-                                    I was impressed by their professionalism and attention to detail. Communication was clear, and the final product exceeded expectations.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <h3 class="text-2xl lg:text-[28px] mb-2.5">Sofia Ramirez</h3>
-                                    <div class="text-sm text-default-600">Marketing Lead at BrightWave Tech</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Content 5 -->
-                        <div id="tab-content-5" class="hidden h-full" role="tabpanel" aria-labelledby="tab-5">
-                            <div class="flex h-full flex-col">
-                                <div class="mb-5 flex gap-1.5">
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                    <i class="iconify tabler--star-filled size-5 text-primary"></i>
-                                </div>
-
-                                <p class="text-default-900">
-                                    The level of professionalism and commitment to quality was exceptional. Every detail was meticulously handled.
-                                </p>
-
-                                <div class="mt-auto">
-                                    <h3 class="text-2xl lg:text-[28px] mb-2.5">Ethan Brooks</h3>
-                                    <div class="text-sm text-default-600">Project Coordinator at Stellar Industries</div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- End Tab Content -->
-                </div>
-
+                @include('pages.partials.client-reviews')
 
                 <div class="grid md:grid-cols-7 gap-7.5">
                     <div class="md:col-span-4 space-y-7.5">
@@ -1310,6 +1135,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Blog / Insights & Article -->
     <section class="relative size-full pb-10">
@@ -1383,6 +1209,7 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('js/client-reviews.js') }}?v={{ filemtime(public_path('js/client-reviews.js')) }}" defer></script>
     <script src="{{ asset('js/home-service-stack.js') }}?v={{ filemtime(public_path('js/home-service-stack.js')) }}" defer></script>
     <script src="{{ asset('js/bswx-tour.js') }}?v={{ filemtime(public_path('js/bswx-tour.js')) }}" defer></script>
 @endpush

@@ -26,6 +26,9 @@
         for (const element of elements) {
             if (ignored(element)) continue;
 
+            const assetKey = element.getAttribute('data-cms-editable-asset');
+            const editableAsset = ['cta.background', 'home.solutions_background'].includes(assetKey) ? assetKey : null;
+            const assetScope = editableAsset === 'cta.background' ? 'global' : 'home';
             const path = `${scope}/${rootName}/${elementPath(element, root)}`;
             const sharedKey = element.getAttribute('data-cms-shared-key');
             const entryScope = sharedKey ? 'global' : scope;
@@ -33,9 +36,10 @@
 
             for (const node of directText) {
                 const textIndex = Array.from(element.childNodes).filter(child => child.nodeType === Node.TEXT_NODE).indexOf(node);
-                const key = sharedKey || element.getAttribute('data-cms-key') || `${path}/text:${textIndex}`;
-                const type = !sharedKey && (/^(P|BLOCKQUOTE)$/.test(element.tagName) || node.nodeValue.trim().length > 80) ? 'textarea' : 'text';
-                const entry = { key, scope: entryScope, type, node, element, original: node.nodeValue };
+                const managedText = element.getAttribute('data-cms-editable-text') === 'about.since_label';
+                const key = managedText ? 'about/assets/about.since_label' : sharedKey || element.getAttribute('data-cms-key') || `${path}/text:${textIndex}`;
+                const type = !managedText && !sharedKey && (/^(P|BLOCKQUOTE)$/.test(element.tagName) || node.nodeValue.trim().length > 80) ? 'textarea' : 'text';
+                const entry = { key, scope: managedText ? 'about' : entryScope, type, node, element, managedText, original: node.nodeValue };
                 entries.set(key, entry);
                 if (!element.hasAttribute('data-key')) {
                     element.setAttribute('data-key', key);
@@ -43,9 +47,9 @@
                 }
             }
 
-            if (element.tagName === 'IMG' && !element.hasAttribute('data-cms-managed-asset')) {
-                const key = sharedKey || `${path}/image`;
-                entries.set(key, { key, scope: entryScope, type: 'image', element, original: element.src, originalVisibility: element.style.visibility });
+            if (element.tagName === 'IMG' && (editableAsset || !element.hasAttribute('data-cms-managed-asset'))) {
+                const key = editableAsset ? `${assetScope}/assets/${editableAsset}` : sharedKey || `${path}/image`;
+                entries.set(key, { key, scope: editableAsset ? assetScope : entryScope, type: 'image', element, managedAsset: editableAsset, original: element.src, originalVisibility: element.style.visibility });
                 element.setAttribute('data-cms-image', key);
             }
 
@@ -67,16 +71,22 @@
                 element.setAttribute('data-cms-href', key);
             }
 
-            if (element.tagName !== 'VIDEO' && !element.hasAttribute('data-cms-managed-asset') && ((element.className && typeof element.className === 'string' && element.className.includes('bg-[url(')) || element.style?.backgroundImage?.includes('url('))) {
-                const key = `${path}/background`;
-                entries.set(key, { key, scope, type: 'background', element, original: element.style.backgroundImage });
+            if (element.tagName !== 'VIDEO' && (editableAsset || !element.hasAttribute('data-cms-managed-asset')) && ((element.className && typeof element.className === 'string' && element.className.includes('bg-[url(')) || element.style?.backgroundImage?.includes('url('))) {
+                const key = editableAsset ? 'global/assets/cta.background' : `${path}/background`;
+                entries.set(key, { key, scope: editableAsset ? 'global' : scope, type: 'background', element, managedAsset: editableAsset, original: element.style.backgroundImage });
                 element.setAttribute('data-cms-background', key);
             }
         }
     }
 
     function apply(entry, value) {
-        if (entry.type === 'video') {
+        if (entry.managedText) {
+            document.querySelectorAll('[data-cms-editable-text="about.since_label"]').forEach(element => {
+                for (const node of element.childNodes) {
+                    if (node.nodeType === Node.TEXT_NODE) node.nodeValue = value;
+                }
+            });
+        } else if (entry.type === 'video') {
             entry.element.src = value;
             entry.element.load();
         } else if (entry.type === 'image') {

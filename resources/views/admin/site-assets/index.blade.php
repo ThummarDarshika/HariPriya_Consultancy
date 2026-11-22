@@ -43,8 +43,8 @@
                                 <label class="mt-3 flex items-center gap-2"><input name="remove" type="checkbox" value="1"> Remove brochure</label>
                             @endif
                         @else
-                            <label>Upload image
-                                <input name="upload" data-current-image="{{ $asset->value }}" data-crop-width="{{ str_starts_with($asset->key, 'about.team_avatar_') || $asset->key === 'site.favicon' ? 512 : ($asset->key === 'site.logo' ? 800 : 1920) }}" data-crop-height="{{ str_starts_with($asset->key, 'about.team_avatar_') || $asset->key === 'site.favicon' ? 512 : ($asset->key === 'site.logo' ? 400 : 1080) }}" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/x-icon" required class="mt-2 block w-full">
+                            <label class="admin-image-field">
+                                <input name="upload" data-current-image="{{ $asset->value }}" data-crop-width="{{ $asset->key === 'site.favicon' ? 512 : ($asset->key === 'site.logo' ? 800 : 1920) }}" data-crop-height="{{ $asset->key === 'site.favicon' ? 512 : ($asset->key === 'site.logo' ? 400 : 1080) }}" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/x-icon" required class="mt-2 block w-full">
                             </label>
                         @endif
                         @if ($asset->kind === 'document') <p class="mt-2 text-sm">Maximum file size: {{ $asset->kind === 'document' ? '50' : '5' }} MB.</p> @endif

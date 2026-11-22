@@ -13,7 +13,7 @@
     @include('admin.sidebar')
 
     <main class="admin-form-main admin-wide-main privacy-policy-admin">
-        <div class="admin-page-bar">@include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Privacy Policy'])</div>
+        <div class="admin-page-bar">@include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Privacy Policy'])<button type="submit" form="privacy-policy-form" class="rounded bg-primary px-6 py-3 text-white">Save and publish</button></div>
 
         @if (session('status'))
             <p class="privacy-policy-admin__notice" role="status">{{ session('status') }}</p>
@@ -24,7 +24,7 @@
             </div>
         @endif
 
-        <form method="post" action="{{ route('admin.privacy-policy.update') }}" class="privacy-policy-editor" data-privacy-policy-form data-admin-confirm-update data-admin-confirm-label="Privacy Policy">
+        <form id="privacy-policy-form" method="post" action="{{ route('admin.privacy-policy.update') }}" class="privacy-policy-editor admin-form-card" data-privacy-policy-form data-admin-confirm-update data-admin-confirm-label="Privacy Policy">
             @csrf
             @method('PUT')
 
@@ -52,10 +52,6 @@
             <textarea name="body_html" hidden aria-hidden="true" data-privacy-policy-field></textarea>
             <p class="privacy-policy-editor__field-error" role="alert" data-privacy-policy-error hidden>Add some Privacy Policy content before saving.</p>
 
-            <div class="admin-form-actions">
-                <p>Saved formatting appears on the public Privacy Policy page immediately.</p>
-                <button type="submit" class="rounded bg-primary px-6 py-3 text-white">Save and publish</button>
-            </div>
         </form>
     </main>
     <script src="{{ asset('js/privacy-policy-editor.js') }}?v={{ filemtime(public_path('js/privacy-policy-editor.js')) }}" defer></script>

@@ -4,22 +4,39 @@
     const widgets = new WeakMap();
     const previousSelections = new WeakMap();
     let busy = false;
-    document.querySelectorAll('input[type="file"]').forEach(input => {
-        if (input.multiple || !/image\//.test(input.accept) || input.dataset.mediaKind === 'video') return;
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'image-upload-tile';
-        button.setAttribute('aria-label', 'Add image');
-        button.innerHTML = '<img alt="Selected image"><span class="image-upload-tile__overlay"><span class="image-upload-tile__plus" aria-hidden="true">+</span><span>Add image</span></span>';
-        input.classList.add('image-upload-native');
-        input.after(button);
-        const widget = { button, image: button.querySelector('img'), url: null };
-        widgets.set(input, widget);
-        if (input.dataset.currentImage) {
-            widget.image.src = input.dataset.currentImage;
-            button.classList.add('has-image');
-        }
-        button.addEventListener('click', () => input.click());
+    function mountWidgets(root) {
+        root.querySelectorAll('input[type="file"]').forEach(input => {
+            if (widgets.has(input) || input.multiple || !/image\//.test(input.accept) || input.dataset.mediaKind === 'video') return;
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'image-upload-tile';
+            button.setAttribute('aria-label', 'Add image');
+            button.innerHTML = '<img alt="Selected image"><span class="image-upload-tile__overlay"><span class="image-upload-tile__plus" aria-hidden="true">+</span><span>Add image</span></span>';
+            input.classList.add('image-upload-native');
+            input.after(button);
+            const widget = { button, image: button.querySelector('img'), url: null };
+            widgets.set(input, widget);
+            if (input.dataset.currentImage) {
+                widget.image.src = input.dataset.currentImage;
+                button.classList.add('has-image');
+            }
+            button.addEventListener('click', () => input.click());
+        });
+    }
+    mountWidgets(document);
+    document.addEventListener('image-upload:mount', event => mountWidgets(event.target));
+    document.addEventListener('image-upload:reset', event => {
+        const input = event.target;
+        const widget = widgets.get(input);
+        if (!widget) return;
+        input.value = '';
+        previousSelections.delete(input);
+        approved.delete(input);
+        if (widget.url) URL.revokeObjectURL(widget.url);
+        widget.url = null;
+        if (input.dataset.currentImage) widget.image.src = input.dataset.currentImage;
+        else widget.image.removeAttribute('src');
+        widget.button.classList.toggle('has-image', Boolean(input.dataset.currentImage));
     });
     const dialog = document.createElement('dialog');
     dialog.className = 'image-crop-editor';

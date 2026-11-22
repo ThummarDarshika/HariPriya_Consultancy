@@ -12,9 +12,8 @@
 <body class="admin-panel has-admin-sidebar min-h-screen bg-default-100 text-default-900">
     @include('admin.sidebar')
     <main class="admin-content-main career-admin">
-        <div class="admin-page-bar">@include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Job applications'])</div>
+        <div class="admin-page-bar">@include('admin.back-link', ['href' => route('admin.dashboard'), 'title' => 'Job applications'])<div class="admin-page-bar__actions">@include('admin.search', ['label' => 'job applications'])</div></div>
         @if (session('status')) <p role="status" class="career-admin__notice">{{ session('status') }}</p> @endif
-        @include('admin.search', ['label' => 'job applications'])
         @component('admin.list-table', ['headers' => ['Candidate', 'Role', 'Phone', 'Applied', 'Actions']])
             @forelse ($applications as $application)
                 <tr>

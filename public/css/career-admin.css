@@ -10,6 +10,8 @@
 .admin-panel .career-admin__table td,
 .admin-panel .career-admin__table th { color: #344054; }
 .admin-panel .career-admin__table td strong { color: #17191f; }
+.admin-panel .career-admin .admin-list__table tbody tr:hover > td { color: #344054; background-color: #fffaf7; }
+.admin-panel .career-admin .admin-list__table tbody tr:hover > td strong { color: #101828; }
 .admin-panel .career-admin__table td.career-admin__empty {
     padding: 52px 20px !important;
     text-align: center;

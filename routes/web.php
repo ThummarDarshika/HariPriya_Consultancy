@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ContactSubmissionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobApplicationController;
 use App\Http\Controllers\Admin\JobOpeningController;
+use App\Http\Controllers\Admin\ListOrderController;
 use App\Http\Controllers\Admin\NotificationSettingsController;
 use App\Http\Controllers\Admin\PrivacyPolicyController;
 use App\Http\Controllers\Admin\ProjectMediaController;
@@ -100,6 +101,7 @@ Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(fu
     Route::put('/notification-settings', [NotificationSettingsController::class, 'update'])->name('notification-settings.update');
     Route::put('/notification-settings/sender', [NotificationSettingsController::class, 'updateSender'])->name('notification-settings.sender.update');
     Route::put('/site-assets/{asset}', [SiteAssetController::class, 'update'])->name('site-assets.update');
+    Route::post('order/{kind}/{collection?}', ListOrderController::class)->name('order');
     Route::post('companies/reorder', [CompanyController::class, 'reorder'])->name('companies.reorder');
     Route::resource('companies', CompanyController::class)->except('show');
     Route::resource('certificates', CertificateController::class)->except('show');

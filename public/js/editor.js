@@ -58,6 +58,11 @@
         const position = document.caretPositionFromPoint?.(x, y);
         let node = position?.offsetNode || document.caretRangeFromPoint?.(x, y)?.startContainer;
         if (node?.nodeType !== Node.TEXT_NODE) node = null;
+        const managedText = node?.parentElement?.closest('[data-cms-editable-text="about.since_label"]');
+        if (managedText) {
+            const entry = cms.entries.get('about/assets/about.since_label');
+            if (entry) return { ...entry, node, element: managedText };
+        }
         let entry = node && Array.from(cms.entries.values()).find(item => item.node === node);
         if (entry) return entry;
         entry = Array.from(cms.entries.values()).find(item => item.node && item.element === target);
@@ -80,6 +85,7 @@
         if (!multiline) input.type = 'text';
         input.className = 'cms-active-input';
         input.value = value;
+        if (entry.managedText) input.maxLength = 160;
         input.placeholder = 'Enter text';
         input.style.fontFamily = style.fontFamily;
         input.style.fontSize = style.fontSize;
@@ -106,6 +112,7 @@
             input.replaceWith(node);
             activeInput = null;
             if (!cancel && nextValue !== value) {
+                if (entry.managedText) cms.apply(entry, node.nodeValue);
                 drafts.set(entry.key, { entry, value: node.nodeValue });
                 for (const twin of cms.entries.values()) {
                     if (twin === entry || !twin.node || twin.scope !== entry.scope) continue;
@@ -168,7 +175,7 @@
     }
 
     document.addEventListener('click', event => {
-        if (event.target.closest('[data-project-pagination] a, [data-case-study-pagination] a')) return;
+        if (event.target.closest('[data-project-pagination] a, [data-case-study-pagination] a, [data-client-reviews] [role="tab"]')) return;
         const siteControl = event.target.closest('header a, header button, header [role="button"], main a, main button, main [role="button"], footer a, footer button, footer [role="button"]');
         if (siteControl) {
             event.preventDefault();
@@ -206,7 +213,10 @@
         if (!entry || !entry.element.isConnected) { imageAction.style.display = 'none'; return; }
         const rect = entry.element.getBoundingClientRect();
         if (rect.width < 1 || rect.height < 1) { imageAction.style.display = 'none'; return; }
-        const isBackground = entry.type === 'background';
+        const isBackground = entry.type === 'background' || Boolean(entry.managedAsset);
+        const label = entry.managedAsset === 'home.solutions_background' ? 'Replace manufacturing solutions background' : entry.managedAsset ? 'Replace shared CTA background' : 'Replace image';
+        imageAction.setAttribute('aria-label', label);
+        imageAction.title = label;
         imageAction.style.left = `${isBackground ? rect.left + rect.width / 2 - 26 : rect.left}px`;
         imageAction.style.top = `${isBackground ? rect.top + rect.height / 2 - 26 : rect.top}px`;
         imageAction.style.width = `${isBackground ? 52 : rect.width}px`;
@@ -239,8 +249,12 @@
             return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
         }) || null;
         positionVideoAction(activeVideo);
-        const image = target?.closest?.('[data-cms-image]') || (target?.hasAttribute?.('data-cms-background') ? target : null);
-        activeImage = image ? cms.entries.get(image.getAttribute('data-cms-image') || image.getAttribute('data-cms-background')) : null;
+        const image = target?.closest?.('[data-cms-image]') || target?.closest?.('[data-cms-background]');
+        activeImage = image ? cms.entries.get(image.getAttribute('data-cms-image') || image.getAttribute('data-cms-background')) : Array.from(cms.entries.values()).find(entry => {
+            if (!entry.managedAsset || entry.type !== 'image' || !entry.element.isConnected) return false;
+            const rect = entry.element.getBoundingClientRect();
+            return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+        }) || null;
         positionImageAction(activeImage);
     }
 
@@ -270,8 +284,8 @@
         selectedImage = activeImage;
         const bounds = activeImage.element.getBoundingClientRect();
         const width = Math.min(1920, Math.max(256, Math.round(bounds.width * 2)));
-        fileInput.dataset.cropWidth = width;
-        fileInput.dataset.cropHeight = Math.max(1, Math.round(width * bounds.height / bounds.width));
+        fileInput.dataset.cropWidth = activeImage.element.dataset.cropWidth || width;
+        fileInput.dataset.cropHeight = activeImage.element.dataset.cropHeight || Math.max(1, Math.round(width * bounds.height / bounds.width));
         fileInput.click();
     });
     videoAction.addEventListener('click', () => videoFileInput.click());

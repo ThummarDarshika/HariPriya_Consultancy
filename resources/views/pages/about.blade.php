@@ -17,15 +17,8 @@
 
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex flex-wrap items-center gap-4">
-                    <div class="flex -space-x-4.5">
-                        @foreach (range(1, 4) as $avatarNumber)
-                            <img src="{{ $siteAssets['about.team_avatar_'.$avatarNumber] }}" alt="Team member {{ $avatarNumber }}" data-cms-managed-asset class="size-10 p-0.5 bg-white rounded-md">
-                        @endforeach
-                        <a href="{{ route('about') }}" class="size-10 p-0.5 bg-white rounded-md">
-                            <div class="bg-default-900 text-white rounded flex items-center justify-center size-full">
-                                10+
-                            </div>
-                        </a>
+                    <div class="flex -space-x-4.5" data-team-highlight data-cms-ignore>
+                        @include('pages.partials.team-highlight', ['avatarSize' => 'size-10', 'linkBadge' => true])
                     </div>
                     <p class="text-sm w-32.5">Team of passionate professionals</p>
                 </div>
@@ -90,27 +83,27 @@
                     </div>
 
                     <div class="overflow-hidden">
-                        <div class="relative z-10 md:flex hidden gap-5 flex-nowrap w-full overflow-hidden mt-auto" data-cms-ignore>
+                        <div class="relative z-10 md:flex hidden gap-5 flex-nowrap w-full overflow-hidden mt-auto">
                             <ul class="infinite-scroll flex gap-5 justify-start items-center ">
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
                             </ul>
 
                             <ul class="infinite-scroll flex gap-5 justify-start items-center ">
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
-                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
+                                <h2 class="uppercase text-nowrap text-white/30 lg:text-7xl md:text-[56px] text-[48px]" data-cms-editable-text="about.since_label">{{ $siteAssets['about.since_label'] }}</h2>
                             </ul>
                         </div>
                     </div>

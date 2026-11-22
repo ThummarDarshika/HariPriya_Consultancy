@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\SiteAsset;
 use App\Models\SiteContent;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\SharedContentSeeder;
+use Database\Seeders\SiteAssetSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -77,6 +79,81 @@ class VisualEditorTest extends TestCase
         $this->get('/')->assertOk()->assertSee('cms-content-pending')->assertSee(basename($imageUrl));
         $this->get('/admin/editor?page=home')->assertOk()->assertSee(basename($imageUrl));
         $this->get('/about')->assertOk()->assertDontSee(basename($imageUrl));
+    }
+
+    public function test_visual_editor_publishes_the_shared_cta_background_to_site_media_and_all_three_pages(): void
+    {
+        Storage::fake('public');
+        $this->seed(SiteAssetSeeder::class);
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        $response = $this->post('/api/site-content/save', [
+            'page' => 'global',
+            'images' => [['key' => 'global/assets/cta.background', 'type' => 'background', 'file' => UploadedFile::fake()->image('cta.jpg')]],
+        ], ['Accept' => 'application/json'])->assertOk()->assertJsonPath('saved.0.key', 'global/assets/cta.background');
+        $url = $response->json('saved.0.value');
+        $this->assertStringStartsWith('/storage/site-assets/', $url);
+        Storage::disk('public')->assertExists(substr($url, strlen('/storage/')));
+        $this->assertSame($url, SiteAsset::query()->where('key', 'cta.background')->firstOrFail()->value);
+        $this->assertDatabaseMissing('site_contents', ['key' => 'global/assets/cta.background']);
+        foreach (['home', 'products', 'services'] as $page) {
+            $this->get($page === 'home' ? '/' : '/'.$page)->assertOk()->assertSee($url);
+            $this->get('/admin/editor?page='.$page)->assertOk()->assertSee($url)->assertSee('data-cms-editable-asset="cta.background"', false);
+        }
+        $this->get('/admin/site-assets')->assertOk()->assertDontSee($url)->assertDontSee('Shared CTA background (Home, Products & Services)');
+    }
+
+    public function test_since_marquee_is_managed_in_the_about_editor_and_hidden_from_site_media(): void
+    {
+        $this->seed(SiteAssetSeeder::class);
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        $this->postJson('/api/site-content/save', [
+            'page' => 'about',
+            'changes' => [['key' => 'about/assets/about.since_label', 'type' => 'text', 'value' => 'Since - 2012']],
+        ])->assertOk()->assertJsonPath('saved.0.value', 'Since - 2012');
+        $this->assertSame('Since - 2012', SiteAsset::query()->where('key', 'about.since_label')->firstOrFail()->value);
+        $this->assertDatabaseMissing('site_contents', ['key' => 'about/assets/about.since_label']);
+        $this->get('/about')->assertOk()->assertSee('Since - 2012');
+        $this->get('/admin/editor?page=about')->assertOk()->assertSee('Since - 2012')->assertSee('data-cms-editable-text="about.since_label"', false);
+        $this->get('/admin/site-assets')->assertOk()->assertDontSee('Since marquee text');
+        foreach ([['home', 'Since - 2015'], ['about', ''], ['about', str_repeat('a', 161)]] as [$page, $value]) {
+            $this->postJson('/api/site-content/save', [
+                'page' => $page,
+                'changes' => [['key' => 'about/assets/about.since_label', 'type' => 'text', 'value' => $value]],
+            ])->assertUnprocessable()->assertJsonValidationErrors('changes.0.value');
+        }
+        $this->assertSame('Since - 2012', SiteAsset::query()->where('key', 'about.since_label')->firstOrFail()->value);
+    }
+
+    public function test_manufacturing_background_can_be_published_in_the_home_editor(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        $response = $this->post('/api/site-content/save', [
+            'page' => 'home',
+            'images' => [['key' => 'home/assets/home.solutions_background', 'type' => 'image', 'file' => UploadedFile::fake()->image('manufacturing.jpg')]],
+        ], ['Accept' => 'application/json'])->assertOk()->assertJsonPath('saved.0.type', 'image');
+        $url = $response->json('saved.0.value');
+        $this->assertSame($url, SiteAsset::query()->where('key', 'home.solutions_background')->firstOrFail()->value);
+        Storage::disk('public')->assertExists(substr($url, strlen('/storage/')));
+        $this->assertDatabaseMissing('site_contents', ['key' => 'home/assets/home.solutions_background']);
+        $this->get('/')->assertOk()->assertSee($url);
+        $this->get('/admin/editor?page=home')->assertOk()->assertSee($url)->assertSee('data-cms-editable-asset="home.solutions_background"', false);
+        $this->get('/products')->assertOk()->assertDontSee($url);
+        $this->get('/admin/site-assets')->assertOk()->assertDontSee('Manufacturing solutions background');
+    }
+
+    public function test_shared_background_upload_rejects_other_assets_or_an_incorrect_scope_or_type(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        foreach ([['home', 'global/assets/cta.background', 'background'], ['global', 'global/assets/cta.background', 'image'], ['global', 'global/assets/site.logo', 'background'], ['global', 'home/assets/home.solutions_background', 'image'], ['home', 'home/assets/home.solutions_background', 'background']] as [$page, $key, $type]) {
+            $this->post('/api/site-content/save', [
+                'page' => $page,
+                'images' => [['key' => $key, 'type' => $type, 'file' => UploadedFile::fake()->image('cta.jpg')]],
+            ], ['Accept' => 'application/json'])->assertUnprocessable()->assertJsonValidationErrors('images.0.key');
+        }
+        $this->assertDatabaseMissing('site_assets', ['key' => 'cta.background']);
+        $this->assertSame([], Storage::disk('public')->allFiles());
     }
 
     public function test_administrator_can_publish_a_video_and_public_api_returns_its_url(): void

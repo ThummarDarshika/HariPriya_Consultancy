@@ -16,74 +16,11 @@
             @csrf
             @if ($item->exists) @method('PUT') @endif
             @php($isJqueryRequired = fn (string $field): bool => in_array($field, $requiredFields, true))
+            @if (in_array('image_upload', $visibleFields, true) || in_array('gallery_uploads', $visibleFields, true) || in_array('icon_upload', $visibleFields, true))
             <section class="admin-form-section">
-                <div class="admin-form-section__heading"><span>01</span><div><h2>Item details</h2><p>Name, URL and publishing status</p></div></div>
-            <div class="grid gap-5 md:grid-cols-2">
-                @if ($collection === 'testimonials')
-                    <label class="block">Client name *
-                        <input name="client_name" value="{{ old('client_name', $item->client_name) }}" maxlength="255" @if ($isJqueryRequired('client_name')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
-                    </label>
-                    @error('client_name')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-                @else
-                    <label class="block">{{ $collection === 'faqs' ? 'Question' : 'Title / Name' }} *
-                        <input name="title" value="{{ old('title', $item->title) }}" maxlength="255" @if ($isJqueryRequired('title')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
-                    </label>
-                    @error('title')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-                @endif
-                <label class="block">Slug *
-                    <input name="slug" value="{{ old('slug', $item->slug) }}" maxlength="255" @if ($isJqueryRequired('slug')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
-                </label>
-                @error('slug')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-                @if (in_array('category', $visibleFields, true))<label class="block">Category{{ $isJqueryRequired('category') ? ' *' : '' }}
-                    <input name="category" value="{{ old('category', $item->category) }}" @if ($isJqueryRequired('category')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
-                </label>
-                @error('category')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror @endif
-                <label class="block">Status *
-                    <select name="status" @if ($isJqueryRequired('status')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
-                        <option value="draft" @selected(old('status', $item->status) === 'draft')>Draft</option>
-                        <option value="published" @selected(old('status', $item->status) === 'published')>Published</option>
-                    </select>
-                </label>
-                @error('status')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-            </div>
-            </section>
-            @if (in_array('description', $visibleFields, true) || in_array('summary', $visibleFields, true) || $collection === 'blogs')
-            <section class="admin-form-section">
-                <div class="admin-form-section__heading"><span>02</span><div><h2>Content</h2><p>Add the text visitors will see</p></div></div>
-            @if (in_array('description', $visibleFields, true))<label class="block">{{ $collection === 'faqs' ? 'Answer' : 'Description / Quote / Article' }}{{ $isJqueryRequired('description') ? ' *' : '' }}
-                <textarea name="description" rows="8" @if ($isJqueryRequired('description')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">{{ old('description', $item->description) }}</textarea>
-            </label>
-            @error('description')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-            <p>Markdown formatting is supported for bold text, emphasis, and links.</p>@endif
-            @if (in_array('summary', $visibleFields, true))<label class="block">Summary / Excerpt{{ $isJqueryRequired('summary') ? ' *' : '' }}
-                <textarea name="summary" rows="3" @if ($isJqueryRequired('summary')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">{{ old('summary', $item->summary) }}</textarea>
-            </label>@endif
-            @error('summary')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-            @if ($collection === 'blogs')
-                <div class="grid gap-5 md:grid-cols-2">
-                    <label class="block">Article subheading{{ $isJqueryRequired('article_subheading') ? ' *' : '' }}
-                        <input name="article_subheading" value="{{ old('article_subheading', $item->article_subheading) }}" @if ($isJqueryRequired('article_subheading')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
-                    </label>
-                    @error('article_subheading')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-                    <label class="block">Video URL{{ $isJqueryRequired('video_url') ? ' *' : '' }}
-                        <input name="video_url" type="url" value="{{ old('video_url', $item->video_url) }}" @if ($isJqueryRequired('video_url')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
-                    </label>
-                    @error('video_url')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
-                </div>
-                <p>Separate article paragraphs, list items, and quote with a blank line to preserve the existing article layout.</p>
-            @endif
-            </section>
-            @endif
-            @if (in_array('features_text', $visibleFields, true))<label class="block">Features (one per line)
-                <textarea name="features_text" rows="4" class="mt-2 block w-full rounded border border-default-200 p-3">{{ old('features_text', implode("\n", $item->features ?? [])) }}</textarea>
-            </label>@endif
-            <section class="admin-form-section">
-                <div class="admin-form-section__heading"><span>03</span><div><h2>{{ $collection === 'faqs' ? 'Display order' : ($collection === 'team-members' ? 'Member profile' : 'Images and details') }}</h2><p>{{ $collection === 'faqs' ? 'Control where this FAQ appears' : 'Manage the item image and supporting information' }}</p></div></div>
-            <div class="grid gap-5 md:grid-cols-2">
                 @if (in_array('image_upload', $visibleFields, true))
                 <label class="block">Primary image{{ $isJqueryRequired('image_upload') ? ' *' : '' }}
-                    <input data-current-image="{{ $item->image }}" name="image_upload" data-crop-width="{{ in_array($collection, ['team-members', 'testimonials']) ? 800 : 1200 }}" data-crop-height="{{ in_array($collection, ['team-members', 'testimonials']) ? 800 : ($collection === 'services' ? 600 : 900) }}" type="file" accept="image/png,image/jpeg,image/webp,image/gif" @if ($isJqueryRequired('image_upload')) data-jquery-required="true" @endif @if ($item->image) data-jquery-required-if-remove="true" data-has-existing-image="true" @endif class="mt-2 block w-full">
-                    @if ($item->image) <span><input type="checkbox" name="remove_image" value="1"> Remove current image</span> @endif
+                    <input data-current-image="{{ $item->image }}" name="image_upload" data-crop-width="{{ in_array($collection, ['team-members', 'testimonials']) ? 800 : 1200 }}" data-crop-height="{{ in_array($collection, ['team-members', 'testimonials']) ? 800 : ($collection === 'services' ? 600 : 900) }}" type="file" accept="image/png,image/jpeg,image/webp,image/gif" @if ($isJqueryRequired('image_upload')) data-jquery-required="true" @endif @if ($item->image) data-has-existing-image="true" @endif class="mt-2 block w-full">
                 </label>
                 @error('image_upload')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
                 @endif
@@ -103,15 +40,71 @@
                     <input data-current-image="{{ $item->icon }}" name="icon_upload" data-crop-width="256" data-crop-height="256" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="mt-2 block w-full">
                 </label>
                 @endif
+            </section>
+            @endif
+            <section class="admin-form-section">
+            <div class="grid gap-5 md:grid-cols-2">
+                @if ($collection === 'testimonials')
+                    <label class="block">Client name *
+                        <input name="client_name" value="{{ old('client_name', $item->client_name) }}" maxlength="255" @if ($isJqueryRequired('client_name')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
+                    </label>
+                    @error('client_name')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
+                @else
+                    <label class="block">{{ $collection === 'faqs' ? 'Question' : 'Title / Name' }} *
+                        <input name="title" value="{{ old('title', $item->title) }}" maxlength="255" @if ($isJqueryRequired('title')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
+                    </label>
+                    @error('title')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
+                @endif
+                @if (in_array('category', $visibleFields, true))<label class="block">Category{{ $isJqueryRequired('category') ? ' *' : '' }}
+                    <input name="category" value="{{ old('category', $item->category) }}" @if ($isJqueryRequired('category')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
+                </label>
+                @error('category')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror @endif
+                <label class="block">Status *
+                    <select name="status" @if ($isJqueryRequired('status')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
+                        <option value="draft" @selected(old('status', $item->status) === 'draft')>Draft</option>
+                        <option value="published" @selected(old('status', $item->status) === 'published')>Published</option>
+                    </select>
+                </label>
+                @error('status')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
+            </div>
+            </section>
+            @if (in_array('description', $visibleFields, true) || in_array('summary', $visibleFields, true) || $collection === 'blogs')
+            <section class="admin-form-section">
+            @if (in_array('description', $visibleFields, true))<label class="block">{{ $collection === 'faqs' ? 'Answer' : 'Description / Quote / Article' }}{{ $isJqueryRequired('description') ? ' *' : '' }}
+                <textarea name="description" rows="8" @if ($isJqueryRequired('description')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">{{ old('description', $item->description) }}</textarea>
+            </label>
+            @error('description')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
+            @endif
+            @if (in_array('summary', $visibleFields, true))<label class="block">Summary / Excerpt{{ $isJqueryRequired('summary') ? ' *' : '' }}
+                <textarea name="summary" rows="3" @if ($isJqueryRequired('summary')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">{{ old('summary', $item->summary) }}</textarea>
+            </label>@endif
+            @error('summary')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
+            @if ($collection === 'blogs')
+                <div class="grid gap-5 md:grid-cols-2">
+                    <label class="block">Article subheading{{ $isJqueryRequired('article_subheading') ? ' *' : '' }}
+                        <input name="article_subheading" value="{{ old('article_subheading', $item->article_subheading) }}" @if ($isJqueryRequired('article_subheading')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
+                    </label>
+                    @error('article_subheading')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
+                    <label class="block">Video URL{{ $isJqueryRequired('video_url') ? ' *' : '' }}
+                        <input name="video_url" type="url" value="{{ old('video_url', $item->video_url) }}" @if ($isJqueryRequired('video_url')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
+                    </label>
+                    @error('video_url')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
+                </div>
+                <details class="admin-field-help"><summary>Formatting help</summary><p>Separate article paragraphs, list items, and quote with a blank line.</p></details>
+            @endif
+            </section>
+            @endif
+            @if (in_array('features_text', $visibleFields, true))<label class="block">Features (one per line)
+                <textarea name="features_text" rows="4" class="mt-2 block w-full rounded border border-default-200 p-3">{{ old('features_text', implode("\n", $item->features ?? [])) }}</textarea>
+            </label>@endif
+            @if (array_intersect($visibleFields, ['price', 'client_name', 'designation', 'company', 'rating', 'role', 'material', 'capability', 'size_range', 'metric', 'display_date', 'social_links']))
+            <section class="admin-form-section">
+            <div class="grid gap-5 {{ $collection === 'products' ? 'admin-product-details' : 'md:grid-cols-2' }}">
                 @if (in_array('price', $visibleFields, true))
                 <label class="block">Price
                     <input name="price" type="number" min="0" step="0.01" value="{{ old('price', $item->price) }}" class="mt-2 block w-full rounded border border-default-200 p-3">
                 </label>
                 @endif
-                <label class="block">Order index{{ $isJqueryRequired('sort_order') ? ' *' : '' }}
-                    <input name="sort_order" type="number" min="0" value="{{ old('sort_order', $item->sort_order ?? 0) }}" @if ($isJqueryRequired('sort_order')) data-jquery-required="true" @endif class="mt-2 block w-full rounded border border-default-200 p-3">
-                </label>
-                @error('sort_order')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror
                 @if (in_array('client_name', $visibleFields, true) && $collection !== 'testimonials')<label class="block">Client name
                     <input name="client_name" value="{{ old('client_name', $item->client_name) }}" class="mt-2 block w-full rounded border border-default-200 p-3">
                 </label>@error('client_name')<p class="jquery-validation-error" role="alert">{{ $message }}</p>@enderror @endif
@@ -161,6 +154,7 @@
                 @endif
             </div>
             </section>
+            @endif
             <div class="admin-form-actions"><button class="rounded bg-primary px-6 py-3 text-white">Save item</button></div>
         </form>
     </main>

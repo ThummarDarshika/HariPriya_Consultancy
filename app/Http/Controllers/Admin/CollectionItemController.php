@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -26,9 +27,8 @@ class CollectionItemController extends Controller
                     ->when(in_array('category', $visibleFields, true), fn ($query) => $query->orWhere('category', 'like', '%'.$search.'%'));
             }))
             ->orderBy('sort_order')
-            ->latest('id')
-            ->paginate(15)
-            ->withQueryString();
+            ->orderBy('id')
+            ->when($search !== '', fn ($query) => $query->paginate(15)->withQueryString(), fn ($query) => $query->get());
 
         return view('admin.collections.index', compact('collection', 'items', 'search', 'visibleFields'));
     }
@@ -71,7 +71,7 @@ class CollectionItemController extends Controller
             'collection' => $collection,
             'item' => $item,
             'visibleFields' => $this->visibleFields($collection),
-            'requiredFields' => $this->requiredFields($collection, $item->image !== null),
+            'requiredFields' => $this->requiredFields($collection, filled($item->image)),
         ]);
     }
 
@@ -118,14 +118,8 @@ class CollectionItemController extends Controller
     /** @return array<string, mixed> */
     private function validated(Request $request, string $collection, ?CollectionItem $item = null): array
     {
-        $slugRule = Rule::unique('collection_items')->where('collection', $collection);
-        if ($item) {
-            $slugRule->ignore($item->id);
-        }
-
         $fieldRules = [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'alpha_dash', 'max:255', $slugRule],
             'category' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:50000'],
             'summary' => ['nullable', 'string', 'max:5000'],
@@ -134,7 +128,6 @@ class CollectionItemController extends Controller
             'price' => ['nullable', 'numeric', 'min:0'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'],
             'icon_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:2048'],
-            'remove_image' => ['sometimes', 'boolean'],
             'gallery_uploads' => ['nullable', 'array', 'max:10'],
             'gallery_uploads.*' => ['image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'],
             'clear_gallery' => ['sometimes', 'boolean'],
@@ -155,17 +148,14 @@ class CollectionItemController extends Controller
             'social_links.instagram' => ['nullable', 'url', 'max:2048'],
             'social_links.linkedin' => ['nullable', 'url', 'max:2048'],
             'social_links.x' => ['nullable', 'url', 'max:2048'],
-            'sort_order' => ['required', 'integer', 'min:0'],
+            'sort_order' => ['sometimes', 'integer', 'min:0'],
         ];
-        $requiredFields = $this->requiredFields($collection, $item?->image !== null);
+        $requiredFields = $this->requiredFields($collection, filled($item?->image));
         foreach ($requiredFields as $field) {
             if (array_key_exists($field, $fieldRules)) {
                 $fieldRules[$field] = array_values(array_filter($fieldRules[$field], fn ($rule): bool => $rule !== 'nullable'));
                 array_unshift($fieldRules[$field], 'required');
             }
-        }
-        if (in_array($collection, ['products', 'services', 'blogs', 'testimonials', 'case-studies', 'team-members'], true) && $item?->image !== null) {
-            $fieldRules['image_upload'] = ['required_if:remove_image,1', 'nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'];
         }
         $visibleFields = $this->visibleFields($collection);
         $alwaysVisible = ['title', 'slug', 'status', 'sort_order'];
@@ -181,6 +171,9 @@ class CollectionItemController extends Controller
             $data['title'] = $data['client_name'];
         }
 
+        $data['slug'] = $item?->slug ?: $this->uniqueSlug($data['title'], $collection);
+        $data['sort_order'] = $data['sort_order'] ?? $item?->sort_order ?? ((int) CollectionItem::query()->where('collection', $collection)->max('sort_order') + 1);
+
         if (! empty($data['video_url'])) {
             $host = parse_url($data['video_url'], PHP_URL_HOST);
             $path = parse_url($data['video_url'], PHP_URL_PATH);
@@ -193,17 +186,29 @@ class CollectionItemController extends Controller
         return $data;
     }
 
+    private function uniqueSlug(string $title, string $collection): string
+    {
+        $base = trim(Str::substr(Str::slug($title), 0, 220), '-') ?: 'item';
+        $slug = $base;
+        $suffix = 2;
+        while (CollectionItem::query()->where('collection', $collection)->where('slug', $slug)->exists()) {
+            $slug = $base.'-'.$suffix++;
+        }
+
+        return $slug;
+    }
+
     /** @return array<int, string> */
     private function visibleFields(string $collection): array
     {
         return match ($collection) {
-            'products' => ['description', 'image_upload', 'remove_image', 'material', 'capability', 'size_range'],
-            'services' => ['description', 'image_upload', 'remove_image'],
-            'blogs' => ['category', 'description', 'summary', 'article_subheading', 'video_url', 'image_upload', 'remove_image', 'display_date'],
-            'testimonials' => ['description', 'image_upload', 'remove_image', 'client_name', 'designation', 'rating'],
-            'case-studies' => ['category', 'description', 'image_upload', 'remove_image', 'metric'],
+            'products' => ['description', 'image_upload', 'material', 'capability', 'size_range'],
+            'services' => ['description', 'image_upload'],
+            'blogs' => ['category', 'description', 'summary', 'article_subheading', 'video_url', 'image_upload', 'display_date'],
+            'testimonials' => ['description', 'image_upload', 'client_name', 'designation', 'rating'],
+            'case-studies' => ['category', 'description', 'image_upload', 'metric'],
             'faqs' => ['description'],
-            'team-members' => ['image_upload', 'remove_image', 'role', 'social_links'],
+            'team-members' => ['image_upload', 'role', 'social_links'],
             default => [],
         };
     }
@@ -211,7 +216,7 @@ class CollectionItemController extends Controller
     /** @return array<int, string> */
     private function requiredFields(string $collection, bool $hasExistingImage = false): array
     {
-        $required = ['slug', 'status', 'sort_order'];
+        $required = ['status'];
         if ($collection !== 'testimonials') {
             $required[] = 'title';
         }
@@ -238,10 +243,7 @@ class CollectionItemController extends Controller
     private function storeFiles(Request $request, array &$data, ?CollectionItem $item, string $collection): void
     {
         $visibleFields = $this->visibleFields($collection);
-        unset($data['image_upload'], $data['icon_upload'], $data['gallery_uploads'], $data['features_text'], $data['remove_image'], $data['clear_gallery']);
-        if (in_array('remove_image', $visibleFields, true) && $request->boolean('remove_image')) {
-            $data['image'] = null;
-        }
+        unset($data['image_upload'], $data['icon_upload'], $data['gallery_uploads'], $data['features_text'], $data['clear_gallery']);
         if (in_array('image_upload', $visibleFields, true) && $request->hasFile('image_upload')) {
             $path = $request->file('image_upload')->store('collection-items', 'public');
             $data['image'] = Storage::disk('public')->url($path);

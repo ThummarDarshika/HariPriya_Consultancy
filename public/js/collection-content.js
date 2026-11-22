@@ -2,7 +2,7 @@
     'use strict';
 
     const baseUrl = document.querySelector('meta[name="cms-collections-url"]')?.content;
-    const groups = Array.from(document.querySelectorAll('[data-cms-collection]'));
+    const groups = Array.from(document.querySelectorAll('[data-cms-collection]:not([data-cms-server-rendered])'));
     if (!baseUrl || !groups.length) return;
 
     function setText(card, selector, value) {
