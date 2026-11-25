@@ -358,6 +358,53 @@ class ProjectMediaTest extends TestCase
         }
     }
 
+    public function test_administrator_can_bulk_delete_selected_project_media_and_remove_stored_files(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('project-media/one.jpg', 'one');
+        Storage::disk('public')->put('project-media/two.mp4', 'two');
+        Storage::disk('public')->put('project-media/three.jpg', 'three');
+
+        $first = ProjectMedia::factory()->create(['title' => 'Media One', 'file_path' => '/storage/project-media/one.jpg']);
+        $second = ProjectMedia::factory()->video()->create(['title' => 'Media Two', 'file_path' => '/storage/project-media/two.mp4']);
+        $third = ProjectMedia::factory()->create(['title' => 'Media Three', 'file_path' => '/storage/project-media/three.jpg']);
+
+        $this->delete(route('admin.project-media.bulk-destroy'), ['ids' => [$first->id]])
+            ->assertRedirect(route('login'));
+
+        $this->actingAs(User::factory()->create());
+        $this->delete(route('admin.project-media.bulk-destroy'), ['ids' => [$first->id]])
+            ->assertForbidden();
+        $this->assertDatabaseHas('project_media', ['id' => $first->id]);
+
+        $this->actingAs($this->administrator());
+
+        $this->get(route('admin.project-media.index'))
+            ->assertOk()
+            ->assertSee('data-bulk-select-all', false)
+            ->assertSee('data-bulk-select-item', false)
+            ->assertSee('form="bulk-delete-project-media-form"', false)
+            ->assertSee('company-bulk-delete.js', false)
+            ->assertSee('Delete selected');
+
+        $this->from(route('admin.project-media.index'))
+            ->delete(route('admin.project-media.bulk-destroy'), ['ids' => []])
+            ->assertRedirect(route('admin.project-media.index'))
+            ->assertSessionHasErrors('ids');
+
+        $this->from(route('admin.project-media.index'))
+            ->delete(route('admin.project-media.bulk-destroy'), ['ids' => [$first->id, $second->id]])
+            ->assertRedirect(route('admin.project-media.index'))
+            ->assertSessionHas('status', '2 project media items deleted.');
+
+        $this->assertDatabaseMissing('project_media', ['id' => $first->id]);
+        $this->assertDatabaseMissing('project_media', ['id' => $second->id]);
+        $this->assertDatabaseHas('project_media', ['id' => $third->id]);
+        Storage::disk('public')->assertMissing('project-media/one.jpg');
+        Storage::disk('public')->assertMissing('project-media/two.mp4');
+        Storage::disk('public')->assertExists('project-media/three.jpg');
+    }
+
     private function administrator(): User
     {
         $administrator = User::factory()->create();

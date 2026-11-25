@@ -25,10 +25,30 @@
         @php
             $hasImage = in_array('image_upload', $visibleFields, true);
             $headers = array_merge($hasImage ? ['Image'] : [], in_array('category', $visibleFields, true) ? ['Title', 'Category', 'Status', 'Actions'] : ['Title', 'Status', 'Actions']);
+            $bulkPluralLabel = match ($collection) {
+                'products' => 'products',
+                'services' => 'services',
+                'blogs' => 'blogs',
+                'testimonials' => 'client reviews',
+                'case-studies' => 'case studies',
+                'team-members' => 'team members',
+                'faqs' => 'FAQs',
+                default => 'items',
+            };
         @endphp
-        @component('admin.list-table', ['headers' => $headers, 'reorderUrl' => route('admin.order', ['collections', $collection]), 'search' => $search])
+        @include('admin.bulk-delete-bar', [
+            'formId' => 'bulk-delete-collections-form',
+            'action' => route('admin.collections.bulk-destroy', $collection),
+            'singular' => $dialogItemLabel,
+            'plural' => $bulkPluralLabel,
+            'items' => $items,
+        ])
+        @component('admin.list-table', ['headers' => $headers, 'reorderUrl' => route('admin.order', ['collections', $collection]), 'search' => $search, 'selectable' => true, 'selectLabel' => $bulkPluralLabel])
                     @forelse ($items as $item)
                         <tr data-order-id="{{ $item->id }}">
+                            <td class="admin-list__select-col">
+                                <input type="checkbox" name="ids[]" value="{{ $item->id }}" form="bulk-delete-collections-form" class="admin-list__checkbox" data-bulk-select-item aria-label="Select {{ $item->title }}">
+                            </td>
                             @if ($hasImage)
                                 <td class="p-4">@if ($item->image)<img src="{{ $item->image }}" alt="{{ $item->title }}" class="admin-list__preview" loading="lazy">@else<span aria-label="No image">&mdash;</span>@endif</td>
                             @endif
@@ -46,7 +66,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="{{ count($headers) }}" class="p-6 text-center">No items yet.</td></tr>
+                        <tr><td colspan="{{ count($headers) + 1 }}" class="p-6 text-center">No items yet.</td></tr>
                     @endforelse
         @endcomponent
         <div class="mt-5">@if ($search !== '') {{ $items->links() }} @endif</div>

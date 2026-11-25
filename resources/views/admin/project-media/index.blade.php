@@ -20,12 +20,21 @@
             </div>
         </div>
         @if (session('status')) <p role="status" class="mb-5 rounded bg-green-100 p-3">{{ session('status') }}</p> @endif
-
+        @include('admin.bulk-delete-bar', [
+            'formId' => 'bulk-delete-project-media-form',
+            'action' => route('admin.project-media.bulk-destroy'),
+            'singular' => 'project media item',
+            'plural' => 'project media items',
+            'items' => $items,
+        ])
 
         @if ($items->isNotEmpty())
-            @component('admin.list-table', ['headers' => ['Preview', 'Title', 'Type', 'Status', 'Actions'], 'reorderUrl' => route('admin.order', 'project-media'), 'search' => $search])
+            @component('admin.list-table', ['headers' => ['Preview', 'Title', 'Type', 'Status', 'Actions'], 'reorderUrl' => route('admin.order', 'project-media'), 'search' => $search, 'selectable' => true, 'selectLabel' => 'project media'])
                         @foreach ($items as $item)
                             <tr data-order-id="{{ $item->id }}">
+                                <td class="admin-list__select-col">
+                                    <input type="checkbox" name="ids[]" value="{{ $item->id }}" form="bulk-delete-project-media-form" class="admin-list__checkbox" data-bulk-select-item aria-label="Select {{ $item->title }}">
+                                </td>
                                     <td>
                                     <div class="project-media-table__preview">
                                         @if ($item->media_type === 'video')

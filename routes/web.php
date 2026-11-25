@@ -103,9 +103,13 @@ Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(fu
     Route::put('/site-assets/{asset}', [SiteAssetController::class, 'update'])->name('site-assets.update');
     Route::post('order/{kind}/{collection?}', ListOrderController::class)->name('order');
     Route::post('companies/reorder', [CompanyController::class, 'reorder'])->name('companies.reorder');
+    Route::delete('companies/bulk-destroy', [CompanyController::class, 'bulkDestroy'])->name('companies.bulk-destroy');
     Route::resource('companies', CompanyController::class)->except('show');
+    Route::delete('certificates/bulk-destroy', [CertificateController::class, 'bulkDestroy'])->name('certificates.bulk-destroy');
     Route::resource('certificates', CertificateController::class)->except('show');
+    Route::delete('project-media/bulk-destroy', [ProjectMediaController::class, 'bulkDestroy'])->name('project-media.bulk-destroy');
     Route::resource('project-media', ProjectMediaController::class)->except('show');
+    Route::delete('job-openings/bulk-destroy', [JobOpeningController::class, 'bulkDestroy'])->name('job-openings.bulk-destroy');
     Route::resource('job-openings', JobOpeningController::class)->except('show');
     Route::get('/job-applications', [JobApplicationController::class, 'index'])->name('job-applications.index');
     Route::get('/job-applications/{jobApplication}', [JobApplicationController::class, 'show'])->name('job-applications.show');
@@ -116,6 +120,7 @@ Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(fu
     Route::post('/collections/{collection}', [CollectionItemController::class, 'store'])->name('collections.store');
     Route::get('/collections/{collection}/{item}/edit', [CollectionItemController::class, 'edit'])->name('collections.edit');
     Route::put('/collections/{collection}/{item}', [CollectionItemController::class, 'update'])->name('collections.update');
+    Route::delete('/collections/{collection}/bulk-destroy', [CollectionItemController::class, 'bulkDestroy'])->name('collections.bulk-destroy');
     Route::delete('/collections/{collection}/{item}', [CollectionItemController::class, 'destroy'])->name('collections.destroy');
     Route::get('/contact-submissions', [ContactSubmissionController::class, 'index'])->name('contact-submissions.index');
     Route::get('/contact-submissions/export', [ContactSubmissionController::class, 'export'])->name('contact-submissions.export');

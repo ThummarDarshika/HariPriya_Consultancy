@@ -7,11 +7,13 @@ use App\Models\Certificate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class CertificateController extends Controller
 {
+    use HandlesBulkDeletion;
+
     public function index(Request $request): View
     {
         $search = $request->string('search')->trim()->toString();
@@ -85,8 +87,8 @@ class CertificateController extends Controller
         unset($data['image_upload']);
         $certificate->update($data);
 
-        if ($previous !== $certificate->image_path && str_starts_with($previous, '/storage/certificates/')) {
-            Storage::disk('public')->delete(substr($previous, strlen('/storage/')));
+        if ($previous !== $certificate->image_path) {
+            $this->deleteStoredPublicPath($previous, ['/storage/certificates/']);
         }
 
         if ($request->expectsJson()) {
@@ -103,5 +105,20 @@ class CertificateController extends Controller
         $certificate->delete();
 
         return redirect()->route('admin.certificates.index')->with('status', 'Certificate deleted.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        return $this->executeBulkDestroy(
+            $request,
+            fn () => Certificate::query(),
+            Rule::exists(Certificate::class, 'id')->whereNull('deleted_at'),
+            'admin.certificates.index',
+            [],
+            'Certificate deleted.',
+            ':count certificates deleted.',
+            ['image_path'],
+            ['/storage/certificates/'],
+        );
     }
 }

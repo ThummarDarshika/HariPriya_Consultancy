@@ -242,4 +242,78 @@ class AdminCollectionsTest extends TestCase
 
         $this->assertNotEmpty(CollectionItem::query()->where('collection', 'blogs')->orderBy('sort_order')->firstOrFail()->description);
     }
+
+    public function test_administrator_can_bulk_delete_selected_collection_items_and_remove_stored_media(): void
+    {
+        Storage::fake('public');
+
+        $otherCollectionItem = CollectionItem::factory()->create(['collection' => 'services', 'title' => 'Keep Service']);
+
+        $this->delete(route('admin.collections.bulk-destroy', 'products'), ['ids' => [$otherCollectionItem->id]])
+            ->assertRedirect(route('login'));
+
+        $this->actingAs(User::factory()->create());
+        $this->delete(route('admin.collections.bulk-destroy', 'products'), ['ids' => [$otherCollectionItem->id]])
+            ->assertForbidden();
+
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+
+        $this->from(route('admin.collections.index', 'products'))
+            ->delete(route('admin.collections.bulk-destroy', 'products'), ['ids' => [$otherCollectionItem->id]])
+            ->assertRedirect(route('admin.collections.index', 'products'))
+            ->assertSessionHasErrors('ids.0');
+        $this->assertDatabaseHas('collection_items', ['id' => $otherCollectionItem->id]);
+
+        foreach (array_keys(config('cms.collections')) as $collection) {
+            $firstPath = 'collection-items/'.$collection.'-one.jpg';
+            $secondPath = 'collection-items/'.$collection.'-two.jpg';
+            $iconPath = 'collection-icons/'.$collection.'-icon.png';
+            $galleryPath = 'collection-items/'.$collection.'-gallery.jpg';
+
+            Storage::disk('public')->put($firstPath, 'one');
+            Storage::disk('public')->put($secondPath, 'two');
+            Storage::disk('public')->put($iconPath, 'icon');
+            Storage::disk('public')->put($galleryPath, 'gallery');
+
+            $first = CollectionItem::factory()->create([
+                'collection' => $collection,
+                'image' => $collection === 'faqs' ? null : '/storage/'.$firstPath,
+                'icon' => $collection === 'faqs' ? null : '/storage/'.$iconPath,
+                'gallery' => $collection === 'faqs' ? null : ['/storage/'.$galleryPath],
+            ]);
+            $second = CollectionItem::factory()->create([
+                'collection' => $collection,
+                'image' => $collection === 'faqs' ? null : '/storage/'.$secondPath,
+            ]);
+            $seeded = CollectionItem::factory()->create([
+                'collection' => $collection,
+                'image' => $collection === 'faqs' ? null : '/assets/1-BK1k9eNG.svg',
+            ]);
+
+            $this->get(route('admin.collections.index', $collection))
+                ->assertOk()
+                ->assertSee('data-bulk-select-all', false)
+                ->assertSee('data-bulk-select-item', false)
+                ->assertSee('form="bulk-delete-collections-form"', false)
+                ->assertSee('company-bulk-delete.js', false)
+                ->assertSee('Delete selected');
+
+            $this->from(route('admin.collections.index', $collection))
+                ->delete(route('admin.collections.bulk-destroy', $collection), ['ids' => [$first->id, $seeded->id]])
+                ->assertRedirect(route('admin.collections.index', $collection))
+                ->assertSessionHas('status', '2 items deleted.');
+
+            $this->assertDatabaseMissing('collection_items', ['id' => $first->id]);
+            $this->assertDatabaseMissing('collection_items', ['id' => $seeded->id]);
+            $this->assertDatabaseHas('collection_items', ['id' => $second->id]);
+
+            if ($collection !== 'faqs') {
+                Storage::disk('public')->assertMissing($firstPath);
+                Storage::disk('public')->assertMissing($iconPath);
+                Storage::disk('public')->assertMissing($galleryPath);
+                Storage::disk('public')->assertExists($secondPath);
+                $this->assertFileExists(public_path('assets/1-BK1k9eNG.svg'));
+            }
+        }
+    }
 }

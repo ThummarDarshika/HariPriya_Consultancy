@@ -16,6 +16,8 @@ use Illuminate\View\View;
 
 class ProjectMediaController extends Controller
 {
+    use HandlesBulkDeletion;
+
     private const IMAGE_MAX_KILOBYTES = 20 * 1024;
 
     private const VIDEO_MAX_KILOBYTES = 100 * 1024;
@@ -141,6 +143,21 @@ class ProjectMediaController extends Controller
         $this->deleteStoredFile($filePath);
 
         return redirect()->route('admin.project-media.index')->with('status', 'Project media deleted.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        return $this->executeBulkDestroy(
+            $request,
+            fn () => ProjectMedia::query(),
+            Rule::exists(ProjectMedia::class, 'id'),
+            'admin.project-media.index',
+            [],
+            'Project media deleted.',
+            ':count project media items deleted.',
+            ['file_path'],
+            ['/storage/project-media/'],
+        );
     }
 
     /** @return array<int, string> */

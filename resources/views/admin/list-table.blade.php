@@ -7,6 +7,11 @@
     <table class="admin-list__table">
         <thead>
             <tr>
+                @if ($selectable ?? false)
+                    <th scope="col" class="admin-list__select-col">
+                        <input type="checkbox" class="admin-list__checkbox" data-bulk-select-all aria-label="Select all {{ $selectLabel ?? 'items' }}">
+                    </th>
+                @endif
                 @foreach ($headers as $header)
                     <th scope="col">{{ $header }}</th>
                 @endforeach

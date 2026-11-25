@@ -13,6 +13,8 @@ use Illuminate\View\View;
 
 class JobOpeningController extends Controller
 {
+    use HandlesBulkDeletion;
+
     public function index(Request $request): View
     {
         $search = $request->string('search')->trim()->toString();
@@ -69,6 +71,19 @@ class JobOpeningController extends Controller
         $jobOpening->delete();
 
         return redirect()->route('admin.job-openings.index')->with('status', 'Job opening removed. Existing applications remain available.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        return $this->executeBulkDestroy(
+            $request,
+            fn () => JobOpening::query(),
+            Rule::exists(JobOpening::class, 'id')->whereNull('deleted_at'),
+            'admin.job-openings.index',
+            [],
+            'Job opening removed. Existing applications remain available.',
+            ':count job openings removed. Existing applications remain available.',
+        );
     }
 
     /** @return array<string, mixed> */

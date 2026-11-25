@@ -503,3 +503,14 @@ body.admin-sidebar-collapsed .admin-sidebar__logout button { justify-content: ce
 
 .admin-panel .company-dialog__fields > .image-upload-tile { margin-bottom: 20px; }
 .project-dialog [data-project-image-field], .project-dialog [data-project-video-field] { margin-bottom: 20px; }
+
+.admin-panel .admin-list__table .admin-list__select-col { width: 48px; padding-right: 8px; text-align: center; }
+.admin-panel .admin-list__checkbox { width: 18px; height: 18px; margin: 0; vertical-align: middle; accent-color: #c9441b; cursor: pointer; }
+.admin-panel .admin-list__table tbody tr.is-selected > td { background: #fff4ed; }
+.admin-panel .admin-bulk-bar { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin: 0 0 14px; }
+.admin-panel .admin-bulk-bar__count { color: #475467; font-size: 13px; font-weight: 600; }
+.admin-panel .admin-bulk-bar__delete { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 14px; border: 1px solid #fecdca; border-radius: 9px; background: #fef3f2; color: #b42318; font-size: 13px; font-weight: 650; transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease; }
+.admin-panel .admin-bulk-bar__delete svg { width: 18px; height: 18px; }
+.admin-panel .admin-bulk-bar__delete:hover:not(:disabled) { border-color: #b42318; background: #b42318; color: #fff; }
+.admin-panel .admin-bulk-bar__delete:disabled { opacity: .45; cursor: not-allowed; border-color: #e4e7ec; background: #f8fafc; color: #98a2b3; }
+.admin-panel .admin-bulk-bar__delete:focus-visible, .admin-panel .admin-list__checkbox:focus-visible { outline: 3px solid #f79009; outline-offset: 2px; }

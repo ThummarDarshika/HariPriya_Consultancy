@@ -8,12 +8,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class CompanyController extends Controller
 {
+    use HandlesBulkDeletion;
+
     public function index(Request $request): View
     {
         $search = $request->string('search')->trim()->toString();
@@ -110,8 +112,8 @@ class CompanyController extends Controller
         unset($data['image_upload']);
         $company->update($data);
 
-        if ($previous !== $company->image_path && str_starts_with($previous, '/storage/companies/')) {
-            Storage::disk('public')->delete(substr($previous, strlen('/storage/')));
+        if ($previous !== $company->image_path) {
+            $this->deleteStoredPublicPath($previous, ['/storage/companies/']);
         }
 
         if ($request->expectsJson()) {
@@ -128,5 +130,20 @@ class CompanyController extends Controller
         $company->delete();
 
         return redirect()->route('admin.companies.index')->with('status', 'Company deleted.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        return $this->executeBulkDestroy(
+            $request,
+            fn () => Company::query(),
+            Rule::exists(Company::class, 'id')->whereNull('deleted_at'),
+            'admin.companies.index',
+            [],
+            'Company deleted.',
+            ':count companies deleted.',
+            ['image_path'],
+            ['/storage/companies/'],
+        );
     }
 }

@@ -19,9 +19,23 @@
             </div>
         </div>
         @if (session('status')) <p role="status" class="mb-4 rounded bg-green-100 p-3">{{ session('status') }}</p> @endif
-        @component('admin.list-table', ['headers' => ['Image', 'Name', 'Status', 'Actions'], 'reorderUrl' => route('admin.order', $kind), 'search' => $search])
+        @php
+            $bulkFormId = 'bulk-delete-'.$kind.'-form';
+            $bulkSingular = $kind === 'companies' ? 'company' : 'certificate';
+        @endphp
+        @include('admin.bulk-delete-bar', [
+            'formId' => $bulkFormId,
+            'action' => route('admin.'.$kind.'.bulk-destroy'),
+            'singular' => $bulkSingular,
+            'plural' => $kind,
+            'items' => $items,
+        ])
+        @component('admin.list-table', ['headers' => ['Image', 'Name', 'Status', 'Actions'], 'reorderUrl' => route('admin.order', $kind), 'search' => $search, 'selectable' => true, 'selectLabel' => $kind])
                     @forelse ($items as $item)
                         <tr class="border-b border-default-100" data-order-id="{{ $item->id }}">
+                            <td class="admin-list__select-col">
+                                <input type="checkbox" name="ids[]" value="{{ $item->id }}" form="{{ $bulkFormId }}" class="admin-list__checkbox" data-bulk-select-item aria-label="Select {{ $item->name }}">
+                            </td>
                             <td class="p-4"><img src="{{ $item->image_path }}" alt="{{ $item->name }}" class="admin-list__preview"></td>
                             <td class="p-4">{{ $item->name }}</td>
                             <td class="p-4"><span class="admin-list__status {{ $item->is_active ? 'is-active' : '' }}">{{ $item->is_active ? 'Visible' : 'Hidden' }}</span></td>
@@ -36,7 +50,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="p-6 text-center">No items yet.</td></tr>
+                        <tr><td colspan="5" class="p-6 text-center">No items yet.</td></tr>
                     @endforelse
         @endcomponent
         @if ($search !== '') <div class="mt-5">{{ $items->links() }}</div> @endif

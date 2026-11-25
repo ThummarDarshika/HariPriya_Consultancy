@@ -263,4 +263,45 @@ class CareerFlowTest extends TestCase
         $this->assertSame(0, substr_count($header[0] ?? '', $productsLink));
         $this->assertSame(1, substr_count($footer[0] ?? '', $productsLink));
     }
+
+    public function test_administrator_can_bulk_delete_selected_job_openings_while_preserving_applications(): void
+    {
+        $first = JobOpening::factory()->create(['title' => 'Welder']);
+        $second = JobOpening::factory()->create(['title' => 'Inspector']);
+        $third = JobOpening::factory()->create(['title' => 'Designer']);
+        $application = JobApplication::factory()->create(['job_opening_id' => $first->id, 'role_title' => $first->title]);
+
+        $this->delete(route('admin.job-openings.bulk-destroy'), ['ids' => [$first->id]])
+            ->assertRedirect(route('login'));
+
+        $this->actingAs(User::factory()->create());
+        $this->delete(route('admin.job-openings.bulk-destroy'), ['ids' => [$first->id]])
+            ->assertForbidden();
+        $this->assertNotSoftDeleted($first);
+
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+
+        $this->get(route('admin.job-openings.index'))
+            ->assertOk()
+            ->assertSee('data-bulk-select-all', false)
+            ->assertSee('data-bulk-select-item', false)
+            ->assertSee('form="bulk-delete-job-openings-form"', false)
+            ->assertSee('company-bulk-delete.js', false)
+            ->assertSee('Delete selected');
+
+        $this->from(route('admin.job-openings.index'))
+            ->delete(route('admin.job-openings.bulk-destroy'), ['ids' => []])
+            ->assertRedirect(route('admin.job-openings.index'))
+            ->assertSessionHasErrors('ids');
+
+        $this->from(route('admin.job-openings.index'))
+            ->delete(route('admin.job-openings.bulk-destroy'), ['ids' => [$first->id, $third->id]])
+            ->assertRedirect(route('admin.job-openings.index'))
+            ->assertSessionHas('status', '2 job openings removed. Existing applications remain available.');
+
+        $this->assertSoftDeleted($first);
+        $this->assertNotSoftDeleted($second);
+        $this->assertSoftDeleted($third);
+        $this->get(route('admin.job-applications.show', $application))->assertOk()->assertSee('Welder');
+    }
 }

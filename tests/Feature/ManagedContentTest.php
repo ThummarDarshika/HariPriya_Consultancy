@@ -287,6 +287,99 @@ class ManagedContentTest extends TestCase
         $this->get('/about')->assertOk()->assertSee($item->fresh()->image_path);
     }
 
+    public function test_administrator_can_bulk_delete_selected_companies_and_certificates(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('companies/alpha.png', 'alpha');
+        Storage::disk('public')->put('companies/beta.png', 'beta');
+        Storage::disk('public')->put('companies/gamma.png', 'gamma');
+        Storage::disk('public')->put('certificates/iso-9001.png', 'iso9001');
+        Storage::disk('public')->put('certificates/iso-14001.png', 'iso14001');
+
+        $first = Company::factory()->create(['name' => 'Alpha Corp', 'image_path' => '/storage/companies/alpha.png']);
+        $second = Company::factory()->create(['name' => 'Beta Corp', 'image_path' => '/storage/companies/beta.png']);
+        $third = Company::factory()->create(['name' => 'Gamma Corp', 'image_path' => '/storage/companies/gamma.png']);
+        $seeded = Company::factory()->create(['name' => 'Seeded Corp', 'image_path' => '/assets/1-BK1k9eNG.svg']);
+
+        $certFirst = Certificate::factory()->create(['name' => 'ISO 9001', 'image_path' => '/storage/certificates/iso-9001.png']);
+        $certSecond = Certificate::factory()->create(['name' => 'ISO 14001', 'image_path' => '/storage/certificates/iso-14001.png']);
+        $certSeeded = Certificate::factory()->create(['name' => 'Seeded Cert', 'image_path' => '/assets/4-cTO0dgU6.svg']);
+
+        $this->delete(route('admin.companies.bulk-destroy'), ['ids' => [$first->id]])
+            ->assertRedirect(route('login'));
+        $this->delete(route('admin.certificates.bulk-destroy'), ['ids' => [$certFirst->id]])
+            ->assertRedirect(route('login'));
+
+        $this->actingAs(User::factory()->create());
+        $this->delete(route('admin.companies.bulk-destroy'), ['ids' => [$first->id]])
+            ->assertForbidden();
+        $this->delete(route('admin.certificates.bulk-destroy'), ['ids' => [$certFirst->id]])
+            ->assertForbidden();
+        $this->assertNotSoftDeleted($first);
+        $this->assertNotSoftDeleted($certFirst);
+        Storage::disk('public')->assertExists('companies/alpha.png');
+        Storage::disk('public')->assertExists('certificates/iso-9001.png');
+
+        $this->actingAs($this->administrator());
+
+        $this->get(route('admin.companies.index'))
+            ->assertOk()
+            ->assertSee('data-bulk-select-all', false)
+            ->assertSee('data-bulk-select-item', false)
+            ->assertSee('form="bulk-delete-companies-form"', false)
+            ->assertSee('company-bulk-delete.js', false)
+            ->assertSee('Delete selected');
+
+        $this->get(route('admin.certificates.index'))
+            ->assertOk()
+            ->assertSee('data-bulk-select-all', false)
+            ->assertSee('data-bulk-select-item', false)
+            ->assertSee('form="bulk-delete-certificates-form"', false)
+            ->assertSee('company-bulk-delete.js', false)
+            ->assertSee('Delete selected');
+
+        $this->from(route('admin.companies.index'))
+            ->delete(route('admin.companies.bulk-destroy'), ['ids' => []])
+            ->assertRedirect(route('admin.companies.index'))
+            ->assertSessionHasErrors('ids');
+
+        $this->from(route('admin.companies.index'))
+            ->delete(route('admin.companies.bulk-destroy'), ['ids' => [$first->id, $third->id, $seeded->id]])
+            ->assertRedirect(route('admin.companies.index'))
+            ->assertSessionHas('status', '3 companies deleted.');
+
+        $this->assertSoftDeleted($first);
+        $this->assertNotSoftDeleted($second);
+        $this->assertSoftDeleted($third);
+        $this->assertSoftDeleted($seeded);
+        Storage::disk('public')->assertMissing('companies/alpha.png');
+        Storage::disk('public')->assertMissing('companies/gamma.png');
+        Storage::disk('public')->assertExists('companies/beta.png');
+        $this->assertFileExists(public_path('assets/1-BK1k9eNG.svg'));
+
+        $this->from(route('admin.certificates.index'))
+            ->delete(route('admin.certificates.bulk-destroy'), ['ids' => [$certFirst->id, $certSeeded->id]])
+            ->assertRedirect(route('admin.certificates.index'))
+            ->assertSessionHas('status', '2 certificates deleted.');
+
+        $this->assertSoftDeleted($certFirst);
+        $this->assertNotSoftDeleted($certSecond);
+        $this->assertSoftDeleted($certSeeded);
+        Storage::disk('public')->assertMissing('certificates/iso-9001.png');
+        Storage::disk('public')->assertExists('certificates/iso-14001.png');
+        $this->assertFileExists(public_path('assets/4-cTO0dgU6.svg'));
+
+        $this->from(route('admin.companies.index'))
+            ->delete(route('admin.companies.bulk-destroy'), ['ids' => [$first->id]])
+            ->assertRedirect(route('admin.companies.index'))
+            ->assertSessionHasErrors('ids.0');
+
+        $this->delete(route('admin.companies.destroy', $second))
+            ->assertRedirect(route('admin.companies.index'))
+            ->assertSessionHas('status', 'Company deleted.');
+        $this->assertSoftDeleted($second);
+    }
+
     private function administrator(): User
     {
         $administrator = User::factory()->create();

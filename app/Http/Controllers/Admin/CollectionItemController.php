@@ -15,6 +15,8 @@ use Illuminate\View\View;
 
 class CollectionItemController extends Controller
 {
+    use HandlesBulkDeletion;
+
     public function index(Request $request, string $collection): View
     {
         $this->checkCollection($collection);
@@ -102,6 +104,23 @@ class CollectionItemController extends Controller
         }
 
         return redirect()->route('admin.collections.index', $collection)->with('status', 'Item deleted.');
+    }
+
+    public function bulkDestroy(Request $request, string $collection): RedirectResponse
+    {
+        $this->checkCollection($collection);
+
+        return $this->executeBulkDestroy(
+            $request,
+            fn () => CollectionItem::query()->where('collection', $collection),
+            Rule::exists(CollectionItem::class, 'id')->where('collection', $collection),
+            'admin.collections.index',
+            ['collection' => $collection],
+            'Item deleted.',
+            ':count items deleted.',
+            ['image', 'icon', 'gallery'],
+            ['/storage/collection-items/', '/storage/collection-icons/'],
+        );
     }
 
     private function checkCollection(string $collection): void
